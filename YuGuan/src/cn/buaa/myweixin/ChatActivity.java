@@ -1,5 +1,7 @@
 package cn.buaa.myweixin;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -18,6 +20,7 @@ import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
@@ -25,7 +28,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,9 +51,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 	private Button mBtnBack;
 	private EditText mEditTextContent;
 	private RelativeLayout screen;
-	private ListView mListView;
-	private ChatMsgViewAdapter mAdapter;
-	private List<ChatMsgEntity> mDataArrays = new ArrayList<ChatMsgEntity>();
 
 	private TextView title;
 	private ImageView image;
@@ -126,6 +125,10 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		try {} catch (Exception e) {
+			// TODO: handle exception
+			showSomeThing(e.toString());
+		}
 		actionId = getIntent().getIntExtra("actionId", 0);
 		showSomeThing(actionId + "");
 		mImageLoader = new ImageLoader(getApplicationContext());
@@ -143,6 +146,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 		new Thread(new HttpUtil(Utils.getCommentUrl + actionId +"&commentid=" + commentId,
 				commentHandler, KEY_COMMENT_JSON)).start();
 		// initCommentListView();
+		
 	}
 
 	public void doBaoMin(View v) {
@@ -269,13 +273,22 @@ public class ChatActivity extends Activity implements OnClickListener {
 		try {
 			commentList.setAdapter(commentAdepter);
 			
-			
+			 int totalHeight = 0;  
 			if(comments.size() < 5){
-				commentList.setLayoutParams(new LinearLayout.LayoutParams(
+				 for (int i = 0; i < commentAdepter.getCount(); i++) {  
+		            View listItem = commentAdepter.getView(i, null, commentList);  
+		            listItem.measure(0, 0);  
+		            totalHeight += listItem.getMeasuredHeight();  
+		        }
+				 
+		        ViewGroup.LayoutParams params = commentList.getLayoutParams();  
+		        params.height = totalHeight + (commentList.getDividerHeight() * (commentAdepter.getCount() - 1));  
+		        commentList.setLayoutParams(params);  
+				/*commentList.setLayoutParams(new ViewGroup.LayoutParams(
 				LayoutParams.FILL_PARENT,
-				LayoutParams.WRAP_CONTENT));
+				LayoutParams.WRAP_CONTENT));*/
 			}else{
-				commentList.setLayoutParams(new LinearLayout.LayoutParams(
+				commentList.setLayoutParams(new ViewGroup.LayoutParams(
 						LayoutParams.FILL_PARENT,
 						600));
 			}
@@ -385,35 +398,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 		
 	}
 
-	private String[] msgArray = new String[] { "有大吗", "有！你呢？", "我也有", "那上吧",
-			"打啊！你放大啊", "你tm咋不放大呢？留大抢人头那！Cao的。你个菜b", "2B不解释", "尼滚....", };
-
-	private String[] dataArray = new String[] { "2012-09-01 18:00",
-			"2012-09-01 18:10", "2012-09-01 18:11", "2012-09-01 18:20",
-			"2012-09-01 18:30", "2012-09-01 18:35", "2012-09-01 18:40",
-			"2012-09-01 18:50" };
-	private final static int COUNT = 8;
-
-	public void initData() {
-		for (int i = 0; i < COUNT; i++) {
-			ChatMsgEntity entity = new ChatMsgEntity();
-			entity.setDate(dataArray[i]);
-			if (i % 2 == 0) {
-				entity.setName("小黑");
-				entity.setMsgType(true);
-			} else {
-				entity.setName("人马");
-				entity.setMsgType(false);
-			}
-
-			entity.setText(msgArray[i]);
-			mDataArrays.add(entity);
-		}
-
-		mAdapter = new ChatMsgViewAdapter(this, mDataArrays);
-		mListView.setAdapter(mAdapter);
-
-	}
 
 	// 设置标题栏右侧按钮的作用
 	public void doLogin(View v) {
@@ -453,10 +437,56 @@ public class ChatActivity extends Activity implements OnClickListener {
 		this.finish();
 	}
 
-	private void send(View v) {
+	public void send(View v) {
 		String contString = mEditTextContent.getText().toString();
+		if(Utils.loginInfo == null){
+			showSomeThing("请先登陆...");
+			return;
+		}
 		if (contString.length() > 0) {
-			showSomeThing(contString);
+			
+			String url = Utils.putCommentUrl + "aid=" + actionId + "&uid=" + Utils.loginInfo.getId() + "&textcontent="+ contString;
+			 new Thread(new HttpUtil(url,
+						new Handler(){
+				 @Override
+				public void handleMessage(Message msg) {
+					 super.handleMessage(msg);
+						Bundle data = msg.getData();
+						String result = data.getString("LOGINAJAX");
+						if (result != null && !"服务访问失败".equals(result)) {
+							try {
+								// {"aid":"13","status":"suc","textcontent":"sfsdfdfsds;","uid":"28"}
+								JSONObject json = new JSONObject(result);
+								String status = json.getString("status");
+								if(status.equals("suc")){
+									/*commentId = 0;
+									new Thread(new HttpUtil(Utils.getCommentUrl + actionId +"&commentid=" + commentId,
+											commentHandler, KEY_COMMENT_JSON)).start();*/
+									CommentBean bean = new CommentBean();
+									String comment = json.getString("textcontent");
+									//comment = URLEncoder.encode(comment, "utf-8");
+									bean.setComment(comment);
+									bean.setId(0);
+									bean.setPostTime(Utils.getNowTime());
+									bean.setUid(Utils.loginInfo.getId());
+									bean.setuName(Utils.loginInfo.getUserName());
+									comments.add(0, bean);
+									commentAdepter.notifyDataSetChanged();
+									commentList.setSelection(1);
+									
+								}else{
+									showSomeThing("评论发布失败!");
+								}
+							} catch (JSONException e) {
+								e.printStackTrace();
+							} 
+						}else{
+							showSomeThing("评论提交失败!");
+						}
+				}
+			 }, "LOGINAJAX")).start();
+		}else{
+			showSomeThing("请输入评论内容");
 		}
 		mEditTextContent.setText("");
 		InputMethodManager imm = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);  

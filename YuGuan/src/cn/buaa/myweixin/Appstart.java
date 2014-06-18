@@ -2,12 +2,10 @@ package cn.buaa.myweixin;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
 
 import com.yuguan.util.AsyncImageLoader;
 

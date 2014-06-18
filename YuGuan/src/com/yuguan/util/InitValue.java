@@ -1,5 +1,7 @@
 package com.yuguan.util;
 
+import android.content.SharedPreferences;
+
 public class InitValue {
 
 	public static String countyJson = "{'cid':'173','counties':["
@@ -121,6 +123,8 @@ public class InitValue {
 	public static String loginJson = "{'message':null,'password':'123456','user':"
 			+ "{'email':'yongzhong1@126.com','id':31,'name':'kevin','password':'E10ADC3949BA59ABBE56E057F20F883E','status':2,'vip':0},"
 			+ "'username':'kevin'}";
+	
+	public static SharedPreferences preferences;
 	public InitValue() {
 	}
 

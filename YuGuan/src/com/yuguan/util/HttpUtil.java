@@ -1,6 +1,9 @@
 package com.yuguan.util;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -67,11 +70,21 @@ public class HttpUtil implements Runnable {
 		HttpResponse response = httpclient.execute(request);
 		// 获取HttpEntity
 		HttpEntity entity = response.getEntity();
+		
 		// 获取响应的结果信息
 		result = EntityUtils.toString(entity, "UTF-8");
 		
 		if(result == null)
 			result = "服务访问失败";
+		
+		/*InputStream is = entity.getContent();
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is,"utf-8"));
+		StringBuffer sb = new StringBuffer();
+		result = "";
+		while((result = bufferedReader.readLine()) != null){
+			sb.append(result);
+		}
+		result = sb.toString();*/
 		// 关闭连接
 		httpclient.getConnectionManager().shutdown();
 

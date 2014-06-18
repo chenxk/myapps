@@ -1,11 +1,16 @@
 package com.yuguan.util;
 
-import org.json.JSONObject;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
+import cn.buaa.myweixin.R;
+
+import com.yuguan.bean.AccountInfo;
 
 public class Utils {
 
@@ -18,11 +23,20 @@ public class Utils {
 	public static String getBaoMingUsersUrl = rootPaht + "/action/baominguser.htm?aid=";
 	public static String getCommentUrl = rootPaht + "/action/getcomment.htm?aid=";
 	public static String loginUrl = rootPaht + "/member/login.htm?r=3&yanzhengma=343&username=";
+	// "aid="+aid+"&uid="+uid+"&textcontent="+text;
+	public static String putCommentUrl = rootPaht + "/action/putcomment.htm?";
 	
 	public static int TIMEOUT = 5000;
-	public static JSONObject loginInfo;
+	public static AccountInfo loginInfo;
 	private Context context;
 
+	
+	public static String getNowTime(){
+		SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss",Locale.CHINA);
+		
+		return	mSimpleDateFormat.format(new Date());
+	}
+	
 	public Utils() {
 	}
 

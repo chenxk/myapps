@@ -212,6 +212,7 @@ public class MainWeixin extends Activity {
 				ImageCacheManager.MODE_FIXED_MEMORY_USED, "_yuguan");
 		imageCacheManager.setMax_Memory(1024 * 1024 * 50);
 
+		InitValue.preferences = this.getSharedPreferences("USERINFO", Context.MODE_WORLD_READABLE);
 		
 		//打印出来的结果分别是：
 		//data路径 /datasd卡路径 /mnt/sdcard根路径 /systemandroid保存sp文件的路径：android存SharedPreferences的路径/data/data/package_name/shared_prefs貌似通过源码，反射的方法可以修改这些默认路径通过context.openFileInput（“fileName”）；content.openFileOutput(“fileName”,Activity.MODE_PRIVATE)默认的文件路径为/data/data/包.名/files

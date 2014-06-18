@@ -3,23 +3,34 @@ package cn.buaa.myweixin;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.yuguan.bean.AccountInfo;
 import com.yuguan.util.HttpUtil;
+import com.yuguan.util.InitValue;
 import com.yuguan.util.Utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class Login extends Activity {
 	private EditText mUser; // ÕÊºÅ±à¼­¿ò
 	private EditText mPassword; // ÃÜÂë±à¼­¿ò
 
+	private CheckBox rememberPwd;
+	private CheckBox autoLogin;
+	private SharedPreferences sp;
+	private Login instance;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,58 +38,56 @@ public class Login extends Activity {
         
         mUser = (EditText)findViewById(R.id.login_user_edit);
         mPassword = (EditText)findViewById(R.id.login_passwd_edit);
+        rememberPwd = (CheckBox) findViewById(R.id.cb_mima);
+        autoLogin = (CheckBox) findViewById(R.id.cb_auto);
+        instance = this;
+        sp = InitValue.preferences;
         
+        if(sp != null){
+        	boolean remPwd = sp.getBoolean("rememberPwd", true);
+        	String name = sp.getString("userName", "");
+        	String pwd = sp.getString("userPwd", "");
+        	rememberPwd.setChecked(remPwd);
+        	if(remPwd){
+        		mUser.setText(name);
+            	mPassword.setText(pwd);
+        	}
+        	boolean autoLog = (sp.getBoolean("autoLogin", true));
+        	autoLogin.setChecked(autoLog);
+        	if(autoLog && !"".equals(name) && !"".equals(pwd)){
+        		login(name, pwd);
+        	}
+        }
+        
+        
+        rememberPwd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				sp.edit().putBoolean("rememberPwd", isChecked).commit();
+			}
+		});
+        
+        autoLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				sp.edit().putBoolean("autoLogin", isChecked).commit();
+				if(isChecked){
+					rememberPwd.setChecked(isChecked);
+					sp.edit().putBoolean("rememberPwd", isChecked).commit();
+				}
+			}
+		});
     }
+    
+    
+    
 
     public void login_mainweixin(View v) {
-    	
-    	
     	if(!"".equals(mUser.getText().toString()) && !"".equals(mPassword.getText().toString()))   //ÅÐ¶Ï ÕÊºÅºÍÃÜÂë
         {
-    		 String url = Utils.loginUrl + mUser.getText().toString() + "&password=" + mPassword.getText().toString();
-    		 new Thread(new HttpUtil(url,
-    					new Handler(){
-    			 @Override
-    			public void handleMessage(Message msg) {
-    				 super.handleMessage(msg);
-    					Bundle data = msg.getData();
-    					String result = data.getString("LOGINAJAX");
-    					if (result != null && !"·þÎñ·ÃÎÊÊ§°Ü".equals(result)) {
-    						/* Intent intent = new Intent();
-    			             intent.setClass(Login.this,MainWeixin.class);
-    			             startActivity(intent);*/
-    						try {
-								JSONObject json = new JSONObject(result);
-								String message = null;
-								try {
-									message = json.getString("message");
-								} catch (Exception e) {
-								}
-								// success
-								if(message == null){
-									Utils.loginInfo = json;
-									
-								}else{
-									new AlertDialog.Builder(Login.this)
-									.setIcon(getResources().getDrawable(R.drawable.login_error_icon))
-									.setTitle("µÇÂ¼´íÎó")
-									.setMessage(message)
-									.create().show();
-								}
-								
-							} catch (JSONException e) {
-								e.printStackTrace();
-							}
-    					}else{
-    						new AlertDialog.Builder(Login.this)
-    						.setIcon(getResources().getDrawable(R.drawable.login_error_icon))
-    						.setTitle("µÇÂ¼Ê§°Ü")
-    						.setMessage("·þÎñ·ÃÎÊÊ§°Ü£¡")
-    						.create().show();
-    					}
-    			}
-    		 }, "LOGINAJAX")).start();
-          }
+    		 //String url = Utils.loginUrl + mUser.getText().toString() + "&password=" + mPassword.getText().toString();
+    		 login(mUser.getText().toString(), mPassword.getText().toString());
+         }
         else if("".equals(mUser.getText().toString()) || "".equals(mPassword.getText().toString()))   //ÅÐ¶Ï ÕÊºÅºÍÃÜÂë
         {
         	new AlertDialog.Builder(Login.this)
@@ -114,4 +123,54 @@ public class Login extends Activity {
     	//intent.setClass(Login.this,Whatsnew.class);
         //startActivity(intent);
       }  
+    
+    public void login(String name,String pwd){
+    	String url = Utils.loginUrl + name + "&password=" + pwd;
+		 new Thread(new HttpUtil(url,
+					new Handler(){
+			 @Override
+			public void handleMessage(Message msg) {
+				 super.handleMessage(msg);
+					Bundle data = msg.getData();
+					String result = data.getString("LOGINAJAX");
+					if (result != null && !"·þÎñ·ÃÎÊÊ§°Ü".equals(result)) {
+						try {
+							JSONObject json = new JSONObject(result);
+							String message = null;
+							try {
+								message = json.getString("message");
+							} catch (Exception e) {
+							}
+							// unsuccess
+							if(message == null || message.equals("null")){
+								Utils.loginInfo = AccountInfo.getAccountInfo(json);
+								sp.edit().putString("userName", json.getString("username")).commit();
+								sp.edit().putString("userPwd", json.getString("password")).commit();
+								showSomeThing("µÇÂ½³É¹¦,»¶Ó­ "+ json.getString("username"));
+								instance.finish();
+							}else{
+								new AlertDialog.Builder(Login.this)
+								.setIcon(getResources().getDrawable(R.drawable.login_error_icon))
+								.setTitle("µÇÂ¼´íÎó")
+								.setMessage(message)
+								.create().show();
+							}
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+					}else{
+						new AlertDialog.Builder(Login.this)
+						.setIcon(getResources().getDrawable(R.drawable.login_error_icon))
+						.setTitle("µÇÂ¼Ê§°Ü")
+						.setMessage("·þÎñ·ÃÎÊÊ§°Ü£¡")
+						.create().show();
+					}
+			}
+		 }, "LOGINAJAX")).start();
+    }
+    
+    public void showSomeThing(String str) {
+		Toast.makeText(getApplicationContext(), str, Toast.LENGTH_LONG).show();
+	}
+
 }
