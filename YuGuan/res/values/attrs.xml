@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <declare-styleable name="MyTextView">
+        <attr name="textcolor" format="reference|color"/>
+        <attr name="textname" format="string"/>
+        <attr name="singleline" format="boolean"/>
+        <attr name="textsize" format="float"/>
+        <attr name="textcolor2" format="reference|color"/>
+        <attr name="textname2" format="string"/>
+        <attr name="singleline2" format="boolean"/>
+        <attr name="textsize2" format="float"/>
+    </declare-styleable>
+    
+    <declare-styleable name="UserInfo">
+        <attr name="userimage" format="reference"/>
+        <attr name="usersex" format="reference"/>
+        <attr name="username" format="string"/>
+    </declare-styleable>
+    
+    <declare-styleable name="CommentInfo">
+        <attr name="commentuser" format="string"/>
+        <attr name="comment" format="string"/>
+        <attr name="commenttime" format="string"/>
+    </declare-styleable>
+    
+    <declare-styleable name="ScoreInfo">
+        <attr name="score" format="integer"/>
+    </declare-styleable>
+    
+    
+     <declare-styleable name="DoubleTextView">
+        <attr name="valueone" format="string"/>
+        <attr name="valuetwo" format="string"/>
+    </declare-styleable>
+    
+     <declare-styleable name="roundedimageview">
+        <attr name="border_thickness" format="dimension" />
+        <attr name="border_inside_color" format="color" />
+        <attr name="border_outside_color" format="color"></attr>
+    </declare-styleable>
+</resources>

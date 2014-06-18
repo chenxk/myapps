@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:diycomp="http://schemas.android.com/apk/res/cn.buaa.myweixin"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff"
+    android:orientation="horizontal"
+    android:padding="5dp" >
+
+    <ImageView
+        android:id="@+id/mallPic"
+        android:layout_width="150dp"
+        android:layout_height="80dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/playyumao" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp" >
+
+        <TextView
+            android:id="@+id/mallTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:paddingBottom="2dp"
+            android:paddingTop="2dp"
+            android:singleLine="true"
+            android:text="AAAAAAAAA"
+            android:textColor="#000"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/mallAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mallTitle"
+            android:gravity="left"
+            android:paddingBottom="2dp"
+            android:paddingTop="2dp"
+            android:singleLine="true"
+            android:text="bbbbbbbbbbbbbb"
+            android:textColor="#000"
+            android:textSize="15sp" />
+
+         <!---->
+        
+        <cn.buaa.myweixin.ScoreInfo
+            android:id="@+id/mallScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mallAddress"
+            android:paddingBottom="2dp"
+            android:paddingTop="2dp">
+        </cn.buaa.myweixin.ScoreInfo>
+         
+    </RelativeLayout>
+
+</LinearLayout>

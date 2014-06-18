@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#fcfcfc"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/search_bar_bg"
+        android:gravity="left" >
+ <!--
+        <Button
+            android:id="@+id/location_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/title_btn_right"
+            android:drawableLeft="@drawable/location"
+            android:onClick="clickActionLocationBtn"
+            android:text="上海"
+            android:textColor="#000000"
+            android:textSize="14sp" >
+        </Button>
+         -->
+
+        <HorizontalScrollView
+            android:id="@+id/mColumnHorizontalScrollView"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_horizontal"
+            android:scrollbars="none" >
+
+            <LinearLayout
+                android:id="@+id/mRadioGroup_content"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="10.0dip"
+                android:paddingRight="10.0dip" >
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!--
+             android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="5dp"
+                android:paddingTop="5dp"
+            <ImageButton 
+                android:id="@+id/location_btn"
+                android:layout_width="80dp"
+			    android:layout_height="40dp"
+        		android:layout_alignParentLeft="true" 
+        		android:layout_centerVertical="true"
+        		android:layout_marginLeft="5dp"
+				android:background="@drawable/title_btn_right"
+        		android:src="@drawable/location"
+                />
+            
+            <EditText
+                android:id="@+id/editText1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="搜索"
+                android:singleLine="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="#000"
+                android:drawableLeft="@drawable/search_bar_icon_normal" 
+                android:background="@drawable/search_bar_edit_bg" >               
+            </EditText>
+        -->
+    </LinearLayout>
+
+    <!--
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/mm_listitem"
+            android:clickable="true"
+            android:onClick="startchat"
+             >
+           
+            <ImageView
+                android:id="@+id/head"
+                android:layout_width="55dp"
+		        android:layout_height="55dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:paddingLeft="5dp"
+                android:src="@drawable/xiaohei" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/head"
+                android:padding="7dp"
+                android:text="小黑"
+                android:textColor="#000" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:padding="7dp"
+                android:text="昨天 晚上"
+                android:textColor="#666" />
+             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/head"
+                android:layout_alignParentBottom="true"
+                android:padding="7dp"
+                android:text="尼滚...."
+                android:textColor="#666" />
+        </RelativeLayout>
+    -->
+
+    <com.yuguan.activities.RefreshListView
+        android:id="@+id/allActivitiesLists"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:cacheColorHint="#00000000"
+        android:scrollbars="horizontal" >
+    </com.yuguan.activities.RefreshListView>
+
+</LinearLayout>

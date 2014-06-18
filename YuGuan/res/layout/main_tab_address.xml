@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#eee"
+    android:orientation="vertical" >
+
+    <!--
+        <RelativeLayout 
+  			android:layout_width="fill_parent"
+  			android:layout_height="45dp"
+  			android:id="@+id/title" 
+  			android:background="@drawable/title_bar"
+  			android:gravity="center_vertical"  >  
+      		<ImageView
+            		android:id="@+id/img_logo"
+        			android:layout_width="wrap_content"
+        			android:layout_height="wrap_content"        	     	
+        			android:scaleType="matrix"
+        			android:clickable="false"
+        			android:layout_centerInParent="true"
+        			android:src="@drawable/crown" />
+			
+			<ImageView 
+			    android:id="@+id/right_btn"
+			    android:layout_width="67dp" 
+        		android:layout_height="wrap_content"
+        		android:layout_alignParentRight="true" 
+        		android:layout_centerVertical="true"
+        		android:layout_marginRight="5dp"
+        		android:src="@drawable/add_user"
+				android:onClick="btnmainright"
+			    /> 
+		</RelativeLayout>
+    -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/search_bar_bg"
+        android:gravity="left" >
+<!-- 
+        <Button
+            android:id="@+id/mall_location_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/title_btn_right"
+            android:drawableLeft="@drawable/location"
+            android:text="上海"
+            android:onClick="clickMallLocationBtn"
+            android:textColor="#000000"
+            android:textSize="14sp" >
+        </Button>
+ -->
+        <HorizontalScrollView
+            android:id="@+id/mall_mColumnHorizontalScrollView"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_horizontal"
+            android:scrollbars="none" >
+
+            <LinearLayout
+                android:id="@+id/mall_mRadioGroup_content"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="10.0dip"
+                android:paddingRight="10.0dip" >
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+
+    <com.yuguan.activities.RefreshListView
+        android:id="@+id/allMallsLists"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="#00000000"
+        android:scrollbars="vertical" >
+    </com.yuguan.activities.RefreshListView>
+
+</LinearLayout>

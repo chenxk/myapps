@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:imagecontrol="http://schemas.android.com/apk/res/cn.buaa.myweixin"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:orientation="vertical" >
+
+    <com.yuguan.util.RoundImageView  
+         android:id="@+id/userImage"
+            android:layout_width="128dp"  
+            android:layout_height="128dp"  
+            imagecontrol:border_inside_color="#fff7f2e9"  
+            imagecontrol:border_outside_color="#ffd5d1c8"  
+            imagecontrol:border_thickness="2dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/head1_128" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="10dp"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/userSex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/girl_32"/>
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="夺命小丸子"
+            android:textColor="#000"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+</LinearLayout>
