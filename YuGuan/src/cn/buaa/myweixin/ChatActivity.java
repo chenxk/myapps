@@ -1,11 +1,14 @@
 package cn.buaa.myweixin;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,7 +31,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +39,7 @@ import com.yuguan.activities.CommentAdepter;
 import com.yuguan.activities.RefreshListView;
 import com.yuguan.bean.CommentBean;
 import com.yuguan.bean.UserBean;
+import com.yuguan.util.HttpPostUtil;
 import com.yuguan.util.HttpUtil;
 import com.yuguan.util.ImageLoader;
 import com.yuguan.util.InitValue;
@@ -50,7 +54,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 	private Button mBtnSend;
 	private Button mBtnBack;
 	private EditText mEditTextContent;
-	private RelativeLayout screen;
+	private ScrollView screen;
 
 	private TextView title;
 	private ImageView image;
@@ -62,10 +66,11 @@ public class ChatActivity extends Activity implements OnClickListener {
 	private TextView actionBegin;
 	private TextView actionEnd;
 	private TextView actionContext;
+	private TextView baomingEndTime;
 	private TextView baoming;
+	private TextView shoucang;
 	private TextView userCount;
 	private LinearLayout usersInfoScrollView;
-	private LinearLayout commontLayout;
 
 	private String mallInfoJson = InitValue.mallInfoJson;
 	private String userInfoJson = InitValue.mallInfoJson;
@@ -114,12 +119,17 @@ public class ChatActivity extends Activity implements OnClickListener {
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
-			Bundle data = msg.getData();
-			String result = data.getString(KEY_COMMENT_JSON);
-			if (result != null && !"服务访问失败".equals(result)) {
-				commentJson = result;
+			try {
+				Bundle data = msg.getData();
+				String result = data.getString(KEY_COMMENT_JSON);
+				if (result != null && !"服务访问失败".equals(result)) {
+					commentJson = result;
+				}
+				initCommentListView();
+			} catch (Exception e) {
+				showSomeThing(e.toString());
 			}
-			initCommentListView();
+			
 		}
 	};
 
@@ -145,16 +155,85 @@ public class ChatActivity extends Activity implements OnClickListener {
 				userHandler, KEY_USERINFO_JSON)).start();
 		new Thread(new HttpUtil(Utils.getCommentUrl + actionId +"&commentid=" + commentId,
 				commentHandler, KEY_COMMENT_JSON)).start();
-		// initCommentListView();
+		
+		/**/
 		
 	}
 
 	public void doBaoMin(View v) {
-		showSomeThing("报名");
+		String s = baoming.getText().toString();
+		if(s.equals("活动已结束")){
+			showSomeThing(s);
+			return;
+		}
+		if(s.equals("已报名")){
+			showSomeThing(s);
+			return;
+		}
+		String url = Utils.baomingtUrl + Utils.loginInfo.getId() + "&aid" + actionId;
+		new Thread(new HttpUtil(url, new Handler(){
+			@Override
+			public void handleMessage(Message msg) {
+				// TODO Auto-generated method stub
+				super.handleMessage(msg);
+				Bundle data = msg.getData();
+				String result = data.getString("BAOMING");
+				if (result != null && !"服务访问失败".equals(result)) {
+					try {
+						JSONObject json = new JSONObject(result);
+						if(json.getString("status").equals("suc")){
+							baoming.setText("已报名");
+							showSomeThing("报名成功!");
+						}else{
+							showSomeThing("报名失败!");
+						}
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}else{
+					showSomeThing("服务访问失败!");
+				}
+			}
+		}, "BAOMING")).start();
+		
 	}
 
 	public void doShoucang(View v) {
-		showSomeThing("收藏");
+		String s = shoucang.getText().toString();
+		if(s.equals("已收藏")){
+			showSomeThing("已收藏");
+			return;
+		}
+		getShouCang();
+	}
+	
+	public void getShouCang(){
+		String url = Utils.shouCangUrl + actionId + "&uid" + Utils.loginInfo.getId();
+		new Thread(new HttpUtil(url, new Handler(){
+			@Override
+			public void handleMessage(Message msg) {
+				// TODO Auto-generated method stub success
+				super.handleMessage(msg);
+				Bundle data = msg.getData();
+				String result = data.getString("SHOUCANG");
+				if (result != null && !"服务访问失败".equals(result)) {
+					try {
+						// {"itemId":"13","status":"success","type":"2","uid":"28"}
+						JSONObject json = new JSONObject(result);
+						if(json.getString("status").equals("success")){
+							shoucang.setText("已收藏");
+							showSomeThing("收藏成功!");
+						}else{
+							showSomeThing("收藏失败!");
+						}
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}else{
+					showSomeThing("服务访问失败!");
+				}
+			}
+		}, "SHOUCANG")).start();
 	}
 
 	public void showSomeThing(String str) {
@@ -178,7 +257,21 @@ public class ChatActivity extends Activity implements OnClickListener {
 				actionBegin.setText(actionInfo.getString("sTime"));
 				actionEnd.setText(actionInfo.getString("eTime"));
 				actionContext.setText(actionInfo.getString("desc"));
-				baoming.setText("2014年7月26日报名截止");
+				try {
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.CHINA);
+					Date date = sdf.parse(actionInfo.getString("sTime") + ":00");
+					Date now = new Date(System.currentTimeMillis());
+					if(now.after(date)){
+						baoming.setText("活动已结束");
+						baomingEndTime.setText("");
+					}else{
+						baoming.setText("立即报名");
+						baomingEndTime.setText(actionInfo.getString("sTime") + "截止");
+					}
+				} catch (Exception e) {
+					showSomeThing(e.toString());
+				}
+				
 				String url = Utils.activityImg
 						+ actionInfo.getString("backPic");
 				mImageLoader.loadImage(url, null, image);
@@ -207,6 +300,9 @@ public class ChatActivity extends Activity implements OnClickListener {
 						if (bean != null) {
 							UserImage user = new UserImage(getApplicationContext());
 							user.initData(bean);
+							if(bean.getId() == Utils.loginInfo.getId()){
+								baoming.setText("已报名");
+							}
 							usersInfoScrollView.addView(user, i, params);
 						}else{
 							showSomeThing("user is null");
@@ -229,6 +325,11 @@ public class ChatActivity extends Activity implements OnClickListener {
 					int count = users.length();
 					if(count >= 10){
 						commentId = ((JSONObject)users.get(9)).getInt("id");
+						commentList.setLastData(false);
+						commentList.addFootView();
+					}else{
+						commentList.setLastData(true);
+						commentList.removeFootView();
 					}
 					for (int i = 0; i < count; i++) {
 						JSONObject json = (JSONObject) users.get(i);
@@ -245,54 +346,37 @@ public class ChatActivity extends Activity implements OnClickListener {
 			showSomeThing(e.toString());
 		}
 	}
-
 	
-	public void initCommentInfos(){
-		getCommentFromJson();
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-				LayoutParams.FILL_PARENT,
-				LayoutParams.FILL_PARENT);
-		commontLayout.removeAllViews();
-		int i = 0;
-		for(CommentBean bean : comments){
-			CommentInfo user = new CommentInfo(getApplicationContext());
-			user.initData(bean);
-			commontLayout.addView(user, i, params);
-			i++;
+	
+	public void setCommentListHeight(){
+		ViewGroup.LayoutParams params = commentList.getLayoutParams();  
+		int totalHeight = 0;  
+		if(comments.size() < 5){
+			 for (int i = 0; i < commentAdepter.getCount(); i++) {  
+	            View listItem = commentAdepter.getView(i, null, commentList);  
+	            listItem.measure(0, 0);  
+	            totalHeight += listItem.getMeasuredHeight();  
+	        }
+	        params.height = totalHeight + (commentList.getDividerHeight() * (commentAdepter.getCount() - 1));  
+		}else{
+	        params.height = 600;  
 		}
+		commentList.setLayoutParams(params);
 	}
 	
 	public void initCommentListView(){
 		getCommentFromJson();
+		
 		if(comments.size() == 0){
 			commentList.setVisibility(View.GONE);
 			return;
 		}
+		
 		commentList.setVisibility(View.VISIBLE);
 		commentAdepter = new CommentAdepter(this, comments);
 		try {
 			commentList.setAdapter(commentAdepter);
-			
-			 int totalHeight = 0;  
-			if(comments.size() < 5){
-				 for (int i = 0; i < commentAdepter.getCount(); i++) {  
-		            View listItem = commentAdepter.getView(i, null, commentList);  
-		            listItem.measure(0, 0);  
-		            totalHeight += listItem.getMeasuredHeight();  
-		        }
-				 
-		        ViewGroup.LayoutParams params = commentList.getLayoutParams();  
-		        params.height = totalHeight + (commentList.getDividerHeight() * (commentAdepter.getCount() - 1));  
-		        commentList.setLayoutParams(params);  
-				/*commentList.setLayoutParams(new ViewGroup.LayoutParams(
-				LayoutParams.FILL_PARENT,
-				LayoutParams.WRAP_CONTENT));*/
-			}else{
-				commentList.setLayoutParams(new ViewGroup.LayoutParams(
-						LayoutParams.FILL_PARENT,
-						600));
-			}
-			
+			setCommentListHeight();
 			commentList.setOnRefreshListener(new RefreshListView.RefreshListener() {
 
 				@Override
@@ -300,6 +384,13 @@ public class ChatActivity extends Activity implements OnClickListener {
 					return null;
 				}
 
+				@Override
+				public void setUrl() {
+					commentId = 0;
+					String url = Utils.getCommentUrl + actionId +"&commentid=" + commentId;
+					commentList.setUrl(url);
+				}
+				
 				@Override
 				public void refreshed(Object obj) {
 					/**/
@@ -312,7 +403,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 						commentJson = result;
 						comments.clear();
 						getCommentFromJson();
-						commentList.setLastData(false);
 						commentList.setLastRow(false);
 						commentList.setLoading(false);
 						commentAdepter.notifyDataSetChanged();
@@ -330,13 +420,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 					}else{
 						showSomeThing("加载到最后一条了");
 					}
-				}
-
-				@Override
-				public void setUrl() {
-					commentId = 0;
-					String url = Utils.getCommentUrl + actionId +"&commentid=" + commentId;
-					commentList.setUrl(url);
 				}
 
 				@Override
@@ -363,15 +446,13 @@ public class ChatActivity extends Activity implements OnClickListener {
 	}
 
 	public void initView() {
-		screen = (RelativeLayout) findViewById(R.id.screen);
-		screen.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-			
+		screen = (ScrollView) findViewById(R.id.scrollView);
+		screen.setOnTouchListener(new View.OnTouchListener() {
 			@Override
-			public void onFocusChange(View v, boolean hasFocus) {
-				if(hasFocus){
-					InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);  
-			        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-				}
+			public boolean onTouch(View v, MotionEvent event) {
+				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);  
+		        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+				return false;
 			}
 		});
 		title = (TextView) findViewById(R.id.title);
@@ -386,10 +467,11 @@ public class ChatActivity extends Activity implements OnClickListener {
 		actionContext = (TextView) findViewById(R.id.actionContext);
 		commentList = (RefreshListView) findViewById(R.id.commentList);
 		commentList.setInterup(true);
-		baoming = (TextView) findViewById(R.id.baomingEndTime);
+		baoming = (TextView) findViewById(R.id.baoming);
+		shoucang = (TextView) findViewById(R.id.shoucang);
+		baomingEndTime = (TextView) findViewById(R.id.baomingEndTime);
 		userCount = (TextView) findViewById(R.id.usrNum);
 		usersInfoScrollView = (LinearLayout) findViewById(R.id.usersInfo);
-		commontLayout = (LinearLayout) findViewById(R.id.commontLayout);
 		mBtnSend = (Button) findViewById(R.id.btn_send);
 		mBtnSend.setOnClickListener(this);
 		mBtnBack = (Button) findViewById(R.id.btn_back);
@@ -445,9 +527,10 @@ public class ChatActivity extends Activity implements OnClickListener {
 		}
 		if (contString.length() > 0) {
 			
-			String url = Utils.putCommentUrl + "aid=" + actionId + "&uid=" + Utils.loginInfo.getId() + "&textcontent="+ contString;
-			 new Thread(new HttpUtil(url,
-						new Handler(){
+			String url = Utils.putCommentUrl + "aid=" + actionId + "&uid=" + Utils.loginInfo.getId();
+			
+			NameValuePair content = new BasicNameValuePair("textcontent",contString);
+			HttpPostUtil postUtil = new HttpPostUtil(url, new Handler(){
 				 @Override
 				public void handleMessage(Message msg) {
 					 super.handleMessage(msg);
@@ -459,20 +542,71 @@ public class ChatActivity extends Activity implements OnClickListener {
 								JSONObject json = new JSONObject(result);
 								String status = json.getString("status");
 								if(status.equals("suc")){
-									/*commentId = 0;
-									new Thread(new HttpUtil(Utils.getCommentUrl + actionId +"&commentid=" + commentId,
-											commentHandler, KEY_COMMENT_JSON)).start();*/
-									CommentBean bean = new CommentBean();
-									String comment = json.getString("textcontent");
-									//comment = URLEncoder.encode(comment, "utf-8");
-									bean.setComment(comment);
-									bean.setId(0);
-									bean.setPostTime(Utils.getNowTime());
-									bean.setUid(Utils.loginInfo.getId());
-									bean.setuName(Utils.loginInfo.getUserName());
-									comments.add(0, bean);
-									commentAdepter.notifyDataSetChanged();
-									commentList.setSelection(1);
+									if(commentAdepter == null){
+										new Thread(new HttpUtil(Utils.getCommentUrl + actionId +"&commentid=" + commentId,
+												commentHandler, KEY_COMMENT_JSON)).start();
+									}else{
+										CommentBean bean = new CommentBean();
+										String comment = json.getString("textcontent");
+										//comment = URLEncoder.encode(comment, "utf-8");
+										bean.setComment(comment);
+										bean.setId(0);
+										bean.setPostTime(Utils.getNowTime());
+										bean.setUid(Utils.loginInfo.getId());
+										bean.setuName(Utils.loginInfo.getUserName());
+										comments.add(0, bean);
+										commentAdepter.notifyDataSetChanged();
+										setCommentListHeight();
+										commentList.setSelection(1);
+									}
+								}else{
+									showSomeThing("评论发布失败!");
+								}
+							} catch (JSONException e) {
+								e.printStackTrace();
+							} 
+						}else{
+							showSomeThing("评论提交失败!");
+						}
+				}
+			 }, "LOGINAJAX");
+			
+			List<NameValuePair> pairs = new ArrayList<NameValuePair>();
+			pairs.add(content);
+			postUtil.setPairs(pairs);
+			
+			new Thread(postUtil).start();
+			
+			/*
+			new Thread(new HttpUtil(url,
+						new Handler(){
+				 @Override
+				public void handleMessage(Message msg) {
+					 super.handleMessage(msg);
+						Bundle data = msg.getData();
+						String result = data.getString("LOGINAJAX");
+						if (result != null && !"服务访问失败".equals(result)) {
+							try {
+								// {"aid":"13","status":"suc","textcontent":"sfsdfdfsds;","uid":"28"}
+								JSONObject json = new JSONObject(result);
+								String status = json.getString("status");
+									if(commentAdepter == null){
+										new Thread(new HttpUtil(Utils.getCommentUrl + actionId +"&commentid=" + commentId,
+												commentHandler, KEY_COMMENT_JSON)).start();
+									}else{
+										CommentBean bean = new CommentBean();
+										String comment = json.getString("textcontent");
+										//comment = URLEncoder.encode(comment, "utf-8");
+										bean.setComment(comment);
+										bean.setId(0);
+										bean.setPostTime(Utils.getNowTime());
+										bean.setUid(Utils.loginInfo.getId());
+										bean.setuName(Utils.loginInfo.getUserName());
+										comments.add(0, bean);
+										commentAdepter.notifyDataSetChanged();
+										commentList.setSelection(1);
+									}
+									
 									
 								}else{
 									showSomeThing("评论发布失败!");
@@ -484,7 +618,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 							showSomeThing("评论提交失败!");
 						}
 				}
-			 }, "LOGINAJAX")).start();
+			 }, "LOGINAJAX")).start();*/
 		}else{
 			showSomeThing("请输入评论内容");
 		}

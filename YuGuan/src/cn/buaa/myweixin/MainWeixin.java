@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -49,6 +50,7 @@ import com.yuguan.activities.MallAdepter;
 import com.yuguan.activities.MallInfo;
 import com.yuguan.activities.RefreshListView;
 import com.yuguan.activities.UserAdepter;
+import com.yuguan.bean.AccountInfo;
 import com.yuguan.bean.ActionBean;
 import com.yuguan.bean.CountyBean;
 import com.yuguan.bean.MallBean;
@@ -214,6 +216,14 @@ public class MainWeixin extends Activity {
 
 		InitValue.preferences = this.getSharedPreferences("USERINFO", Context.MODE_WORLD_READABLE);
 		
+		if(InitValue.preferences != null){
+        	String name = InitValue.preferences.getString("userName", "");
+        	String pwd = InitValue.preferences.getString("userPwd", "");
+        	boolean autoLog = (InitValue.preferences.getBoolean("autoLogin", true));
+        	if(autoLog && !"".equals(name) && !"".equals(pwd)){
+        		login(name, pwd);
+        	}
+        }
 		//打印出来的结果分别是：
 		//data路径 /datasd卡路径 /mnt/sdcard根路径 /systemandroid保存sp文件的路径：android存SharedPreferences的路径/data/data/package_name/shared_prefs貌似通过源码，反射的方法可以修改这些默认路径通过context.openFileInput（“fileName”）；content.openFileOutput(“fileName”,Activity.MODE_PRIVATE)默认的文件路径为/data/data/包.名/files
 		try {
@@ -305,6 +315,48 @@ public class MainWeixin extends Activity {
 
 	}
 
+	public void login(String name,String pwd){
+    	String url = Utils.loginUrl + name + "&password=" + pwd;
+		 new Thread(new HttpUtil(url,
+					new Handler(){
+			 @Override
+			public void handleMessage(Message msg) {
+				 super.handleMessage(msg);
+					Bundle data = msg.getData();
+					String result = data.getString("LOGINAJAX");
+					if (result != null && !"服务访问失败".equals(result)) {
+						try {
+							JSONObject json = new JSONObject(result);
+							String message = null;
+							try {
+								message = json.getString("message");
+							} catch (Exception e) {
+							}
+							// unsuccess
+							if(message == null || message.equals("null")){
+								Utils.loginInfo = AccountInfo.getAccountInfo(json);
+								showSomeThing("登陆成功,欢迎 "+ json.getString("username"));
+							}else{
+								new AlertDialog.Builder(MainWeixin.this)
+								.setIcon(getResources().getDrawable(R.drawable.login_error_icon))
+								.setTitle("登录错误")
+								.setMessage(message)
+								.create().show();
+							}
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+					}else{
+						new AlertDialog.Builder(MainWeixin.this)
+						.setIcon(getResources().getDrawable(R.drawable.login_error_icon))
+						.setTitle("登录失败")
+						.setMessage("服务访问失败！")
+						.create().show();
+					}
+			}
+		 }, "LOGINAJAX")).start();
+    }
+	
 	public void loadImage(ImageView view) {
 		if (view != null) {
 			Animation operatingAnim = AnimationUtils.loadAnimation(this,
@@ -363,7 +415,6 @@ public class MainWeixin extends Activity {
 									activityJson = result;
 									actions.clear();
 									getActionDataFromJson();
-									allActivitiesList.setLastData(false);
 									allActivitiesList.setLastRow(false);
 									allActivitiesList.setLoading(false);
 									activityAdapter.notifyDataSetChanged();

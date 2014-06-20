@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/screen"
     android:background="#fff" >
 
     <RelativeLayout
@@ -436,6 +435,7 @@
                     android:orientation="vertical" >
 
                     <TextView
+                        android:id="@+id/baoming"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
@@ -471,10 +471,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:background="@drawable/unlove_96"
+                        android:background="@drawable/unlove_48"
                         android:paddingLeft="30dp" />
 
                     <TextView
+                        android:id="@+id/shoucang"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -483,7 +484,7 @@
                         android:singleLine="true"
                         android:text="收藏"
                         android:textColor="#fff"
-                        android:textSize="30sp" />
+                        android:textSize="28sp" />
                 </LinearLayout>
             </RelativeLayout>
 

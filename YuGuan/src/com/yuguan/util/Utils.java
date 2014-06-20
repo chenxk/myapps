@@ -8,7 +8,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
-import cn.buaa.myweixin.R;
 
 import com.yuguan.bean.AccountInfo;
 
@@ -25,6 +24,9 @@ public class Utils {
 	public static String loginUrl = rootPaht + "/member/login.htm?r=3&yanzhengma=343&username=";
 	// "aid="+aid+"&uid="+uid+"&textcontent="+text;
 	public static String putCommentUrl = rootPaht + "/action/putcomment.htm?";
+	// +uid+"&aid="+aid"
+	public static String baomingtUrl = rootPaht + "/action/baoming.htm?uid=";
+	public static String shouCangUrl = rootPaht + "/util/collect.htm?type=2&itemId=";
 	
 	public static int TIMEOUT = 5000;
 	public static AccountInfo loginInfo;
@@ -36,6 +38,17 @@ public class Utils {
 		
 		return	mSimpleDateFormat.format(new Date());
 	}
+	
+	
+	
+	public static long getTimeByString(String str){
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss",Locale.CHINA);
+		Date dates = new Date(str);
+		
+		return 0;
+	}
+	
+	
 	
 	public Utils() {
 	}
