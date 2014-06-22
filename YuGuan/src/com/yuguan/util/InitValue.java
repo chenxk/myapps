@@ -103,7 +103,7 @@ public class InitValue {
 			+ "{'bTime':'2014年04月30日 15:00','id':2,'address':'航华二中羽毛球馆','pic':'action.png','sex':10,'name':'羽毛球请赛'}"
 			+ "],'huodongList':'success','nums':14,'pg':'1','rg':'0','sr':'0'}";
 	
-	public static String mallInfoJson = "{'actionInfo':"
+	public static String actionInfoJson = "{'actionInfo':"
 			+ "{'aName':'健康时尚运动','aid':13,'backPic':'m_1399812448626.JPG','contact':'Lehmann','desc':'飞一般的感觉',"
 			+ "'eTime':'2014-05-31 17:00','mAddress':'一二八纪念路401号','mName':'鸿飞运动城','mid':3,'phone':'13817227701',"
 			+ "'poster':'Lehmann','posterId':29,'price':20,'sTime':'2014-05-31 14:00','score':0.0,'userNum':12},"
@@ -123,6 +123,39 @@ public class InitValue {
 	public static String loginJson = "{'message':null,'password':'123456','user':"
 			+ "{'email':'yongzhong1@126.com','id':31,'name':'kevin','password':'E10ADC3949BA59ABBE56E057F20F883E','status':2,'vip':0},"
 			+ "'username':'kevin'}";
+	
+	
+	public static String mallsInfo = "{'commentid':null,'comments':null,'envInfo':null,'imgs':null,'mallEvents':null,"
+			+ "'mallInfo':{'address':'闵行区航新路75号(航新路吴中路)','desc':'上海市航华第二中学创办于2003年6月，"
+			+ "是在闵行区教育局直接领导下的一所公办初级中学。学校占地17600平方米，校舍建筑面积9040平方米，绿化面积6200平方米，"
+			+ "教室及辅助用房40间，大型室内体育场馆，250米塑胶跑道，及各类专用教室一应俱全，教学设施齐全先进。校舍宽敞明亮，"
+			+ "校园环境整洁美丽，办学条件优良。学校现已拥有一支较强的师资队伍，学校管理规范有序，教师工作认真负责，"
+			+ "校园里充满了团结和谐、务实向上的良好氛围','mid':1,'name':'航华二中羽毛球馆','phone':'021-64202335',"
+			+ "'pic':'mall.png','score':8.14286},'mid':'1','status':null}";
+	
+	public static String picsInfoJson = "{'commentid':null,'comments':null,'envInfo':null,"
+			+ "'imgs':['m1_1397922592581.png','m1_1397922592582.png','m1_1397922592583.png','m1_1397922592584.png',"
+			+ "'m1_1397922592585.png','m1_1401116363797.PNG','m1_1401116363798.PNG','m1_1401117849516.PNG'],"
+			+ "'mallEvents':null,'mallInfo':{'address':'闵行区航新路75号(航新路吴中路)',"
+			+ "'desc':'上海市航华第二中学创办于2003年6月，是在闵行区教育局直接领导下的一所公办初级中学。学校占地17600平方米，"
+			+ "校舍建筑面积9040平方米，绿化面积6200平方米，教室及辅助用房40间，大型室内体育场馆，250米塑胶跑道，"
+			+ "及各类专用教室一应俱全，教学设施齐全先进。校舍宽敞明亮，校园环境整洁美丽，办学条件优良。学校现已拥有"
+			+ "一支较强的师资队伍，学校管理规范有序，教师工作认真负责，校园里充满了团结和谐、务实向上的良好氛围','mid':1,"
+			+ "'name':'航华二中羽毛球馆','phone':'021-64202335','pic':'mall.png','score':8.14286},'mid':'1','status':null}";
+	
+	public static String envInfoJson = "{'commentid':null,'comments':null,"
+			+ "'envInfo':{'bus':'枢纽5路 七宝3路 七宝2路','floor':'专业塑胶','height':14,'num':12,"
+			+ "'openobj':'面向所有人开放，办理VIP有折扣','optime':'工作日：18:00—22:00 周末： 8:00—22:00',"
+			+ "'parking':'室内地下收费停车场','position':'室内','sale':'售羽毛球 饮料 矿泉水 出租球拍','subway':'9号线七宝站',"
+			+ "'wash':'热水淋浴','wifi':'免费WIFI'},'imgs':['m1_1397922592581.png','m1_1397922592582.png',"
+			+ "'m1_1397922592583.png','m1_1397922592584.png','m1_1397922592585.png','m1_1401116363797.PNG',"
+			+ "'m1_1401116363798.PNG','m1_1401117849516.PNG'],'mallEvents':null,"
+			+ "'mallInfo':{'address':'闵行区航新路75号(航新路吴中路)','desc':'上海市航华第二中学创办于2003年6月，"
+			+ "是在闵行区教育局直接领导下的一所公办初级中学。学校占地17600平方米，校舍建筑面积9040平方米，绿化面积6200平方米，"
+			+ "教室及辅助用房40间，大型室内体育场馆，250米塑胶跑道，及各类专用教室一应俱全，教学设施齐全先进。校舍宽敞明亮，"
+			+ "校园环境整洁美丽，办学条件优良。学校现已拥有一支较强的师资队伍，学校管理规范有序，教师工作认真负责，校园里充满"
+			+ "了团结和谐、务实向上的良好氛围','mid':1,'name':'航华二中羽毛球馆','phone':'021-64202335','pic':'mall.png',"
+			+ "'score':8.14286},'mid':'1','status':null}";
 	
 	public static SharedPreferences preferences;
 	public InitValue() {

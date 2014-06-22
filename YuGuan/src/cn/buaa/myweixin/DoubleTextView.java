@@ -43,5 +43,15 @@ public class DoubleTextView extends LinearLayout {
 		view2.setText(valueTwo);
 	}
 
+	public String getValueTwo() {
+		return valueTwo;
+	}
+
+	public void setValueTwo(String valueTwo) {
+		this.valueTwo = valueTwo;
+		view2.setText(valueTwo);
+	}
+	
+
 
 }

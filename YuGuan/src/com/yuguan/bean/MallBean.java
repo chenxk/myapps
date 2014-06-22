@@ -2,6 +2,8 @@ package com.yuguan.bean;
 
 import java.io.Serializable;
 
+import org.json.JSONObject;
+
 public class MallBean implements Serializable {
 
 	/**
@@ -106,6 +108,26 @@ public class MallBean implements Serializable {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public static MallBean getMallBean(JSONObject json) {
+		try {
+			MallBean bean = new MallBean();
+			bean.setAddress(json.getString("address"));
+			bean.setComments(json.getInt("comments"));
+			bean.setFavorites(json.getInt("favorites"));
+			bean.setMdesc(json.getString("mdesc"));
+			bean.setPhone(json.getString("phone"));
+			bean.setPic(json.getString("pic"));
+			Double score = json.getDouble("score");
+			bean.setScore(score.intValue());
+			bean.setTitle(json.getString("title"));
+			bean.setId(json.getInt("id"));
+			return bean;
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return null;
 	}
 
 }

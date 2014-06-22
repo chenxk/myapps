@@ -14,19 +14,44 @@ import com.yuguan.bean.AccountInfo;
 public class Utils {
 
 	public static String rootPaht = "http://192.168.10.106:8080/yuqiu";
-	public static String countyUrl = rootPaht + "/util/county.htm?cid=";
+	// 获取区
+	public static String countyUrl = rootPaht + "/util/county.htm?r=" + Math.random() + "&cid=";
+	// 获取活动图片
 	public static String activityImg = rootPaht + "/images/action/";
+	// 获取用户头像
 	public static String userImg = rootPaht + "/images/user/";
-	public static String activityUrl = rootPaht + "/action/actionlist.htm?rg=0&sr=0&pg=";
-	public static String mallInfoUrl = rootPaht + "/action/actioninfo.htm?aid=";
-	public static String getBaoMingUsersUrl = rootPaht + "/action/baominguser.htm?aid=";
-	public static String getCommentUrl = rootPaht + "/action/getcomment.htm?aid=";
-	public static String loginUrl = rootPaht + "/member/login.htm?r=3&yanzhengma=343&username=";
-	// "aid="+aid+"&uid="+uid+"&textcontent="+text;
-	public static String putCommentUrl = rootPaht + "/action/putcomment.htm?";
-	// +uid+"&aid="+aid"
-	public static String baomingtUrl = rootPaht + "/action/baoming.htm?uid=";
-	public static String shouCangUrl = rootPaht + "/util/collect.htm?type=2&itemId=";
+	// 获取所有活动
+	public static String activityUrl = rootPaht + "/action/actionlist.htm?r=" + Math.random() + "&pg=";
+	// 获取单个活动信息
+	public static String actionInfoUrl = rootPaht + "/action/actioninfo.htm?r=" + Math.random() + "&aid=";
+	// 获取活动报名用户
+	public static String getBaoMingUsersUrl = rootPaht + "/action/baominguser.htm?r=" + Math.random() + "&aid=";
+	// 获取活动评价
+	public static String getCommentUrl = rootPaht + "/action/getcomment.htm?r=" + Math.random() + "&aid=";
+	// 用户登录
+	public static String loginUrl = rootPaht + "/member/login.htm?r=" + Math.random() + "&yanzhengma=343&username=";
+	// 发表评论
+	public static String putCommentUrl = rootPaht + "/action/putcomment.htm?r=" + Math.random() + "&";
+	// 点击报名操作
+	public static String baomingtUrl = rootPaht + "/action/baoming.htm?r=" + Math.random() + "&uid=";
+	// 点击收藏操作
+	public static String shouCangUrl = rootPaht + "/util/collect.htm?r=" + Math.random() + "&type=2&itemId=";
+	// 获取所有场馆
+	public static String mallListUrl = rootPaht + "/mall/malllist.htm?r=" + Math.random() + "&pg=";
+	// 获取场馆信息
+	public static String mallInfoUrl = rootPaht + "/mall/mallinfo.htm?r=" + Math.random() + "&mid=";
+	// 获取所有图片
+	public static String mallPicsUrl = rootPaht + "/mall/imginfo.htm?r=" + Math.random() + "&mid=";
+	// 场馆图片
+	public static String mallPicUrl = rootPaht + "/images/mall/";
+	// 收藏场馆
+	public static String mallShouCangUrl = rootPaht + "/util/collect.htm?type=1&r="+Math.random();
+	// 场馆评论 mid="+mid+"&commentid="+commentId+"&
+	public static String mallCommentUrl = rootPaht + "/mall/getcomment.htm?r="+Math.random() + "&mid=";
+	// 场馆环境信息
+	public static String mallEnvInfoUrl = rootPaht + "/mall/envinfo.htm?r="+Math.random() + "&mid=";
+	// 添加场馆评论 "mid="+mid+"&uid="+uid+"&score="+score+"&textcontent="+text;
+	public static String putMallCommentUrl = rootPaht + "/mall/putcomment.htm";
 	
 	public static int TIMEOUT = 5000;
 	public static AccountInfo loginInfo;

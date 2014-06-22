@@ -41,7 +41,7 @@ public class ActivityAdapter extends BaseAdapter {
 		this.mBusy = busy;
 	}
 
-	public ActivityAdapter(List<ActionBean> list, Context ctx,ListView listView) {
+	public ActivityAdapter(List<ActionBean> list, Context ctx) {
 		this.list = list;
 		this.ctx = ctx;
 		mInflater = LayoutInflater.from(ctx);
@@ -64,31 +64,6 @@ public class ActivityAdapter extends BaseAdapter {
 		return list == null ? 0 : list.get(position).getId();
 	}
 
-	/*private Handler handler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			super.handleMessage(msg);
-			Bundle data = msg.getData();
-			String name = data.getString("FILENAME");
-			FileInputStream is = null;
-			try {
-				is = ctx.openFileInput(name);
-				Drawable drawable = Drawable.createFromStream(is, null);
-				imag.setBackgroundDrawable(drawable);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-				showSomething("FileNotFoundException " + e.toString());
-			} finally {
-				try {
-					if (is != null)
-						is.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-
-		}
-	};*/
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {

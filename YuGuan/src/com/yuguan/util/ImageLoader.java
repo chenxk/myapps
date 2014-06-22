@@ -29,12 +29,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-import cn.buaa.myweixin.R;
 
 public class ImageLoader {
 	private static final String TAG = "ImageLoader";
-	private static final int MAX_CAPACITY = 10;// 一级缓存的最大空间
-	private static final long DELAY_BEFORE_PURGE = 1000 * 1000;// 定时清理缓存
+	private static final int MAX_CAPACITY = 50;// 一级缓存的最大空间
+	private static final long DELAY_BEFORE_PURGE = 1000 * 60 * 30;// 定时清理缓存
 
 	// 0.75是加载因子为经验值，true则表示按照最近访问量的高低排序，false则表示按照插入顺序排序
 	private HashMap<String, Bitmap> mFirstLevelCache = new LinkedHashMap<String, Bitmap>(
@@ -62,6 +61,10 @@ public class ImageLoader {
 	public ImageLoader(Context context) {
 		this.context = context;
 		imageFileCache = new ImageFileCache();
+	}
+	
+	public ImageLoader(){
+		
 	}
 
 	// 定时清理缓存
@@ -169,7 +172,6 @@ public class ImageLoader {
 		resetPurgeTimer();
 		Bitmap bitmap = getBitmapFromCache(url);// 从缓存中读取
 		if (bitmap == null) {
-			imageView.setImageResource(R.drawable.action_list_back);//缓存没有设为默认图片
 			ImageLoadTask imageLoadTask = new ImageLoadTask();
 			imageLoadTask.execute(url, adapter, imageView,null);
 		} else {
@@ -187,7 +189,6 @@ public class ImageLoader {
 		resetPurgeTimer();
 		Bitmap bitmap = getBitmapFromCache(url);// 从缓存中读取
 		if (bitmap == null) {
-			layout.setBackgroundResource(R.drawable.action_list_back);//缓存没有设为默认图片
 			ImageLoadTask imageLoadTask = new ImageLoadTask();
 			imageLoadTask.execute(url, adapter,null,layout);
 		} else {
@@ -216,8 +217,23 @@ public class ImageLoader {
 		BaseAdapter adapter;
 		ImageView imageView;
 		LinearLayout layout;
+		
+		/**
+		 * 是否取消
+		 */
+		private boolean isCancel = false;
+		
+		@Override
+		protected void onCancelled() {
+			System.out.println("async load imgae cancel");
+			isCancel = true;
+		}
+		
 		@Override
 		protected Bitmap doInBackground(Object... params) {
+			if (isCancel) {
+				return null;
+			}
 			url = (String) params[0];
 			if(params[1] != null)
 				adapter = (BaseAdapter) params[1];
@@ -231,6 +247,9 @@ public class ImageLoader {
 
 		@Override
 		protected void onPostExecute(Bitmap result) {
+			if (isCancel) {
+				return ;
+			}
 			if (result == null) {
 				return;
 			}
@@ -239,7 +258,8 @@ public class ImageLoader {
 				//showSomething("保存本地失败");
 			}
 			if(imageView != null){
-				imageView.setImageBitmap(result);
+				if(imageView.getTag().equals(url))
+					imageView.setImageBitmap(result);
 			}
 			if(layout != null){
 				BitmapDrawable bd = new BitmapDrawable(result);

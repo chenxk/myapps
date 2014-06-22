@@ -55,7 +55,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 	private Button mBtnBack;
 	private EditText mEditTextContent;
 	private ScrollView screen;
-
 	private TextView title;
 	private ImageView image;
 	private TextView actionHouse;
@@ -68,12 +67,13 @@ public class ChatActivity extends Activity implements OnClickListener {
 	private TextView actionContext;
 	private TextView baomingEndTime;
 	private TextView baoming;
+	private ImageView loveImg;
 	private TextView shoucang;
 	private TextView userCount;
 	private LinearLayout usersInfoScrollView;
 
-	private String mallInfoJson = InitValue.mallInfoJson;
-	private String userInfoJson = InitValue.mallInfoJson;
+	private String mallInfoJson = InitValue.actionInfoJson;
+	private String userInfoJson = InitValue.actionInfoJson;
 	private String commentJson = InitValue.commentJson;
 	private int actionId;
 	private int commentId = 0;
@@ -149,7 +149,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 		initView();
 
-		new Thread(new HttpUtil(Utils.mallInfoUrl + actionId, mallHandler,
+		new Thread(new HttpUtil(Utils.actionInfoUrl + actionId, mallHandler,
 				KEY_MALLINFO_JSON)).start();
 		new Thread(new HttpUtil(Utils.getBaoMingUsersUrl + actionId,
 				userHandler, KEY_USERINFO_JSON)).start();
@@ -161,6 +161,10 @@ public class ChatActivity extends Activity implements OnClickListener {
 	}
 
 	public void doBaoMin(View v) {
+		if(Utils.loginInfo == null){
+			showSomeThing("请先登陆...");
+			return;
+		}
 		String s = baoming.getText().toString();
 		if(s.equals("活动已结束")){
 			showSomeThing(s);
@@ -184,6 +188,8 @@ public class ChatActivity extends Activity implements OnClickListener {
 						if(json.getString("status").equals("suc")){
 							baoming.setText("已报名");
 							showSomeThing("报名成功!");
+							new Thread(new HttpUtil(Utils.getBaoMingUsersUrl + actionId,
+									userHandler, KEY_USERINFO_JSON)).start();
 						}else{
 							showSomeThing("报名失败!");
 						}
@@ -199,15 +205,16 @@ public class ChatActivity extends Activity implements OnClickListener {
 	}
 
 	public void doShoucang(View v) {
+		if(Utils.loginInfo == null){
+			showSomeThing("请先登陆...");
+			return;
+		}
 		String s = shoucang.getText().toString();
+		
 		if(s.equals("已收藏")){
 			showSomeThing("已收藏");
 			return;
 		}
-		getShouCang();
-	}
-	
-	public void getShouCang(){
 		String url = Utils.shouCangUrl + actionId + "&uid" + Utils.loginInfo.getId();
 		new Thread(new HttpUtil(url, new Handler(){
 			@Override
@@ -220,8 +227,10 @@ public class ChatActivity extends Activity implements OnClickListener {
 					try {
 						// {"itemId":"13","status":"success","type":"2","uid":"28"}
 						JSONObject json = new JSONObject(result);
+						//showSomeThing(result);
 						if(json.getString("status").equals("success")){
-							shoucang.setText("已收藏");
+							//shoucang.setText("已收藏");
+							loveImg.setImageResource(R.drawable.love_48);
 							showSomeThing("收藏成功!");
 						}else{
 							showSomeThing("收藏失败!");
@@ -235,6 +244,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 			}
 		}, "SHOUCANG")).start();
 	}
+	
 
 	public void showSomeThing(String str) {
 		Toast.makeText(getApplicationContext(), str, Toast.LENGTH_LONG).show();
@@ -254,19 +264,20 @@ public class ChatActivity extends Activity implements OnClickListener {
 				actionCreater.setText(actionInfo.getString("contact"));
 				actionTel.setText(actionInfo.getString("phone"));
 				actionPrice.setText(actionInfo.getString("price"));
-				actionBegin.setText(actionInfo.getString("sTime"));
+				String stime = actionInfo.getString("sTime");
+				actionBegin.setText(stime);
 				actionEnd.setText(actionInfo.getString("eTime"));
 				actionContext.setText(actionInfo.getString("desc"));
 				try {
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.CHINA);
-					Date date = sdf.parse(actionInfo.getString("sTime") + ":00");
+					Date date = sdf.parse(stime + ":00");
 					Date now = new Date(System.currentTimeMillis());
 					if(now.after(date)){
 						baoming.setText("活动已结束");
 						baomingEndTime.setText("");
 					}else{
 						baoming.setText("立即报名");
-						baomingEndTime.setText(actionInfo.getString("sTime") + "截止");
+						baomingEndTime.setText(stime + "截止");
 					}
 				} catch (Exception e) {
 					showSomeThing(e.toString());
@@ -300,7 +311,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 						if (bean != null) {
 							UserImage user = new UserImage(getApplicationContext());
 							user.initData(bean);
-							if(bean.getId() == Utils.loginInfo.getId()){
+							if(Utils.loginInfo != null && bean.getUid() == Utils.loginInfo.getId()){
 								baoming.setText("已报名");
 							}
 							usersInfoScrollView.addView(user, i, params);
@@ -455,7 +466,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 				return false;
 			}
 		});
-		title = (TextView) findViewById(R.id.title);
+		title = (TextView) findViewById(R.id.mallTit);
 		image = (ImageView) findViewById(R.id.mallImage);
 		actionHouse = (TextView) findViewById(R.id.actionHouse);
 		actionAdress = (TextView) findViewById(R.id.actionAdress);
@@ -468,6 +479,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 		commentList = (RefreshListView) findViewById(R.id.commentList);
 		commentList.setInterup(true);
 		baoming = (TextView) findViewById(R.id.baoming);
+		loveImg = (ImageView) findViewById(R.id.loveImg);
 		shoucang = (TextView) findViewById(R.id.shoucang);
 		baomingEndTime = (TextView) findViewById(R.id.baomingEndTime);
 		userCount = (TextView) findViewById(R.id.usrNum);
@@ -491,7 +503,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		showSomeThing("TOUCH");
 
 		((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE))
 				.hideSoftInputFromWindow(ChatActivity.this.getCurrentFocus()
@@ -577,48 +588,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 			
 			new Thread(postUtil).start();
 			
-			/*
-			new Thread(new HttpUtil(url,
-						new Handler(){
-				 @Override
-				public void handleMessage(Message msg) {
-					 super.handleMessage(msg);
-						Bundle data = msg.getData();
-						String result = data.getString("LOGINAJAX");
-						if (result != null && !"服务访问失败".equals(result)) {
-							try {
-								// {"aid":"13","status":"suc","textcontent":"sfsdfdfsds;","uid":"28"}
-								JSONObject json = new JSONObject(result);
-								String status = json.getString("status");
-									if(commentAdepter == null){
-										new Thread(new HttpUtil(Utils.getCommentUrl + actionId +"&commentid=" + commentId,
-												commentHandler, KEY_COMMENT_JSON)).start();
-									}else{
-										CommentBean bean = new CommentBean();
-										String comment = json.getString("textcontent");
-										//comment = URLEncoder.encode(comment, "utf-8");
-										bean.setComment(comment);
-										bean.setId(0);
-										bean.setPostTime(Utils.getNowTime());
-										bean.setUid(Utils.loginInfo.getId());
-										bean.setuName(Utils.loginInfo.getUserName());
-										comments.add(0, bean);
-										commentAdepter.notifyDataSetChanged();
-										commentList.setSelection(1);
-									}
-									
-									
-								}else{
-									showSomeThing("评论发布失败!");
-								}
-							} catch (JSONException e) {
-								e.printStackTrace();
-							} 
-						}else{
-							showSomeThing("评论提交失败!");
-						}
-				}
-			 }, "LOGINAJAX")).start();*/
 		}else{
 			showSomeThing("请输入评论内容");
 		}

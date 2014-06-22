@@ -34,8 +34,6 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.HorizontalScrollView;
@@ -105,6 +103,10 @@ public class MainWeixin extends Activity {
 	private LinearLayout activityRadioGroup_content;
 	private int activityColumnSelectIndex = 0;
 	private int curActivityPage = 1;
+	// 排序方式
+	private int curActivitySr = 0;
+	// 区域ID
+	private int curActivityRg = 0;
 
 	/** 所有场馆 */
 	private RefreshListView allMallsList;
@@ -113,7 +115,12 @@ public class MainWeixin extends Activity {
 	private boolean allMallsListIsLoad = false;
 	private LinearLayout mall_mRadioGroup_content;
 	private int mallColumnSelectIndex = 0;
-
+	private int curMallPage = 1;
+	// 排序方式
+	private int curMallSr = 0;
+	// 区域ID
+	private int curMallRg = 0;
+	
 	/** 所有好友 */
 	private RefreshListView allFriendsList;
 	private UserAdepter userAdepter;
@@ -121,7 +128,12 @@ public class MainWeixin extends Activity {
 	private boolean allFriendsListIsLoad = false;
 	private LinearLayout friend_mRadioGroup_content;
 	private int friendColumnSelectIndex = 0;
-
+	private int curFriendPage = 1;
+	// 排序方式
+	private int curFriendSr = 0;
+	// 区域ID
+	private int curFriendRg = 0;
+	
 	private final String KEY_COUNTY_JSON = "KEY_COUNTY_JSON";
 	private final String KEY_ACTIVITY_JSON = "KEY_ACTIVITY_JSON";
 	private final String KEY_MALL_JSON = "KEY_MALL_JSON";
@@ -167,9 +179,12 @@ public class MainWeixin extends Activity {
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			Bundle data = msg.getData();
-			mallJson = data.getString(KEY_MALL_JSON);
-			if (mallJson.length() > 0 && !mallJson.equals("服务访问失败")) {
-				initMallList();
+			String result = data.getString(KEY_MALL_JSON);
+			if (result.length() > 0 && !result.equals("服务访问失败")) {
+				mallJson = result;
+				malls.clear();
+				getMallDataFromJson();
+				mallAdapter.notifyDataSetChanged();
 			}
 		}
 	};
@@ -179,9 +194,12 @@ public class MainWeixin extends Activity {
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			Bundle data = msg.getData();
-			friendJson = data.getString(KEY_FRIEND_JSON);
-			if (friendJson.length() > 0 && !friendJson.equals("服务访问失败")) {
-				initFriendList();
+			String result = data.getString(KEY_FRIEND_JSON);
+			if (result.length() > 0 && !result.equals("服务访问失败")) {
+				friendJson = result;
+				friends.clear();
+				getFriendDataFromJson();
+				userAdepter.notifyDataSetChanged();
 			}
 		}
 	};
@@ -204,6 +222,7 @@ public class MainWeixin extends Activity {
 			}
 		}
 	};
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -294,10 +313,6 @@ public class MainWeixin extends Activity {
 				((ViewPager) container).removeView(views.get(position));
 			}
 
-			// @Override
-			// public CharSequence getPageTitle(int position) {
-			// return titles.get(position);
-			// }
 
 			@Override
 			public Object instantiateItem(View container, int position) {
@@ -357,26 +372,9 @@ public class MainWeixin extends Activity {
 		 }, "LOGINAJAX")).start();
     }
 	
-	public void loadImage(ImageView view) {
-		if (view != null) {
-			Animation operatingAnim = AnimationUtils.loadAnimation(this,
-					R.anim.loop);
-			LinearInterpolator lin = new LinearInterpolator();
-			operatingAnim.setInterpolator(lin);
-			view.startAnimation(operatingAnim);
-		}
-	}
-
-	public void destoryImage(ImageView view) {
-		if (view != null) {
-			view.clearAnimation();
-		}
-	}
-
 	private void initActionView() {
 		if (allActivitiesListIsLoad == false) {
 			activityRadioGroup_content = (LinearLayout) findViewById(R.id.mRadioGroup_content);
-			// loadImage = (ImageView) findViewById(R.id.activity_loaddata);
 			initTabColumn(0);
 			
 			new Thread(new HttpUtil(Utils.countyUrl + cityId,countyHandler, KEY_COUNTY_JSON)).start();
@@ -428,7 +426,7 @@ public class MainWeixin extends Activity {
 							public void more() {
 								if(!allActivitiesList.isLastData()){
 									++ curActivityPage;
-									String url = Utils.activityUrl + curActivityPage;
+									String url = Utils.activityUrl + curActivityPage + "&rg=" + curActivityRg + "&sr=" + curActivitySr;
 									allActivitiesList.setUrl(url);
 								}else{
 									showSomeThing("加载到最后一条了");
@@ -438,7 +436,7 @@ public class MainWeixin extends Activity {
 							@Override
 							public void setUrl() {
 								curActivityPage = 1;
-								String url = Utils.activityUrl + curActivityPage;
+								String url = Utils.activityUrl + curActivityPage + "&rg=" + curActivityRg + "&sr=" + curActivitySr;
 								allActivitiesList.setUrl(url);
 							}
 
@@ -463,7 +461,7 @@ public class MainWeixin extends Activity {
 
 				initActivitiesList();
 				
-				new Thread(new HttpUtil(Utils.activityUrl + curActivityPage,
+				new Thread(new HttpUtil(Utils.activityUrl + curActivityPage + "&rg=" + curActivityRg + "&sr=" + curActivitySr,
 						activityHandler, KEY_ACTIVITY_JSON)).start();
 
 			} catch (Exception e) {
@@ -478,10 +476,10 @@ public class MainWeixin extends Activity {
 		if (allMallsListIsLoad == false) {
 			mall_mRadioGroup_content = (LinearLayout) findViewById(R.id.mall_mRadioGroup_content);
 			initTabColumn(1);
+			new Thread(new HttpUtil(Utils.countyUrl + cityId,countyHandler, KEY_COUNTY_JSON)).start();
 			try {
 				allMallsList = (RefreshListView) findViewById(R.id.allMallsLists);
-				allMallsList
-						.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+				allMallsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 							@Override
 							public void onItemClick(AdapterView<?> parent,
@@ -489,7 +487,77 @@ public class MainWeixin extends Activity {
 								getMallInfo(view);
 							}
 						});
+				
+				allMallsList.setOnRefreshListener(new RefreshListView.RefreshListener() {
+
+					@Override
+					public Object refreshing() {
+						return null;
+					}
+
+					@Override
+					public void refreshed(Object obj) {
+						/**/
+						if (obj == null) {
+							return;
+						}
+
+						String result = obj.toString();
+						if (result.length() > 0 && !result.equals("服务访问失败")) {
+							mallJson = result;
+							malls.clear();
+							getMallDataFromJson();
+							allMallsList.setLastRow(false);
+							allMallsList.setLoading(false);
+							mallAdapter.notifyDataSetChanged();
+						}else{
+							showSomeThing(result);
+						}
+						allMallsList.setSelection(1);
+					}
+
+					@Override
+					public void more() {
+						if(!allMallsList.isLastData()){
+							++ curMallPage;
+							String url = Utils.mallListUrl + curMallPage + "&rg=" + curMallRg + "&sr=" + curMallSr;
+							allMallsList.setUrl(url);
+						}else{
+							showSomeThing("加载到最后一条了");
+						}
+					}
+
+					@Override
+					public void setUrl() {
+						curMallPage = 1;
+						String url = Utils.mallListUrl + curMallPage + "&rg=" + curMallRg + "&sr=" + curMallSr;
+						allMallsList.setUrl(url);
+					}
+
+					@Override
+					public void loaded(Object obj) {
+						if (obj == null) {
+							return;
+						}
+
+						String result = obj.toString();
+						if (result.length() > 0 && !result.equals("服务访问失败")) {
+							mallJson = result;
+							getMallDataFromJson();
+							mallAdapter.notifyDataSetChanged();
+							allMallsList.setLoading(false);
+							
+						}else{
+							showSomeThing(result);
+						}
+						allMallsList.removeFootView();
+					}
+				});
+
 				initMallList();
+				String url = Utils.mallListUrl + curMallPage + "&rg=" + curMallRg + "&sr=" + curMallSr;
+				new Thread(new HttpUtil(url,mallHandler, KEY_MALL_JSON)).start();
+				
 			} catch (Exception e) {
 				showSomeThing(e.toString());
 			}
@@ -551,7 +619,7 @@ public class MainWeixin extends Activity {
 			JSONObject jsonObject = new JSONObject(activityJson);
 			JSONArray jsonArray = jsonObject.getJSONArray("actions");
 			if (jsonArray.length() == 0) {
-				showSomeThing("加载到最后一条了");
+				showSomeThing("没有更多数据");
 				allActivitiesList.setLastData(true);
 				return;
 			} else {
@@ -560,13 +628,8 @@ public class MainWeixin extends Activity {
 
 			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject json = (JSONObject) jsonArray.get(i);
-				ActionBean action = new ActionBean();
-				action.setbTime(json.getString("bTime"));
-				action.setId(json.getInt("id"));
-				action.setMall(json.getString("mall"));
-				action.setPic(json.getString("pic"));
-				action.setScore(json.getString("score"));
-				action.setTitle(json.getString("title"));
+				ActionBean action = ActionBean.getActionBean(json);
+				if(action != null)
 				actions.add(action);
 			}
 		} catch (JSONException e1) {
@@ -580,19 +643,17 @@ public class MainWeixin extends Activity {
 		try {
 			JSONObject jsonObject = new JSONObject(mallJson);
 			JSONArray jsonArray = jsonObject.getJSONArray("malls");
+			if (jsonArray.length() == 0) {
+				showSomeThing("没有更多数据");
+				allMallsList.setLastData(true);
+				return;
+			} else {
+				allMallsList.setLastData(false);
+			}
 			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject json = (JSONObject) jsonArray.get(i);
-				MallBean bean = new MallBean();
-				bean.setAddress(json.getString("address"));
-				bean.setComments(json.getInt("comments"));
-				bean.setFavorites(json.getInt("favorites"));
-				bean.setMdesc(json.getString("mdesc"));
-				bean.setPhone(json.getString("phone"));
-				bean.setPic(json.getString("pic"));
-				Double score = json.getDouble("score");
-				bean.setScore(score.intValue());
-				bean.setTitle(json.getString("title"));
-				bean.setId(json.getInt("id"));
+				MallBean bean = MallBean.getMallBean(json);
+				if(bean != null)
 				malls.add(bean);
 			}
 		} catch (JSONException e) {
@@ -607,15 +668,16 @@ public class MainWeixin extends Activity {
 		try {
 			JSONObject jsonObject = new JSONObject(friendJson);
 			JSONArray jsonArray = jsonObject.getJSONArray("users");
+			if (jsonArray.length() == 0) {
+				showSomeThing("没有更多数据");
+				allFriendsList.setLastData(true);
+				return;
+			} else {
+				allFriendsList.setLastData(false);
+			}
 			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject json = (JSONObject) jsonArray.get(i);
 				UserBean bean = UserBean.getBeanFromJson(json);
-				/*UserBean action = new UserBean();
-				action.setId(json.getInt("id"));
-				action.setAddress(json.getString("address"));
-				action.setPic(json.getString("pic"));
-				action.setSex(json.getInt("sex"));
-				action.setName(json.getString("name"));*/
 				if(bean != null)
 					friends.add(bean);
 			}
@@ -626,15 +688,37 @@ public class MainWeixin extends Activity {
 
 	public void initActivitiesList() {
 		getActionDataFromJson();
-		activityAdapter = new ActivityAdapter(actions, this,allActivitiesList);
-		allActivitiesList.setAdapter(activityAdapter);
+		try {
+			allActivitiesList.setAdapter(null);
+			if(actions.size() < 5){
+				allActivitiesList.removeHeaderView();
+				allActivitiesList.removeFootView();
+			}else{
+				allActivitiesList.addHeaderView();
+				allActivitiesList.addFootView();
+			}
+			activityAdapter = new ActivityAdapter(actions, this);
+			allActivitiesList.setAdapter(activityAdapter);
+		} catch (Exception e) {
+			// TODO: handle exception
+			showSomeThing(e.toString());
+		}
 	}
 
 	private void initMallList() {
 		/**/
 		getMallDataFromJson();
-		mallAdapter = new MallAdepter(this, malls);
 		try {
+			allMallsList.setAdapter(null);
+			/**/
+			if(malls.size() < 5){
+				allMallsList.removeHeaderView();
+				allMallsList.removeFootView();
+			}else{
+				allMallsList.addHeaderView();
+				allMallsList.addFootView();
+			}
+			mallAdapter = new MallAdepter(this, malls);
 			allMallsList.setAdapter(mallAdapter);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -644,8 +728,23 @@ public class MainWeixin extends Activity {
 
 	private void initFriendList() {
 		getFriendDataFromJson();
-		userAdepter = new UserAdepter(this, friends);
-		allFriendsList.setAdapter(userAdepter);
+		try {
+			allFriendsList.setAdapter(null);
+			/**/
+			if(friends.size() < 5){
+				allFriendsList.removeHeaderView();
+				allFriendsList.removeFootView();
+			}else{
+				allFriendsList.addHeaderView();
+				allFriendsList.addFootView();
+			}
+			userAdepter = new UserAdepter(this, friends);
+			allFriendsList.setAdapter(userAdepter);
+		} catch (Exception e) {
+			// TODO: handle exception
+			showSomeThing(e.toString());
+		}
+		
 	}
 
 	public List<HashMap<String, String>> getSimpleAdapterData() {
@@ -817,6 +916,68 @@ public class MainWeixin extends Activity {
 						}
 					}
 					try {
+						if(index == 0){
+							curActivityRg = id;
+							curActivityPage = 1;
+							new Thread(new HttpUtil(Utils.activityUrl + curActivityPage + "&rg=" + curActivityRg + "&sr=" + curActivitySr,
+									new Handler() {
+
+								@Override
+								public void handleMessage(Message msg) {
+									super.handleMessage(msg);
+									Bundle data = msg.getData();
+									String result = data.getString("CHANGEQU");
+									if (result.length() > 0 && !result.equals("服务访问失败")) {
+										activityJson = result;
+										actions.clear();
+										initActivitiesList();
+									}
+								}
+							}, "CHANGEQU")).start();
+						}
+						if(index == 1){
+							curMallRg = id;
+							curMallPage = 1;
+							new Thread(new HttpUtil(Utils.mallListUrl + curMallPage + "&rg=" + curMallRg + "&sr=" + curMallSr,
+									new Handler() {
+
+								@Override
+								public void handleMessage(Message msg) {
+									super.handleMessage(msg);
+									Bundle data = msg.getData();
+									String result = data.getString("CHANGEQU2");
+									if (result.length() > 0 && !result.equals("服务访问失败")) {
+										mallJson = result;
+										malls.clear();
+										initMallList();
+									}
+								}
+							}, "CHANGEQU2")).start();
+						}
+						if(index == 2){
+							
+							if(true){
+								return;
+							}
+							
+							curFriendRg = id;
+							curFriendPage = 1;
+							new Thread(new HttpUtil(Utils.activityUrl + curActivityPage + "&rg=" + curActivityRg + "&sr=" + curActivitySr,
+									new Handler() {
+
+								@Override
+								public void handleMessage(Message msg) {
+									super.handleMessage(msg);
+									Bundle data = msg.getData();
+									String result = data.getString("CHANGEQU3");
+									if (result.length() > 0 && !result.equals("服务访问失败")) {
+										activityJson = result;
+										actions.clear();
+										initActivitiesList();
+									}
+								}
+							}, "CHANGEQU3")).start();
+						}
 						showSomeThing(id + "");
 					} catch (Exception e) {
 						showSomeThing(e.toString());
@@ -1115,6 +1276,9 @@ public class MainWeixin extends Activity {
 	}
 
 	public void getActionInfo(View v) { // 小黑 对话界面
+		if(!netIsGood){
+			showSomeThing("");
+		}
 		TextView idView = (TextView)v.findViewById(R.id.actionId);
 		int id = Integer.parseInt(idView.getText().toString());
 		Intent intent = new Intent(MainWeixin.this, ChatActivity.class);
@@ -1128,7 +1292,12 @@ public class MainWeixin extends Activity {
 
 	public void getMallInfo(View v) { // 小黑 对话界面
 		try {
+			TextView idView = (TextView)v.findViewById(R.id.mallId);
+			int id = Integer.parseInt(idView.getText().toString());
 			Intent intent = new Intent(MainWeixin.this, MallInfo.class);
+			Bundle bundle = new Bundle();
+			bundle.putInt("mallId", id);
+			intent.putExtras(bundle);
 			startActivity(intent);
 		} catch (Exception e) {
 			showSomeThing(e.toString());
