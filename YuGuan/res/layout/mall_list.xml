@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="#fff"
     android:orientation="horizontal"
-    android:padding="5dp" >
+    android:padding="10dp" >
 
     <ImageView
         android:id="@+id/mallPic"
@@ -20,6 +20,18 @@
         android:gravity="center_vertical"
         android:paddingLeft="10dp" >
 
+        <TextView
+            android:id="@+id/mallId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:paddingBottom="2dp"
+            android:paddingTop="2dp"
+            android:singleLine="true"
+            android:visibility="gone"
+            android:textColor="#000"
+            android:textSize="20sp" />
+        
         <TextView
             android:id="@+id/mallTitle"
             android:layout_width="wrap_content"

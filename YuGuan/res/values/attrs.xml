@@ -26,6 +26,7 @@
     
     <declare-styleable name="ScoreInfo">
         <attr name="score" format="integer"/>
+        <attr name="clickable" format="boolean"/>
     </declare-styleable>
     
     

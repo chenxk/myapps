@@ -8,16 +8,15 @@
         android:id="@+id/valueone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="sssssssssssss："
         android:textColor="#000"
-        android:textSize="15sp"/>
+        android:textSize="18sp"/>
     
     <TextView 
         android:id="@+id/valuetwo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="sssssssssssssssssssssss"
+        android:singleLine="false"
         android:textColor="#000"
-        android:textSize="15sp"/>
+        android:textSize="18sp"/>
 
 </LinearLayout>
