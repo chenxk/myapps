@@ -52,8 +52,13 @@ public class Utils {
 	public static String mallEnvInfoUrl = rootPaht + "/mall/envinfo.htm?r="+Math.random() + "&mid=";
 	// 添加场馆评论 "mid="+mid+"&uid="+uid+"&score="+score+"&textcontent="+text;
 	public static String putMallCommentUrl = rootPaht + "/mall/putcomment.htm";
+	// 所有用户 cid="+cid+"&pn="+pn+"&
+	public static String friendsUrl = rootPaht + "/friend/friends.htm?r="+Math.random();
+	// 用户信息
+	public static String friendInfoUrl = rootPaht + "/friend/friends.htm?r="+Math.random();
 	
 	public static int TIMEOUT = 5000;
+	public static int cid = 173;
 	public static AccountInfo loginInfo;
 	private Context context;
 

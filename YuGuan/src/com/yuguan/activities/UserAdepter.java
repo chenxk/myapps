@@ -15,8 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import cn.buaa.myweixin.R;
 
+import com.yuguan.bean.FriendBean;
 import com.yuguan.bean.UserBean;
 import com.yuguan.util.DownloadTask;
+import com.yuguan.util.ImageLoader;
 import com.yuguan.util.Utils;
 
 /**
@@ -25,17 +27,19 @@ import com.yuguan.util.Utils;
  */
 public class UserAdepter extends BaseAdapter {
 
-	private List<UserBean> coll;
+	private List<FriendBean> coll;
 
     private Context ctx;
     
     private LayoutInflater mInflater;
+    private ImageLoader mImageLoader;
 
     
-    public UserAdepter(Context context, List<UserBean> coll) {
+    public UserAdepter(Context context, List<FriendBean> coll) {
         this.ctx = context;
         this.coll = coll;
         mInflater = LayoutInflater.from(context);
+        mImageLoader = new ImageLoader(ctx);
     }
     
     
@@ -63,7 +67,7 @@ public class UserAdepter extends BaseAdapter {
 	@Override
 	public long getItemId(int position) {
 		// TODO Auto-generated method stub
-		return coll == null ? 0 : coll.get(position).getId();
+		return coll == null ? 0 : coll.get(position).getUid();
 	}
 
 	/* (non-Javadoc)
@@ -84,10 +88,12 @@ public class UserAdepter extends BaseAdapter {
             TextView friendAddress = (TextView)convertView.findViewById(R.id.friendAddress);
             
             //从list对象中为子组件赋值
-            UserBean bean = coll.get(position);
-            //new DownloadTask(imag,R.drawable.head1_128).execute(Utils.userImg + bean.getPic());
+            FriendBean bean = coll.get(position);
+            String url = Utils.userImg + bean.getPic();
+			imag.setTag(url);
+			mImageLoader.loadImage(url, this, imag);
             friendTitle.setText(bean.getName());
-            friendAddress.setText(bean.getAddress());
+            friendAddress.setText(bean.getAddr());
             if(bean.getSex() == 0){
             	friendSex.setImageResource(R.drawable.boy_48);
             }else{

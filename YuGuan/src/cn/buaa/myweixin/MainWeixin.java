@@ -51,6 +51,7 @@ import com.yuguan.activities.UserAdepter;
 import com.yuguan.bean.AccountInfo;
 import com.yuguan.bean.ActionBean;
 import com.yuguan.bean.CountyBean;
+import com.yuguan.bean.FriendBean;
 import com.yuguan.bean.MallBean;
 import com.yuguan.bean.UserBean;
 import com.yuguan.imagecache.ImageCacheManager;
@@ -123,8 +124,8 @@ public class MainWeixin extends Activity {
 	
 	/** 所有好友 */
 	private RefreshListView allFriendsList;
-	private UserAdepter userAdepter;
-	private List<UserBean> friends = new ArrayList<UserBean>();
+	private UserAdepter friendAdepter;
+	private List<FriendBean> friends = new ArrayList<FriendBean>();
 	private boolean allFriendsListIsLoad = false;
 	private LinearLayout friend_mRadioGroup_content;
 	private int friendColumnSelectIndex = 0;
@@ -199,7 +200,7 @@ public class MainWeixin extends Activity {
 				friendJson = result;
 				friends.clear();
 				getFriendDataFromJson();
-				userAdepter.notifyDataSetChanged();
+				friendAdepter.notifyDataSetChanged();
 			}
 		}
 	};
@@ -376,7 +377,6 @@ public class MainWeixin extends Activity {
 		if (allActivitiesListIsLoad == false) {
 			activityRadioGroup_content = (LinearLayout) findViewById(R.id.mRadioGroup_content);
 			initTabColumn(0);
-			
 			new Thread(new HttpUtil(Utils.countyUrl + cityId,countyHandler, KEY_COUNTY_JSON)).start();
 			
 			try {
@@ -568,19 +568,89 @@ public class MainWeixin extends Activity {
 
 	private void initFriendView() {
 		if (allFriendsListIsLoad == false) {
-			friend_mRadioGroup_content = (LinearLayout) findViewById(R.id.friend_mRadioGroup_content);
-			initTabColumn(2);
+			//friend_mRadioGroup_content = (LinearLayout) findViewById(R.id.friend_mRadioGroup_content);
+			//initTabColumn(2);
+			//new Thread(new HttpUtil(Utils.countyUrl + cityId,countyHandler, KEY_COUNTY_JSON)).start();
 			try {
 				allFriendsList = (RefreshListView) findViewById(R.id.allfriendsLists);
-				allFriendsList
-						.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+				allFriendsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 							@Override
 							public void onItemClick(AdapterView<?> parent,
 									View view, int position, long id) {
 								getFriendInfo(view);
 							}
 						});
+				
+				allFriendsList.setOnRefreshListener(new RefreshListView.RefreshListener() {
+
+					@Override
+					public Object refreshing() {
+						return null;
+					}
+
+					@Override
+					public void refreshed(Object obj) {
+						/**/
+						if (obj == null) {
+							return;
+						}
+
+						String result = obj.toString();
+						if (result.length() > 0 && !result.equals("服务访问失败")) {
+							friendJson = result;
+							friends.clear();
+							getFriendDataFromJson();
+							allFriendsList.setLastRow(false);
+							allFriendsList.setLoading(false);
+							friendAdepter.notifyDataSetChanged();
+						}else{
+							showSomeThing(result);
+						}
+						allFriendsList.setSelection(1);
+					}
+
+					@Override
+					public void more() {
+						if(!allFriendsList.isLastData()){
+							++ curFriendPage;
+							String url = Utils.friendsUrl + "&cid=" + Utils.cid + "&pn=" + curFriendPage;
+							allFriendsList.setUrl(url);
+						}else{
+							showSomeThing("加载到最后一条了");
+						}
+					}
+
+					@Override
+					public void setUrl() {
+						curFriendPage = 1;
+						String url = Utils.friendsUrl + "&cid=" + Utils.cid + "&pn=" + curFriendPage;
+						allFriendsList.setUrl(url);
+					}
+
+					@Override
+					public void loaded(Object obj) {
+						if (obj == null) {
+							return;
+						}
+
+						String result = obj.toString();
+						if (result.length() > 0 && !result.equals("服务访问失败")) {
+							friendJson = result;
+							getFriendDataFromJson();
+							friendAdepter.notifyDataSetChanged();
+							allFriendsList.setLoading(false);
+							
+						}else{
+							showSomeThing(result);
+						}
+						allFriendsList.removeFootView();
+					}
+				});
+
 				initFriendList();
+				String url = Utils.friendsUrl + "&cid=" + Utils.cid + "&pn=" + curFriendPage;
+				new Thread(new HttpUtil(url,friendHandler, KEY_FRIEND_JSON)).start();
+				
 			} catch (Exception e) {
 				showSomeThing(e.toString());
 			}
@@ -595,6 +665,7 @@ public class MainWeixin extends Activity {
 		counties.add(new CountyBean(0, null, "全部", 0));
 		try {
 			JSONObject jsonObject = new JSONObject(countyJson);
+			Utils.cid = jsonObject.getInt("cid");
 			JSONArray jsonArray = jsonObject.getJSONArray("counties");
 			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject json = (JSONObject) jsonArray.get(i);
@@ -667,7 +738,7 @@ public class MainWeixin extends Activity {
 		// friends.clear();
 		try {
 			JSONObject jsonObject = new JSONObject(friendJson);
-			JSONArray jsonArray = jsonObject.getJSONArray("users");
+			JSONArray jsonArray = jsonObject.getJSONArray("frds");
 			if (jsonArray.length() == 0) {
 				showSomeThing("没有更多数据");
 				allFriendsList.setLastData(true);
@@ -677,7 +748,7 @@ public class MainWeixin extends Activity {
 			}
 			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject json = (JSONObject) jsonArray.get(i);
-				UserBean bean = UserBean.getBeanFromJson(json);
+				FriendBean bean = FriendBean.getBeanFromJson(json);
 				if(bean != null)
 					friends.add(bean);
 			}
@@ -738,8 +809,8 @@ public class MainWeixin extends Activity {
 				allFriendsList.addHeaderView();
 				allFriendsList.addFootView();
 			}
-			userAdepter = new UserAdepter(this, friends);
-			allFriendsList.setAdapter(userAdepter);
+			friendAdepter = new UserAdepter(this, friends);
+			allFriendsList.setAdapter(friendAdepter);
 		} catch (Exception e) {
 			// TODO: handle exception
 			showSomeThing(e.toString());
@@ -784,9 +855,9 @@ public class MainWeixin extends Activity {
 	public List<HashMap<String, Object>> getSimpleAdapterFriendData() {
 		getFriendDataFromJson();
 		List<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
-		Iterator<UserBean> iterator = friends.iterator();
+		Iterator<FriendBean> iterator = friends.iterator();
 		while (iterator.hasNext()) {
-			UserBean action = iterator.next();
+			FriendBean action = iterator.next();
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("pic", action.getPic());
 			if (action.getSex() == 0) {
@@ -795,7 +866,7 @@ public class MainWeixin extends Activity {
 				map.put("sex", R.drawable.boy_48);
 			}
 
-			map.put("address", action.getAddress());
+			map.put("address", action.getAddr());
 			map.put("name", action.getName());
 			list.add(map);
 		}

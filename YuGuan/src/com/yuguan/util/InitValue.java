@@ -90,18 +90,11 @@ public class InitValue {
 							+ "'score':5.66667,'title':'通河中学羽毛球馆'}"
 							+ "],'nums':4,'pg':'1','rg':'0','sr':'0'}");
 	public static String mallJson = jsons.toString();
-	public static String friendJson = "{'users':["
-			+ "{'bTime':'2014年05月31日 14:00','id':13,'address':'鸿飞运动城','pic':'m_1399812448626.JPG','sex':0,'name':'健康时'},"
-			+ "{'bTime':'2014年05月28日 10:00','id':11,'address':'航华二中羽毛球馆','pic':'action.png','sex':10,'name':'羽冠王晋级赛'},"
-			+ "{'bTime':'2014年05月25日 15:00','id':14,'address':'博宽羽毛球馆—双桥路分部','pic':'m_1399812794313.JPG','sex':0,'name':'羽乐动真情'},"
-			+ "{'bTime':'2014年05月24日 15:00','id':12,'address':'航华二中羽毛球馆','pic':'m_1399735056391.PNG','sex':10,'name':'双打竞技赛'},"
-			+ "{'bTime':'2014年05月03日 14:00','id':10,'address':'航华二中羽毛球馆','pic':'action.png','sex':0,'name':'羽冠王预选赛'},"
-			+ "{'bTime':'2014年05月02日 14:00','id':9,'address':'航华二中羽毛球馆','pic':'action.png','sex':10,'name':'双打争霸赛'},"
-			+ "{'bTime':'2014年05月01日 14:00','id':4,'address':'航华二中羽毛球馆','pic':'action.png','sex':0,'name':'羽毛球相亲'},"
-			+ "{'bTime':'2014年05月01日 09:00','id':8,'address':'航华二中羽毛球馆','pic':'action.png','sex':10,'name':'单打争霸赛'},"
-			+ "{'bTime':'2014年04月30日 16:00','id':3,'address':'航华二中羽毛球馆','pic':'action.png','sex':0,'name':'羽毛球活动'},"
-			+ "{'bTime':'2014年04月30日 15:00','id':2,'address':'航华二中羽毛球馆','pic':'action.png','sex':10,'name':'羽毛球请赛'}"
-			+ "],'huodongList':'success','nums':14,'pg':'1','rg':'0','sr':'0'}";
+	public static String friendJson = "{'cid':173,'frds':["
+			+ "{'addr':'上海-闵行区','level':'LV1','name':'Johnney','pic':'img.jpg','rpu':10,'sex':1,'skill':10,'star':1,'uid':28},"
+			+ "{'addr':'上海','level':'LV1','name':'Lehmann','pic':'qq.jpg','rpu':18,'sex':2,'skill':8,'star':1,'uid':29},"
+			+ "{'addr':'上海','level':'LV1','name':'思密达','pic':'default.jpg','rpu':10,'sex':0,'skill':7,'star':1,'uid':30}"
+			+ "],'num':3,'pn':1}";
 	
 	public static String actionInfoJson = "{'actionInfo':"
 			+ "{'aName':'健康时尚运动','aid':13,'backPic':'m_1399812448626.JPG','contact':'Lehmann','desc':'飞一般的感觉',"
