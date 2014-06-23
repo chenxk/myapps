@@ -57,7 +57,7 @@
             android:layout_marginRight="10dp"
             android:onClick="sendComment"
             android:background="@drawable/chat_send_btn"
-            android:text="发送" />
+            android:text="评论" />
 
         <EditText
             android:id="@+id/mallComment"

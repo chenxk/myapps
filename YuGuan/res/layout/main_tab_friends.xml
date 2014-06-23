@@ -107,13 +107,13 @@
             android:src="@drawable/mm_submenu" />
     </RelativeLayout>    -->
 
-
+<!--
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/search_bar_bg"
         android:gravity="left" >
-<!--
+
         <Button
             android:id="@+id/friend_location_btn"
             android:layout_width="wrap_content"
@@ -126,7 +126,7 @@
             android:textColor="#000000"
             android:textSize="14sp" >
         </Button>
--->
+
         <HorizontalScrollView
             android:id="@+id/friend_mColumnHorizontalScrollView"
             android:layout_width="wrap_content"
@@ -143,9 +143,10 @@
                 android:paddingLeft="10.0dip"
                 android:paddingRight="10.0dip" >
             </LinearLayout>
-        </HorizontalScrollView>
+           
+        </HorizontalScrollView> 
     </LinearLayout>
-
+-->
     <com.yuguan.activities.RefreshListView
         android:id="@+id/allfriendsLists"
         android:layout_width="fill_parent"
