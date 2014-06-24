@@ -1,0 +1,865 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:diycomp="http://schemas.android.com/apk/res/cn.buaa.myweixin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#fff" >
+
+    <RelativeLayout
+        android:id="@+id/mall_rl_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/title_bar"
+        android:gravity="center_vertical" >
+
+        <Button
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@drawable/title_btn_back"
+            android:onClick="back"
+            android:text="返回"
+            android:textColor="#fff"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:clickable="false"
+            android:scaleType="matrix"
+            android:src="@drawable/crown" />
+
+        <ImageView
+            android:layout_width="67dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:onClick="dologin"
+            android:src="@drawable/add_user" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/mall_rl_bottom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/chat_footer_bg" >
+
+        <Button
+            android:id="@+id/mall_btn_send"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:onClick="sendComment"
+            android:background="@drawable/chat_send_btn"
+            android:text="评论" />
+
+        <EditText
+            android:id="@+id/mallComment"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/mall_btn_send"
+            android:background="@drawable/login_edit_normal"
+            android:singleLine="true"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/mall_rl_bottom"
+        android:layout_below="@id/mall_rl_layout"
+        android:scrollbars="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/mallBt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="8dp"
+                android:singleLine="true"
+                android:textColor="#000"
+                android:textSize="22sp" />
+
+            <ImageView
+                android:id="@+id/bigImage"
+                android:layout_width="fill_parent"
+                android:layout_height="200dp"
+                android:clickable="false"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/action_list_back" />
+
+            <HorizontalScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:scrollbars="none" >
+
+                <LinearLayout
+                    android:id="@+id/horizontalImages"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/white_line" >
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp" >
+
+                <cn.buaa.myweixin.ScoreInfo
+                    android:id="@+id/mall_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="2dp" >
+                </cn.buaa.myweixin.ScoreInfo>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:onClick="doShoucang"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:id="@+id/shoucang_mall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:paddingLeft="10dp"
+                        android:src="@drawable/love_32" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:paddingLeft="5dp"
+                        android:singleLine="true"
+                        android:text="收藏"
+                        android:textColor="#FF0000"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="#FFB200"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:singleLine="false"
+                android:textColor="#fff"
+                android:textSize="20sp" />
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="10dp" >
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/linearlayout_layer2"
+                android:padding="10dp" >
+
+                <cn.buaa.myweixin.DoubleTextView
+                    android:id="@+id/mallAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    diycomp:valueone="详细地址："
+                    diycomp:valuetwo="上海市徐汇区" >
+                </cn.buaa.myweixin.DoubleTextView>
+
+                <TextView
+                    android:id="@+id/mallMap"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="left"
+                    android:singleLine="true"
+                    android:text="[地图]"
+                    android:textColor="#DC2F1F"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="10dp" >
+            </LinearLayout>
+            
+            <cn.buaa.myweixin.DoubleTextView
+                android:background="@drawable/linearlayout_layer2"
+                android:id="@+id/mallPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                diycomp:valueone="联系电话："
+                diycomp:valuetwo="021-7678776" >
+            </cn.buaa.myweixin.DoubleTextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="10dp" >
+            </LinearLayout>
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/linearlayout_layer2"
+                android:orientation="vertical"
+                android:padding="10dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="doExpandFuwuxinxi"
+                    android:orientation="horizontal" >
+
+                    <LinearLayout
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent" >
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/fuwuxinxi_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/expand" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:singleLine="true"
+                        android:text="服务信息"
+                        android:textColor="#000"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/fuwuxinxi_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="10dp"
+                    android:visibility="gone" >
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="2dp"
+                        android:background="@drawable/linearlayout_layer2" >
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp" >
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="营业时间："
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/fuwuOpen"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:paddingBottom="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="2014年6月22日17:16:08"
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="2dp"
+                        android:background="@drawable/linearlayout_layer2" >
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp" >
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="开放对象："
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/fuwuPeo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:paddingBottom="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="土豪"
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="2dp"
+                        android:background="@drawable/linearlayout_layer2" >
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp" >
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="地板材质："
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/fuwuCaizhi"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:paddingBottom="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="大理石"
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="2dp"
+                        android:background="@drawable/linearlayout_layer2" >
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp" >
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="地理位置："
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/fuwuDili"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:paddingBottom="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="室内"
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="2dp"
+                        android:background="@drawable/linearlayout_layer2" >
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp" >
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="场地数量："
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/fuwuNum"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:paddingBottom="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="10片"
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="2dp"
+                        android:background="@drawable/linearlayout_layer2" >
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp" >
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="球馆挑高："
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/fuwuHigh"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:paddingBottom="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="19米"
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="2dp"
+                        android:background="@drawable/linearlayout_layer2" >
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp" >
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="无线网络："
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/fuwuNet"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:paddingBottom="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="WIFI"
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="2dp"
+                        android:background="@drawable/linearlayout_layer2" >
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp" >
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="洗浴设施："
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/fuwuLingyu"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:paddingBottom="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="淋浴"
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="2dp"
+                        android:background="@drawable/linearlayout_layer2" >
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:paddingTop="10dp" >
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="球馆商店："
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/fuwuShop"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:paddingBottom="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="false"
+                            android:text="各种吃货"
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp" >
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/linearlayout_layer2"
+                android:orientation="vertical"
+                android:padding="10dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="doExpandJiaotong"
+                    android:orientation="horizontal" >
+
+                    <LinearLayout
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent" >
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/jiaotong_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/expand" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:singleLine="true"
+                        android:text="交通路线"
+                        android:textColor="#000"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/jiaotong_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="10dp"
+                    android:visibility="gone" >
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="2dp"
+                        android:background="@drawable/linearlayout_layer2" >
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp" >
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="公交："
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/bus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:paddingBottom="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="false"
+                            android:text="23路"
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="2dp"
+                        android:background="@drawable/linearlayout_layer2" >
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp" >
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="地铁："
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/subway"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:paddingBottom="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="3号"
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="2dp"
+                        android:background="@drawable/linearlayout_layer2" >
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:paddingTop="10dp" >
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="停车场："
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/parking"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:paddingBottom="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="无"
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp" >
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/linearlayout_layer2"
+                android:orientation="vertical"
+                android:padding="10dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="doExpandPinglun"
+                    android:orientation="horizontal" >
+
+                    <LinearLayout
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent" >
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/pinglun_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/expand" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:singleLine="true"
+                        android:text="评论交流"
+                        android:textColor="#000"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/pinglun_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="10dp"
+                    android:visibility="gone" >
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="2dp"
+                        android:background="@drawable/linearlayout_layer2" >
+                    </LinearLayout>
+
+                    <com.yuguan.activities.RefreshListView
+                        android:id="@+id/mallCommentList"
+                        android:layout_width="fill_parent"
+                        android:layout_height="match_parent"
+                        android:cacheColorHint="#00000000"
+                        android:scrollbars="none" >
+                    </com.yuguan.activities.RefreshListView>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp" >
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

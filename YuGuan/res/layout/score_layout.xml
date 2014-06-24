@@ -10,7 +10,7 @@
         android:paddingBottom="2dp"
         android:paddingTop="2dp"
         android:singleLine="true"
-        android:text="评分：	"
+        android:text="评分:"
         android:textColor="#000"
         android:textSize="15sp" />
 

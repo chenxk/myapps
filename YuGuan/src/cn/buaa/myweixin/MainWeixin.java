@@ -53,7 +53,6 @@ import com.yuguan.bean.ActionBean;
 import com.yuguan.bean.CountyBean;
 import com.yuguan.bean.FriendBean;
 import com.yuguan.bean.MallBean;
-import com.yuguan.bean.UserBean;
 import com.yuguan.imagecache.ImageCacheManager;
 import com.yuguan.util.HttpUtil;
 import com.yuguan.util.InitValue;
@@ -317,11 +316,16 @@ public class MainWeixin extends Activity {
 
 			@Override
 			public Object instantiateItem(View container, int position) {
-				((ViewPager) container).addView(views.get(position));
+				try {
+					((ViewPager) container).addView(views.get(position));
 
-				if (position == 0) {
-					initActionView();
+					if (position == 0) {
+						initActionView();
+					}
+				} catch (Exception e) {
+					showSomeThing(e.toString() + " WWWW");
 				}
+				
 
 				return views.get(position);
 			}
@@ -1161,7 +1165,13 @@ public class MainWeixin extends Activity {
 			}
 
 			if (position == 2) {
-				initFriendView();
+				try {
+					initFriendView();
+				} catch (Exception e) {
+					// TODO: handle exception
+					showSomeThing("initFriendView(); " + e.toString());
+				}
+				
 			}
 
 			Animation animation = null;
@@ -1398,5 +1408,11 @@ public class MainWeixin extends Activity {
 	public void btn_shake(View v) { // �ֻ�ҡһҡ
 		Intent intent = new Intent(MainWeixin.this, ShakeActivity.class);
 		startActivity(intent);
+	}
+	
+	public void clickfriendLocationBtn(View v){
+		curFriendPage = 1;
+		String url = Utils.friendsUrl + "&cid=" + Utils.cid + "&pn=" + curFriendPage;
+		new Thread(new HttpUtil(url,friendHandler, KEY_FRIEND_JSON)).start();
 	}
 }

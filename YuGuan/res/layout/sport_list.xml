@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 这是列表项的布局文件，每一行长什么样子，修改这里 -->
+<!-- 这是列表项的布局文件，每一行长什么样子，修改这里 
+android:background="@drawable/mm_listitem"
+-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="138dp"
     android:layout_gravity="center_vertical"
-    android:background="@drawable/mm_listitem"
     android:orientation="vertical"
-    android:paddingBottom="4dp"
-    android:paddingTop="4dp" >
+    android:background="@drawable/linearlayout_line"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    >
 
     <LinearLayout
         android:id="@+id/actionImg"

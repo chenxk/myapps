@@ -1,39 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#fff"
+    android:layout_height="138dp"
+    android:background="@drawable/linearlayout_line"
     android:orientation="horizontal" >
 
-    <ImageView
-        android:id="@+id/friendPic"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/head1_128" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/linearlayout_line" >
+
+        <ImageView
+            android:id="@+id/friendPic"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_vertical"
+            android:scaleType="fitXY"
+            android:src="@drawable/head1_128" />
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="80dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         android:paddingLeft="10dp" >
 
         <TextView
             android:id="@+id/friendTitle"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:gravity="center"
-            android:singleLine="true"
             android:paddingLeft="10dp"
+            android:singleLine="true"
             android:text="AAAAAAAAA"
             android:textColor="#000"
             android:textSize="25sp" />
+        <!--  -->
+
+        <LinearLayout
+            android:id="@+id/jiange"
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_below="@id/friendTitle"
+            android:background="@drawable/linearlayout_layer2" >
+
+            <TextView
+                android:layout_width="1dp"
+                android:layout_height="1dp" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_alignParentBottom="true"
-            android:layout_below="@id/friendTitle"
+            android:layout_below="@id/jiange"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:orientation="horizontal" >
@@ -42,8 +65,7 @@
                 android:id="@+id/friendSex"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/girl_48" 
-                android:contentDescription="sss"/>
+                android:src="@drawable/girl_48" />
 
             <TextView
                 android:id="@+id/friendAddress"
@@ -51,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:text="bbbbbbbbbbbbbb"
-                android:textColor="#000"
+                android:textColor="#FEC861"
                 android:textSize="20sp" />
         </LinearLayout>
     </RelativeLayout>

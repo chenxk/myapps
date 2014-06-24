@@ -5,7 +5,7 @@
         android:drawable="@drawable/linearlayout_line"
         android:right="10dp"
         android:left="10dp"
-        android:bottom="10dp"
-        android:top="10dp"/>
+        android:bottom="2dp"
+        android:top="2dp"/>
 
 </layer-list>

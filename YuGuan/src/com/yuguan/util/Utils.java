@@ -13,7 +13,7 @@ import com.yuguan.bean.AccountInfo;
 
 public class Utils {
 
-	public static String rootPaht = "http://www.yuguanwang.com:8080/yuqiu";
+	public static String rootPaht = "http://192.168.10.106:8080/yuqiu";
 	// 获取区
 	public static String countyUrl = rootPaht + "/util/county.htm?r=" + Math.random() + "&cid=";
 	// 获取活动图片
