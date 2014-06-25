@@ -44,6 +44,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yuguan.activities.ActivityAdapter;
+import com.yuguan.activities.FriendInfo;
 import com.yuguan.activities.MallAdepter;
 import com.yuguan.activities.MallInfo;
 import com.yuguan.activities.RefreshListView;
@@ -1390,7 +1391,7 @@ public class MainWeixin extends Activity {
 
 	public void getFriendInfo(View v) {
 		try {
-			Intent intent = new Intent(MainWeixin.this, MallInfo.class);
+			Intent intent = new Intent(MainWeixin.this, FriendInfo.class);
 			startActivity(intent);
 		} catch (Exception e) {
 			showSomeThing(e.toString());

@@ -3,32 +3,32 @@
     xmlns:imagecontrol="http://schemas.android.com/apk/res/cn.buaa.myweixin"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:padding="10dp" >
 
-    <com.yuguan.util.RoundImageView  
-         android:id="@+id/userImage"
-            android:layout_width="128dp"  
-            android:layout_height="128dp"  
-            imagecontrol:border_inside_color="#fff7f2e9"  
-            imagecontrol:border_outside_color="#ffd5d1c8"  
-            imagecontrol:border_thickness="2dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/head1_128" />
+    <com.yuguan.util.RoundImageView
+        android:id="@+id/userImage"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/head1_128"
+        imagecontrol:border_inside_color="#fff7f2e9"
+        imagecontrol:border_outside_color="#ffd5d1c8"
+        imagecontrol:border_thickness="2dp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:paddingTop="10dp"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:paddingTop="10dp" >
 
         <ImageView
             android:id="@+id/userSex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/girl_32"/>
+            android:src="@drawable/girl_32" />
 
         <TextView
             android:id="@+id/userName"

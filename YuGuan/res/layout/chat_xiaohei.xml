@@ -420,7 +420,6 @@
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:onClick="doBaoMin"
                 android:orientation="horizontal"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
@@ -430,6 +429,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="90dp"
                     android:minWidth="150dp"
+                    android:onClick="doBaoMin"
                     android:layout_alignParentLeft="true"
                     android:layout_gravity="right"
                     android:background="#BDC40C"
