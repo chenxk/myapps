@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:imagecontrol="http://schemas.android.com/apk/res/cn.buaa.myweixin"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/linearlayout_line"
+    android:orientation="horizontal" >
+
+    <com.yuguan.util.RoundImageView
+        android:id="@+id/userImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="fitXY"
+        android:src="@drawable/head1_128"
+        imagecontrol:border_inside_color="#fff7f2e9"
+        imagecontrol:border_outside_color="#ffd5d1c8"
+        imagecontrol:border_thickness="2dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingLeft="10dp" >
+
+        <TextView
+            android:id="@+id/friendmsgname"
+            style="@style/fontstyle_red_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:singleLine="false"
+            android:text="周杰伦" />
+
+        <TextView
+            android:paddingBottom="10dp"
+            android:id="@+id/friendmsgAddress"
+            style="@style/fontstyle_18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="false"
+            android:text="bbbbbbbbsdfsdfsfsdfsfsfsdfsfasdfsfsdfasfasfsafsadfsdafdsfsdfsdbbbbbb" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingRight="5dp"
+                android:src="@drawable/clock_32" />
+
+            <TextView
+                android:id="@+id/msgSendTime"
+                style="@style/fontstyle_18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="false"
+                android:text="2014年5月29日20:14:22" />
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#FFB200"
+            android:orientation="horizontal"
+            android:paddingBottom="2dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="2dp" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingRight="5dp"
+                android:src="@drawable/edit_32" />
+
+            <TextView
+                style="@style/fontstyle_white_18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="回复" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

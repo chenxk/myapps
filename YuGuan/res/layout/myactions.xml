@@ -8,7 +8,7 @@
     android:orientation="vertical" >
 
     <RelativeLayout
-        android:id="@+id/message_rl_layout"
+        android:id="@+id/myaction_rl_layout"
         android:layout_width="fill_parent"
         android:layout_height="45dp"
         android:background="@drawable/title_bar"
@@ -43,7 +43,7 @@
     </RelativeLayout>
 
     <TableLayout
-        android:id="@+id/messages"
+        android:id="@+id/myactions"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
@@ -67,7 +67,7 @@
                     android:layout_gravity="center_vertical"
                     android:gravity="center"
                     android:singleLine="true"
-                    android:text="系统消息"
+                    android:text="我参与的"
                     android:textColor="#DC2F1F"
                     android:textSize="20sp" />
             </LinearLayout>
@@ -92,7 +92,7 @@
                     android:layout_gravity="center_vertical"
                     android:gravity="center"
                     android:singleLine="true"
-                    android:text="好友私信"
+                    android:text="我组织的"
                     android:textColor="#000"
                     android:textSize="20sp" />
             </LinearLayout>
@@ -106,7 +106,7 @@
     </LinearLayout>
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/messagePager"
+        android:id="@+id/myactionPager"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center" >

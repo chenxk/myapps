@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <TextView
+        style="@style/fontstyle_bold_24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="系统消息" />
+
+    <TextView
+        android:id="@+id/sysmsg"
+        style="@style/fontstyle_20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:singleLine="false"
+        android:text="周杰身份的十分大方大方暗室逢灯舒服水电费舒服舒服师范生" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingRight="5dp"
+            android:src="@drawable/clock_32" />
+
+        <TextView
+            android:id="@+id/sysSendTime"
+            style="@style/fontstyle_18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="false"
+            android:text="2014年5月29日20:14:22" />
+    </LinearLayout>
+
+</LinearLayout>

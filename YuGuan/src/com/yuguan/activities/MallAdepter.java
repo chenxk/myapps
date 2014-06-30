@@ -93,8 +93,7 @@ public class MallAdepter extends BaseAdapter {
 			TextView id = (TextView) convertView.findViewById(R.id.mallId);
 			TextView tv1 = (TextView) convertView.findViewById(R.id.mallTitle);
 			TextView pb = (TextView) convertView.findViewById(R.id.mallAddress);
-			ScoreInfo tv2 = (ScoreInfo) convertView
-					.findViewById(R.id.mallScore);
+			ScoreInfo tv2 = (ScoreInfo) convertView.findViewById(R.id.mallScore);
 
 			// 从list对象中为子组件赋值
 			MallBean bean = coll.get(position);
