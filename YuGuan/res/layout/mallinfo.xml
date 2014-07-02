@@ -55,8 +55,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:onClick="sendComment"
             android:background="@drawable/chat_send_btn"
+            android:onClick="sendComment"
             android:text="评论" />
 
         <EditText
@@ -132,8 +132,20 @@
                 android:orientation="horizontal"
                 android:padding="10dp" >
 
+                <TextView
+                    android:id="@+id/pppp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="2dp"
+                    android:singleLine="true"
+                    android:text="评分："
+                    android:textColor="#000"
+                    android:textSize="15sp" />
+
                 <cn.buaa.myweixin.ScoreInfo
                     android:id="@+id/mall_score"
+                    android:layout_toRightOf="@id/pppp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="2dp"
@@ -180,7 +192,7 @@
                 android:singleLine="false"
                 android:textColor="#fff"
                 android:textSize="20sp" />
-            
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="10dp" >
@@ -189,8 +201,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:background="@drawable/linearlayout_layer2"
+                android:orientation="horizontal"
                 android:padding="10dp" >
 
                 <cn.buaa.myweixin.DoubleTextView
@@ -217,12 +229,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="10dp" >
             </LinearLayout>
-            
+
             <cn.buaa.myweixin.DoubleTextView
-                android:background="@drawable/linearlayout_layer2"
                 android:id="@+id/mallPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/linearlayout_layer2"
                 android:padding="10dp"
                 diycomp:valueone="联系电话："
                 diycomp:valuetwo="021-7678776" >
@@ -232,7 +244,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="10dp" >
             </LinearLayout>
-            
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

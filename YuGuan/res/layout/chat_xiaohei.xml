@@ -68,8 +68,8 @@
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@id/btn_send"
             android:background="@drawable/login_edit_normal"
-            android:singleLine="true"
             android:hint="点此输入活动评论"
+            android:singleLine="false"
             android:textSize="18sp" />
     </RelativeLayout>
 
@@ -428,11 +428,11 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="90dp"
-                    android:minWidth="150dp"
-                    android:onClick="doBaoMin"
                     android:layout_alignParentLeft="true"
                     android:layout_gravity="right"
                     android:background="#BDC40C"
+                    android:minWidth="150dp"
+                    android:onClick="doBaoMin"
                     android:orientation="vertical" >
 
                     <TextView
@@ -472,8 +472,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/unlove_48"
-                        android:paddingLeft="20dp" />
+                        android:paddingLeft="20dp"
+                        android:src="@drawable/unlove_48" />
 
                     <TextView
                         android:id="@+id/shoucang"
@@ -514,8 +514,8 @@
                     android:gravity="center_horizontal"
                     android:padding="5dp"
                     android:singleLine="true"
-                    android:textColor="#DB2F21"
                     android:text="0"
+                    android:textColor="#DB2F21"
                     android:textSize="30sp" />
 
                 <TextView
@@ -540,16 +540,13 @@
 
                 <LinearLayout
                     android:id="@+id/usersInfo"
-                    android:orientation = "horizontal"
-                    android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal" >
                 </LinearLayout>
             </HorizontalScrollView>
 
-            
-            
-            
             <LinearLayout
                 android:id="@+id/commontLayout"
                 android:layout_width="fill_parent"
@@ -559,13 +556,12 @@
                 android:padding="10dp" >
 
                 <com.yuguan.activities.RefreshListView
-			        android:id="@+id/commentList"
-			        android:layout_width="fill_parent"
-			        android:layout_height="match_parent"
-			        android:cacheColorHint="#00000000"
-			        android:scrollbars="none" >
-			    </com.yuguan.activities.RefreshListView>
-                
+                    android:id="@+id/commentList"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:cacheColorHint="#00000000"
+                    android:scrollbars="none" >
+                </com.yuguan.activities.RefreshListView>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

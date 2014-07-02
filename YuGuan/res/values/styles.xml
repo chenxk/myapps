@@ -121,6 +121,11 @@
         <item name="android:gravity">center</item>
     </style>
     
+    <style name="fontstyle_16">
+        <item name="android:textSize">16.0sp</item>
+        <item name="android:textColor">#524E4E</item>
+    </style>
+    
     <style name="fontstyle_18">
         <item name="android:textSize">18.0sp</item>
         <item name="android:textColor">#524E4E</item>
@@ -131,8 +136,18 @@
         <item name="android:textColor">#524E4E</item>
     </style>
     
+    <style name="fontstyle_red_16">
+        <item name="android:textSize">16.0sp</item>
+        <item name="android:textColor">#DC2F1F</item>
+    </style>
+    
     <style name="fontstyle_red_20">
         <item name="android:textSize">20.0sp</item>
+        <item name="android:textColor">#DC2F1F</item>
+    </style>
+    
+     <style name="fontstyle_red_18">
+        <item name="android:textSize">18.0sp</item>
         <item name="android:textColor">#DC2F1F</item>
     </style>
     
@@ -157,9 +172,19 @@
         <item name="android:textColor">#000</item>
     </style>
     
+     <style name="fontstyle_black_18">
+        <item name="android:textSize">18.0sp</item>
+        <item name="android:textColor">#000</item>
+    </style>
+    
      <style name="fontstyle_pingfen_16">
         <item name="android:textSize">16.0sp</item>
         <item name="android:textColor">#FFB200</item>
+    </style>
+    
+     <style name="fontstyle_guanjun_16">
+        <item name="android:textSize">16.0sp</item>
+        <item name="android:textColor">#E1AD0F</item>
     </style>
     
 </resources>
