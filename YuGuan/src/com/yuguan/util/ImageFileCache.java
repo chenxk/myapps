@@ -43,6 +43,16 @@ public class ImageFileCache {
         }
         return null;
     }
+    
+    
+    public File getImageFile(String url){
+    	final String path = getDirectory() + "/" + convertUrlToFileName(url);
+        File file = new File(path);
+        if (file.exists()) {
+              return file;
+        }
+        return null;
+    }
                                                                 
     /** 将图片存入文件缓存 **/
     public  boolean saveBitmap(Bitmap bm, String url) {

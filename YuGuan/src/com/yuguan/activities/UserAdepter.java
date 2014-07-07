@@ -16,8 +16,6 @@ import android.widget.Toast;
 import cn.buaa.myweixin.R;
 
 import com.yuguan.bean.FriendBean;
-import com.yuguan.bean.UserBean;
-import com.yuguan.util.DownloadTask;
 import com.yuguan.util.ImageLoader;
 import com.yuguan.util.Utils;
 
@@ -67,7 +65,7 @@ public class UserAdepter extends BaseAdapter {
 	@Override
 	public long getItemId(int position) {
 		// TODO Auto-generated method stub
-		return coll == null ? 0 : coll.get(position).getUid();
+		return coll == null ? -1 : coll.get(position).getUid();
 	}
 
 	/* (non-Javadoc)
@@ -83,6 +81,7 @@ public class UserAdepter extends BaseAdapter {
         try {
         	//得到条目中的子组件
     		ImageView imag = (ImageView)convertView.findViewById(R.id.friendPic);
+    		TextView friendId = (TextView)convertView.findViewById(R.id.friendId);
             TextView friendTitle = (TextView)convertView.findViewById(R.id.friendTitle);
             ImageView friendSex = (ImageView)convertView.findViewById(R.id.friendSex);
             TextView friendAddress = (TextView)convertView.findViewById(R.id.friendAddress);
@@ -92,6 +91,7 @@ public class UserAdepter extends BaseAdapter {
             String url = Utils.userImg + bean.getPic();
 			imag.setTag(url);
 			mImageLoader.loadImage(url, this, imag);
+			friendId.setText(bean.getUid()+"");
             friendTitle.setText(bean.getName());
             friendAddress.setText(bean.getAddr());
             if(bean.getSex() == 0){

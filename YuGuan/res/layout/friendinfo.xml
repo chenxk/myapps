@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:diycomp="http://schemas.android.com/apk/res/cn.buaa.myweixin"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainfriendinfo"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#fff" >
@@ -14,12 +15,13 @@
         android:gravity="center_vertical" >
 
         <Button
+            android:id="@+id/friendinfo_back"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:background="@drawable/title_btn_back"
-            android:onClick="doBack"
             android:text="返回"
+            android:onClick="dofriendinfoBack"
             android:textColor="#fff"
             android:textSize="14sp" />
 
@@ -32,12 +34,13 @@
             android:src="@drawable/crown" />
 
         <ImageView
+            android:id="@+id/friendinfo_login"
             android:layout_width="67dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
-            android:onClick="doLogin"
+            android:onClick="dofriendinfoLogin"
             android:src="@drawable/add_user" />
     </RelativeLayout>
 
@@ -168,6 +171,7 @@
                         android:orientation="horizontal" >
 
                         <TextView
+                            android:id="@+id/xinyustars"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="☆☆☆"
@@ -176,7 +180,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/fenshu"
+                        
                         android:layout_width="90dp"
                         android:layout_height="39dp"
                         android:layout_below="@id/stars"
@@ -188,6 +192,7 @@
                         android:orientation="vertical" >
 
                         <TextView
+                            android:id="@+id/xinyufenshu"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
@@ -237,6 +242,7 @@
                         android:orientation="horizontal" >
 
                         <TextView
+                            android:id="@+id/level"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
@@ -261,6 +267,7 @@
                         android:orientation="vertical" >
 
                         <TextView
+                            android:id="@+id/levelfenshu"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
@@ -283,10 +290,12 @@
                 android:paddingTop="10dp" >
 
                 <LinearLayout
+                    android:id="@+id/fasixin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_marginLeft="50dp"
+                    android:onClick="doSendMsg"
                     android:orientation="horizontal" >
 
                     <ImageView
@@ -314,10 +323,12 @@
                     android:background="@drawable/linearlayout_line" />
 
                 <LinearLayout
+                    android:id="@+id/jiahaoyou"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="50dp"
+                    android:onClick="doAddFriend"
                     android:orientation="horizontal" >
 
                     <ImageView

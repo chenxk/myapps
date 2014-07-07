@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:diycomp="http://schemas.android.com/apk/res/cn.buaa.myweixin"
     android:id="@+id/mainweixin"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -15,12 +16,13 @@
         android:gravity="center_vertical" >
 
         <!-- 创建活动 -->
+
         <LinearLayout
             android:id="@+id/main_title_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
             android:layout_centerVertical="true"
+            android:gravity="center_horizontal"
             android:orientation="horizontal" >
 
             <TextView
@@ -53,6 +55,7 @@
             android:scaleType="matrix"
             android:src="@drawable/crown" />
 
+        <!--
         <ImageView
             android:id="@+id/right_btn"
             android:layout_width="67dp"
@@ -61,7 +64,20 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
             android:onClick="btnmainright"
-            android:src="@drawable/add_user" />
+            android:src="@drawable/add_user" />        -->
+
+        <com.yuguan.util.RoundImageView
+            android:id="@+id/right_btn"
+            android:layout_width="67dp"
+            android:layout_height="67dp"
+            android:layout_margin="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:onClick="btnmainright"
+            android:src="@drawable/add_user"
+            diycomp:border_outside_color="#C6BBBB"
+            diycomp:border_thickness="2dp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -157,30 +173,6 @@
                     android:textSize="13sp" />
             </LinearLayout>
 
-            <!-- 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical" >
-
-                <ImageView
-                    android:id="@+id/img_settings"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:scaleType="matrix"
-                    android:src="@drawable/tab_settings_normal" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="设置"
-                    android:textColor="#DC2F1F"
-                    android:textSize="13sp" />
-            </LinearLayout>
-             -->
         </LinearLayout>
     </RelativeLayout>
 

@@ -135,10 +135,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		try {} catch (Exception e) {
-			// TODO: handle exception
-			showSomeThing(e.toString());
-		}
 		actionId = getIntent().getIntExtra("actionId", 0);
 		showSomeThing(actionId + "");
 		mImageLoader = new ImageLoader(getApplicationContext());

@@ -15,6 +15,7 @@
         android:gravity="center_vertical" >
 
         <Button
+            android:id="@+id/myaction_back"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -24,15 +25,16 @@
             android:textColor="#fff"
             android:textSize="14sp" />
 
-        <ImageView
+        <TextView
+            style="@style/fontstyle_white_18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:clickable="false"
-            android:scaleType="matrix"
-            android:src="@drawable/crown" />
+            android:text="我的活动" />
 
         <ImageView
+            android:id="@+id/myaction_login"
             android:layout_width="67dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -53,6 +55,7 @@
             android:layout_height="wrap_content" >
 
             <LinearLayout
+                android:id="@+id/myaction_in"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -62,6 +65,7 @@
                 android:padding="10dp" >
 
                 <TextView
+                    android:id="@+id/myaction_inText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -78,6 +82,7 @@
                 android:background="@drawable/linearlayout_line" />
 
             <LinearLayout
+                android:id="@+id/myaction_out"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -87,6 +92,7 @@
                 android:padding="10dp" >
 
                 <TextView
+                    android:id="@+id/myaction_outText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"

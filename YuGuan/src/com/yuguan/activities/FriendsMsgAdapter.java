@@ -3,8 +3,6 @@ package com.yuguan.activities;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,31 +13,28 @@ import android.widget.Toast;
 import cn.buaa.myweixin.R;
 
 import com.yuguan.bean.ActionBean;
+import com.yuguan.bean.FriendMsgBean;
 import com.yuguan.util.ImageLoader;
+import com.yuguan.util.RoundImageView;
 import com.yuguan.util.Utils;
 
-public class ActivityAdapter extends BaseAdapter {
+public class FriendsMsgAdapter extends BaseAdapter {
 
-	private List<ActionBean> list;
+	private List<FriendMsgBean> list;
 
 	private Context ctx;
-
 	private LayoutInflater mInflater;
-
-	private LinearLayout imag;
-
 	private ImageLoader mImageLoader;
+	private LinearLayout huifu;
+	private RoundImageView userImage;
+	private TextView friendmsgname;
+	private TextView friendmsg;
+	private TextView msgSendTime;
 
-	public ActivityAdapter() {
+	public FriendsMsgAdapter() {
 	}
 
-	private boolean mBusy = false;
-
-	public void setFlagBusy(boolean busy) {
-		this.mBusy = busy;
-	}
-
-	public ActivityAdapter(List<ActionBean> list, Context ctx) {
+	public FriendsMsgAdapter(List<FriendMsgBean> list, Context ctx) {
 		this.list = list;
 		this.ctx = ctx;
 		mInflater = LayoutInflater.from(ctx);
@@ -59,46 +54,44 @@ public class ActivityAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int position) {
-		return list == null ? 0 : list.get(position).getId();
+		return list == null ? 0 : list.get(position).getUid();
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.sport_list, null);
+			convertView = mInflater.inflate(R.layout.friendmsg, null);
 		}
 		try {
 			// 得到条目中的子组件
-			imag = (LinearLayout) convertView.findViewById(R.id.actionImg);
+			huifu = (LinearLayout) convertView.findViewById(R.id.huifu);
+
+			huifu.setOnClickListener(new View.OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+
+				}
+			});
+
 			TextView actionId = (TextView) convertView
-					.findViewById(R.id.actionId);
-			TextView title = (TextView) convertView
-					.findViewById(R.id.actionTitle);
-			TextView bTime = (TextView) convertView
-					.findViewById(R.id.actionTime);
-			TextView mall = (TextView) convertView
-					.findViewById(R.id.actionMall);
+					.findViewById(R.id.friendmsgId);
+			friendmsgname = (TextView) convertView
+					.findViewById(R.id.friendmsgname);
+			friendmsg = (TextView) convertView.findViewById(R.id.friendContent);
+			msgSendTime = (TextView) convertView.findViewById(R.id.msgSendTime);
 
 			// 从list对象中为子组件赋值
-			ActionBean bean = list.get(position);
+			FriendMsgBean bean = list.get(position);
 			String url = Utils.activityImg + bean.getPic();
-			imag.setTag(url);
-			if (!mBusy) {
-				mImageLoader.loadImage(url, this, imag);
-			} else {
-				Bitmap bitmap = mImageLoader.getBitmapFromCache(url);
-				if (bitmap != null) {
-					BitmapDrawable bd = new BitmapDrawable(bitmap);
-					imag.setBackgroundDrawable(bd);
-				} else {
-					imag.setBackgroundResource(R.drawable.action_list_back);
-				}
-			}
+			// imag.setTag(url);
+			mImageLoader.loadImage(url, this, userImage);
 
-			actionId.setText(bean.getId() + "");
-			title.setText(bean.getTitle());
-			bTime.setText(bean.getbTime());
-			mall.setText(bean.getMall());
+			actionId.setText(bean.getUid() + "");
+			friendmsgname.setText(bean.getName());
+			friendmsg.setText(bean.getMsg());
+			msgSendTime.setText(bean.getTime());
 
 		} catch (Exception e) {
 			Toast.makeText(ctx, e.toString(), Toast.LENGTH_SHORT).show();

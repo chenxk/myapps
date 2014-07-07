@@ -1,56 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#fff"
+    android:layout_margin="10dp"
+    android:background="@drawable/login_edit_normal"
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/pingfenName"
+        android:id="@+id/sendFriendName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingBottom="8dp"
         android:paddingTop="8dp"
         android:singleLine="true"
-        android:text="什么活动"
+        android:text="发送给：Mr.chen"
         android:textColor="#000"
         android:textSize="22sp" />
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/white_line" >
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
         android:paddingRight="10dp" >
 
         <EditText
+            android:id="@+id/msgcontent"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="80dp"
             android:background="@drawable/login_edit_normal"
-            android:hint="说点什么说点什么说点什么说点什么说点什么说点什么说点什么说点什么吧"
-            android:inputType="textMultiLine"
+            android:hint="点此输入私信"
             android:singleLine="false" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/sendMsg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="10dp"
         android:background="#DC2F1F"
         android:gravity="center"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         android:paddingBottom="5dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:paddingTop="5dp" >
 
         <TextView
@@ -58,6 +60,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="发送" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/cancelMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" >
+
+        <TextView
+            style="@style/fontstyle_16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="取消" />
     </LinearLayout>
 
 </LinearLayout>

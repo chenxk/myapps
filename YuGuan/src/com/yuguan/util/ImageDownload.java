@@ -27,7 +27,7 @@ public class ImageDownload implements Runnable{
 	@Override
 	public void run() {
 		try {
-			CacheInfo cacheInfo = MainWeixin.imageCacheManager
+			/*CacheInfo cacheInfo = MainWeixin.imageCacheManager
 					.downlaodImageReInfo(new URL(url));
 			if (cacheInfo != null) {
 				Message message = new Message();
@@ -36,7 +36,7 @@ public class ImageDownload implements Runnable{
 						cacheInfo.getFileName());
 				message.setData(bundle);
 				handler.sendMessage(message);
-			}	
+			}	*/
 		} catch (Exception e) {
 			showSomething("URL  " + e.toString());
 		}

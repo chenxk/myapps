@@ -4,16 +4,22 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import org.json.JSONObject;
+
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
+import cn.buaa.myweixin.Login;
 
 import com.yuguan.bean.AccountInfo;
+import com.yuguan.bean.FriendBean;
 
 public class Utils {
 
-	public static String rootPaht = "http://192.168.10.106:8080/yuqiu";
+	public static String rootPaht = "http://www.yuguanwang.com/yuqiu";//
 	// 获取区
 	public static String countyUrl = rootPaht + "/util/county.htm?r=" + Math.random() + "&cid=";
 	// 获取活动图片
@@ -56,10 +62,33 @@ public class Utils {
 	public static String friendsUrl = rootPaht + "/friend/friends.htm?r="+Math.random();
 	// 用户信息
 	public static String friendInfoUrl = rootPaht + "/friend/friends.htm?r="+Math.random();
+	// 发私信
+	public static String sendPriMsgUrl = rootPaht + "/user/sendprvmsg.htm?";
+	// 添加好友
+	public static String addFriendUrl = rootPaht + "/user/addfriend.htm?r="+Math.random();
+	// 获取个人信息
+	public static String getAccountInfoUrl = rootPaht + "/app/userinfo.htm?uid=";
+	// 获取消息个数 {"actinvite":0,"addfrd":0,"notice":0,"prvmsg":0,"uid":28}
+	public static String getMessageCountUrl = rootPaht + "/user/noticenum.htm?r="+Math.random();;
+	// 上传文件
+	public static String uploadFileUrl = rootPaht + "/servlet/uploadImg.do?r="+Math.random();
 	
 	public static int TIMEOUT = 5000;
 	public static int cid = 173;
+	// 
+	public static int uid = 0;
 	public static AccountInfo loginInfo;
+	public static FriendBean self;
+	public static Bitmap selfPic;
+	public static JSONObject msgCount;
+	// 活动邀请
+	public static int  actinvite;
+	// 好友申请
+	public static int  addfrd;
+	// 系统通知
+	public static int  notice;
+	// 球友私信
+	public static int  prvmsg;
 	private Context context;
 
 	
@@ -74,7 +103,6 @@ public class Utils {
 	public static long getTimeByString(String str){
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss",Locale.CHINA);
 		Date dates = new Date(str);
-		
 		return 0;
 	}
 	
@@ -221,4 +249,15 @@ public class Utils {
 		}
 		return netType;
 	}
+	
+	
+	public static void doCheckLogin(Context context){
+		Intent intent = new Intent(context, Login.class);
+		
+		if(loginInfo != null){
+			intent = new Intent(context, com.yuguan.activities.AccountInfo.class);
+		}
+		context.startActivity(intent);
+	}
+	
 }

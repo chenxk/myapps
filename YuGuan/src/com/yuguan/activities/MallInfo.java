@@ -170,7 +170,7 @@ public class MallInfo extends Activity{
 				WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
 		mallId = getIntent().getIntExtra("mallId", 0);
-		showSomeThing(mallId + "");
+		//showSomeThing(mallId + "");
 		mImageLoader = new ImageLoader(getApplicationContext());
 
 		initView();

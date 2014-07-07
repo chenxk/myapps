@@ -18,6 +18,7 @@
         <attr name="username" format="string"/>
     </declare-styleable>
     
+    
     <declare-styleable name="CommentInfo">
         <attr name="commentuser" format="string"/>
         <attr name="comment" format="string"/>

@@ -26,6 +26,13 @@
         android:paddingLeft="10dp" >
 
         <TextView
+            android:id="@+id/friendmsgId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="周杰伦" />
+        
+        <TextView
             android:id="@+id/friendmsgname"
             style="@style/fontstyle_red_20"
             android:layout_width="wrap_content"
@@ -36,8 +43,8 @@
 
         <TextView
             android:paddingBottom="10dp"
-            android:id="@+id/friendmsgAddress"
-            style="@style/fontstyle_18"
+            android:id="@+id/friendContent"
+            style="@style/fontstyle_black_18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="false"
@@ -66,6 +73,7 @@
         </LinearLayout>
         
         <LinearLayout
+             android:id="@+id/huifu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#FFB200"

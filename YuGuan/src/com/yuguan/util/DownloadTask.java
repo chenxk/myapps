@@ -37,8 +37,9 @@ public class DownloadTask extends AsyncTask<String, Void, CacheInfo> {
 	@Override
 	protected CacheInfo doInBackground(String... params) {
 		try {
-			return MainWeixin.imageCacheManager.downlaodImageReInfo(new URL(
-					params[0]));
+			//return MainWeixin.imageCacheManager.downlaodImageReInfo(new URL(
+			//		params[0]));
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

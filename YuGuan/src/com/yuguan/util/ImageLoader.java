@@ -1,6 +1,7 @@
 package com.yuguan.util;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.SoftReference;
@@ -161,6 +162,29 @@ public class ImageLoader {
 		}
 		return bitmap;
 	}
+	
+	public Bitmap getImageFromUrl(String url){
+		resetPurgeTimer();
+		Bitmap bitmap = getBitmapFromCache(url);// 从缓存中读取
+		if (bitmap == null) {
+			bitmap = loadImageFromInternet(url);
+			if(bitmap == null){
+				addImage2Cache(url, bitmap);// 放入缓存
+				savePicAsFile(bitmap, url);
+			}
+		}
+		return (bitmap);//
+	}
+	
+	public boolean saveImageToFile(String url,Bitmap bitmap){
+		addImage2Cache(url, bitmap);// 放入缓存
+		return savePicAsFile(bitmap, url);
+	}
+	
+	public File getImageFile(String url){
+		return imageFileCache.getImageFile(url);
+	}
+	
 
 	/**
 	 * 加载图片，如果缓存中有就直接从缓存中拿，缓存中没有就下载

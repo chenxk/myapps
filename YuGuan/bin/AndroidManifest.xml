@@ -70,6 +70,27 @@
             android:name="com.yuguan.activities.MallInfo"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
+            android:name="com.yuguan.activities.FriendInfo"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="com.yuguan.activities.AccountInfo"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="com.yuguan.activities.ActionPingfen"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="com.yuguan.activities.MessageCenter"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="com.yuguan.activities.MyActions"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="com.yuguan.activities.MyFriends"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="com.yuguan.activities.MyShouCang"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
             android:name=".InfoXiaohei"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity

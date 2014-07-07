@@ -8,10 +8,6 @@ android:background="@drawable/mm_listitem"
     android:layout_gravity="center_vertical"
     android:orientation="vertical"
     android:background="@drawable/linearlayout_line"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
     >
 
     <LinearLayout

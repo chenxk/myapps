@@ -56,7 +56,9 @@ import com.yuguan.bean.FriendBean;
 import com.yuguan.bean.MallBean;
 import com.yuguan.imagecache.ImageCacheManager;
 import com.yuguan.util.HttpUtil;
+import com.yuguan.util.ImageLoader;
 import com.yuguan.util.InitValue;
+import com.yuguan.util.RoundImageView;
 import com.yuguan.util.Utils;
 
 public class MainWeixin extends Activity {
@@ -78,7 +80,7 @@ public class MainWeixin extends Activity {
 	private PopupWindow menuWindow;
 	private LayoutInflater inflater;
 	// private Button mRightBtn;
-
+	private RoundImageView userImg;
 	private LinearLayout mainTitleBar;
 
 	/** 省分类列表 */
@@ -94,7 +96,7 @@ public class MainWeixin extends Activity {
 	/** 市区分类列表 */
 	private ArrayList<CountyBean> counties = new ArrayList<CountyBean>();
 	// private boolean isCountyLoading = false;
-	public static ImageCacheManager imageCacheManager;
+	//public static ImageCacheManager imageCacheManager;
 
 	/** 所有活动 */
 	private RefreshListView allActivitiesList;
@@ -225,15 +227,19 @@ public class MainWeixin extends Activity {
 	};
 	
 
+	private ImageLoader mImageLoader;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		/* 固定存储空间大小 */
+		/* 固定存储空间大小
 		imageCacheManager = ImageCacheManager.getImageCacheService(this,
 				ImageCacheManager.MODE_FIXED_MEMORY_USED, "_yuguan");
 		imageCacheManager.setMax_Memory(1024 * 1024 * 50);
-
+		 */
+		mImageLoader = new ImageLoader(getApplicationContext());
+		
 		InitValue.preferences = this.getSharedPreferences("USERINFO", Context.MODE_WORLD_READABLE);
 		
 		if(InitValue.preferences != null){
@@ -259,6 +265,7 @@ public class MainWeixin extends Activity {
 				WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		instance = this;
 
+		userImg = (RoundImageView) findViewById(R.id.right_btn);
 		mainTitleBar = (LinearLayout) findViewById(R.id.main_title_bar);
 		mTabPager = (ViewPager) findViewById(R.id.tabpager);
 		mTabPager.setOnPageChangeListener(new MyOnPageChangeListener());
@@ -353,9 +360,13 @@ public class MainWeixin extends Activity {
 								message = json.getString("message");
 							} catch (Exception e) {
 							}
-							// unsuccess
+							// {"message":null,"password":"Lehmann",
+							//"user":{"email":"yongzhong15@126.com","id":28,"name":"Johnney",
+							//"password":"ABEFCB49241976E2F7A4A88030CD3255","status":2,"vip":0},"username":"Johnney"}
 							if(message == null || message.equals("null")){
 								Utils.loginInfo = AccountInfo.getAccountInfo(json);
+								//Utils.getAccountInfo(Utils.loginInfo.getId());
+								getAccountInfo(Utils.loginInfo.getId());
 								showSomeThing("登陆成功,欢迎 "+ json.getString("username"));
 							}else{
 								new AlertDialog.Builder(MainWeixin.this)
@@ -377,6 +388,34 @@ public class MainWeixin extends Activity {
 			}
 		 }, "LOGINAJAX")).start();
     }
+	
+	public void getAccountInfo(int id){
+    	String url = Utils.getAccountInfoUrl + id;
+    	new Thread(new HttpUtil(url, new Handler(){
+			 @Override
+			public void handleMessage(Message msg) {
+				 super.handleMessage(msg);
+					Bundle data = msg.getData();
+					String result = data.getString("GETACCOUNTINFO");
+					if (result != null && !"服务访问失败".equals(result)) {
+						try {
+							JSONObject json = new JSONObject(result);
+							JSONObject message  = json.getJSONObject("user");
+							if(message != null){
+								Utils.self = FriendBean.getBeanFromJson(message);
+								String url = Utils.userImg + Utils.self.getPic();
+								userImg.setTag(url);
+								mImageLoader.loadImage(url, null, userImg);
+								Utils.selfPic = mImageLoader.getImageFromUrl(url);
+							}
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+					}
+			}
+		 }, "GETACCOUNTINFO")).start();
+    }
+    
 	
 	private void initActionView() {
 		if (allActivitiesListIsLoad == false) {
@@ -582,7 +621,7 @@ public class MainWeixin extends Activity {
 							@Override
 							public void onItemClick(AdapterView<?> parent,
 									View view, int position, long id) {
-								getFriendInfo(view);
+								getFriendInfo(view,position);
 							}
 						});
 				
@@ -754,8 +793,14 @@ public class MainWeixin extends Activity {
 			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject json = (JSONObject) jsonArray.get(i);
 				FriendBean bean = FriendBean.getBeanFromJson(json);
-				if(bean != null)
-					friends.add(bean);
+				if(Utils.loginInfo == null){
+					if(bean != null)
+						friends.add(bean);
+				}else{
+					if(bean != null && Utils.loginInfo.getId() != bean.getUid())
+						friends.add(bean);
+				}
+				
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -1166,13 +1211,7 @@ public class MainWeixin extends Activity {
 			}
 
 			if (position == 2) {
-				try {
-					initFriendView();
-				} catch (Exception e) {
-					// TODO: handle exception
-					showSomeThing("initFriendView(); " + e.toString());
-				}
-				
+				initFriendView();
 			}
 
 			Animation animation = null;
@@ -1351,8 +1390,22 @@ public class MainWeixin extends Activity {
 
 	// 设置标题栏右侧按钮的作用
 	public void btnmainright(View v) {
-		Intent intent = new Intent(MainWeixin.this, Login.class);
-		startActivity(intent);
+		try {
+			Intent intent = null;//new Intent(MainWeixin.this, Login.class);
+			
+			if(Utils.loginInfo != null){
+				intent = new Intent(MainWeixin.this, com.yuguan.activities.AccountInfo.class);
+			}else{
+				intent = new Intent(MainWeixin.this, Login.class);
+			}
+			startActivity(intent);
+		} catch (Exception e) {
+			// TODO: handle exception
+			showSomeThing(e.toString());
+		}
+		
+		//Intent intent = new Intent(MainWeixin.this, Login.class);
+		//startActivity(intent);
 		// Toast.makeText(getApplicationContext(), "点击了功能按钮",
 		// Toast.LENGTH_LONG).show();
 	}
@@ -1389,9 +1442,16 @@ public class MainWeixin extends Activity {
 		// Toast.LENGTH_LONG).show();
 	}
 
-	public void getFriendInfo(View v) {
+	public void getFriendInfo(View v,int position) {
 		try {
+			FriendBean bean = friends.get(position);
 			Intent intent = new Intent(MainWeixin.this, FriendInfo.class);
+			TextView idView = (TextView)v.findViewById(R.id.friendId);
+			int id = Integer.parseInt(idView.getText().toString());
+			Bundle bundle = new Bundle();
+			bundle.putInt("friendId", id);
+			bundle.putSerializable("friendBean", bean);
+			intent.putExtras(bundle);
 			startActivity(intent);
 		} catch (Exception e) {
 			showSomeThing(e.toString());

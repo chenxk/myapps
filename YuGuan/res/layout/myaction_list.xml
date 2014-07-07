@@ -88,6 +88,7 @@ android:background="@drawable/mm_listitem"-->
                 android:src="@drawable/mark_24" />
 
             <TextView
+                android:id="@+id/comeon"
                 style="@style/fontstyle_black_16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -96,6 +97,7 @@ android:background="@drawable/mm_listitem"-->
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/actionScore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -116,7 +118,5 @@ android:background="@drawable/mm_listitem"-->
                 android:text="评分" />
         </LinearLayout>
     </RelativeLayout>
-
-    
 
 </LinearLayout>

@@ -18,7 +18,7 @@ import com.yuguan.bean.ActionBean;
 import com.yuguan.util.ImageLoader;
 import com.yuguan.util.Utils;
 
-public class ActivityAdapter extends BaseAdapter {
+public class MyActivityAdapter extends BaseAdapter {
 
 	private List<ActionBean> list;
 
@@ -30,7 +30,7 @@ public class ActivityAdapter extends BaseAdapter {
 
 	private ImageLoader mImageLoader;
 
-	public ActivityAdapter() {
+	public MyActivityAdapter() {
 	}
 
 	private boolean mBusy = false;
@@ -39,7 +39,7 @@ public class ActivityAdapter extends BaseAdapter {
 		this.mBusy = busy;
 	}
 
-	public ActivityAdapter(List<ActionBean> list, Context ctx) {
+	public MyActivityAdapter(List<ActionBean> list, Context ctx) {
 		this.list = list;
 		this.ctx = ctx;
 		mInflater = LayoutInflater.from(ctx);
@@ -65,20 +65,31 @@ public class ActivityAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.sport_list, null);
+			convertView = mInflater.inflate(R.layout.myaction_list, null);
 		}
 		try {
 			// 得到条目中的子组件
-			imag = (LinearLayout) convertView.findViewById(R.id.actionImg);
+			imag = (LinearLayout) convertView.findViewById(R.id.myactionImg);
 			TextView actionId = (TextView) convertView
-					.findViewById(R.id.actionId);
+					.findViewById(R.id.myactionId);
 			TextView title = (TextView) convertView
-					.findViewById(R.id.actionTitle);
+					.findViewById(R.id.myactionTitle);
 			TextView bTime = (TextView) convertView
-					.findViewById(R.id.actionTime);
+					.findViewById(R.id.myactionTime);
 			TextView mall = (TextView) convertView
-					.findViewById(R.id.actionMall);
+					.findViewById(R.id.myactionMall);
+			TextView comeon = (TextView) convertView
+					.findViewById(R.id.comeon);
+			LinearLayout actionScore = (LinearLayout) convertView.findViewById(R.id.actionScore);
 
+			actionScore.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
 			// 从list对象中为子组件赋值
 			ActionBean bean = list.get(position);
 			String url = Utils.activityImg + bean.getPic();
