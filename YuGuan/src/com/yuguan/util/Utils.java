@@ -19,7 +19,7 @@ import com.yuguan.bean.FriendBean;
 
 public class Utils {
 
-	public static String rootPaht = "http://www.yuguanwang.com/yuqiu";//
+	public static String rootPaht = "http://192.168.10.100:8080/yuqiu";//
 	// 获取区
 	public static String countyUrl = rootPaht + "/util/county.htm?r=" + Math.random() + "&cid=";
 	// 获取活动图片
@@ -71,7 +71,7 @@ public class Utils {
 	// 获取消息个数 {"actinvite":0,"addfrd":0,"notice":0,"prvmsg":0,"uid":28}
 	public static String getMessageCountUrl = rootPaht + "/user/noticenum.htm?r="+Math.random();;
 	// 上传文件
-	public static String uploadFileUrl = rootPaht + "/servlet/uploadImg.do?r="+Math.random();
+	public static String uploadFileUrl = rootPaht + "/fileUpload";
 	
 	public static int TIMEOUT = 5000;
 	public static int cid = 173;

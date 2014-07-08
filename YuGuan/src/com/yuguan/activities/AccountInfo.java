@@ -3,6 +3,7 @@ package com.yuguan.activities;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -17,6 +18,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -272,6 +274,11 @@ public class AccountInfo extends Activity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		try {
+			
+		
+		
 		// 结果码不等于取消时候
 		if (resultCode != RESULT_CANCELED) {
 
@@ -303,6 +310,9 @@ public class AccountInfo extends Activity {
 				}
 				break;
 			}
+		}} catch (Exception e) {
+			// TODO: handle exception
+			showSomeThing(e.toString());
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -313,6 +323,10 @@ public class AccountInfo extends Activity {
 	 * @param uri
 	 */
 	public void startPhotoZoom(Uri uri) {
+		cropImageUri(uri);
+		
+		if(true)
+			return;
 
 		Intent intent = new Intent("com.android.camera.action.CROP");
 		intent.setDataAndType(uri, "image/*");
@@ -322,11 +336,39 @@ public class AccountInfo extends Activity {
 		intent.putExtra("aspectX", 1);
 		intent.putExtra("aspectY", 1);
 		// outputX outputY 是裁剪图片宽高
-		intent.putExtra("outputX", 640);
-		intent.putExtra("outputY", 640);
+		intent.putExtra("outputX", 480);
+		intent.putExtra("outputY", 480);
 		intent.putExtra("return-data", true);
 		startActivityForResult(intent, RESULT_REQUEST_CODE);
 	}
+	
+	private Uri tempUri = Uri.parse("file:///sdcard/temp.jpg");
+	private void cropImageUri(Uri uri){
+		 	    Intent intent = new Intent("com.android.camera.action.CROP");
+		 	    intent.setDataAndType(uri, "image/*");
+		 	    intent.putExtra("crop", "true");
+		 	    intent.putExtra("aspectX", 1);
+			    intent.putExtra("aspectY", 1);
+			    intent.putExtra("outputX", 480);
+			    intent.putExtra("outputY", 480);
+			    intent.putExtra("scale", true);
+			    intent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri);
+		 	    intent.putExtra("return-data", false);
+		 	    intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+		 	    intent.putExtra("noFaceDetection", true); // no face detection
+		 	    startActivityForResult(intent, RESULT_REQUEST_CODE);
+		 	}
+	
+	private Bitmap decodeUriAsBitmap(Uri uri){
+		Bitmap bitmap = null;
+		try {
+		bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+		} catch (FileNotFoundException e) {
+		e.printStackTrace();
+		return null;
+		}
+		return bitmap;
+		}
 
 	/**
 	 * 保存裁剪之后的图片数据
@@ -336,27 +378,35 @@ public class AccountInfo extends Activity {
 	private void getImageToView(Intent data) {
 		Bundle extras = data.getExtras();
 		if (extras != null) {
-			Bitmap photo = extras.getParcelable("data");
+			//Bitmap photo = extras.getParcelable("data");
+			try {Bitmap photo = decodeUriAsBitmap(tempUri);
 			Drawable drawable = new BitmapDrawable(photo);
 			accountImg.setImageDrawable(drawable);
 			String url = Utils.userImg + IMAGE_FILE_NAME;
 			mImageLoader.saveImageToFile(url, photo);
 			File tempFile = mImageLoader.getImageFile(url);
 			uploadFile = tempFile.getPath();
+			
 			new Thread(new Runnable() {
 				
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-					uploadFile();
+					uploadFileToServer();
 				}
 			}).start();
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+				showSomeThing(e.toString());
+			}
+			
 			
 		}
 	}
 
 	/* 上传文件至Server的方法 */
-	private void uploadFile() {
+	private void uploadFileToServer() {
 		String end = "\r\n";
 		String twoHyphens = "--";
 		String boundary = "*****";
@@ -368,19 +418,18 @@ public class AccountInfo extends Activity {
 			con.setDoInput(true);
 			con.setDoOutput(true);
 			con.setUseCaches(false);
+			con.setConnectTimeout(10 * 1000);//设置超时的时间  
 			/* 设置传送的method=POST */
 			con.setRequestMethod("POST");
 			/* setRequestProperty */
 			con.setRequestProperty("Connection", "Keep-Alive");
 			con.setRequestProperty("Charset", "UTF-8");
-			con.setRequestProperty("Content-Type",
-					"multipart/form-data;boundary=" + boundary);
+			con.setRequestProperty("Content-Type","multipart/form-data;boundary=" + boundary);
 			/* 设置DataOutputStream */
 			DataOutputStream ds = new DataOutputStream(con.getOutputStream());
 			ds.writeBytes(twoHyphens + boundary + end);
 			ds.writeBytes("Content-Disposition: form-data; "
-					+ "name=\"file1\";filename=\"" + IMAGE_FILE_NAME + "\""
-					+ end);
+					+ "name=\"file1\";filename=\"" + IMAGE_FILE_NAME + "\""+ end);
 			ds.writeBytes(end);
 			/* 取得文件的FileInputStream */
 			FileInputStream fStream = new FileInputStream(uploadFile);
@@ -398,17 +447,35 @@ public class AccountInfo extends Activity {
 			/* close streams */
 			fStream.close();
 			ds.flush();
-			/* 取得Response内容 */
-			InputStream is = con.getInputStream();
-			int ch;
-			StringBuffer b = new StringBuffer();
-			while ((ch = is.read()) != -1) {
-				b.append((char) ch);
+			/* 取得Response内容*/
+			Object obj = con.getResponseMessage();
+			if(obj != null){
+				showSomeThing(obj.toString());
 			}
+			int res = con.getResponseCode();
+			
+			if(res == 200)
+			{
+				InputStream is = con.getInputStream();
+				
+				if(is != null){
+					int ch;
+					StringBuffer b = new StringBuffer();
+					while ((ch = is.read()) != -1) {
+						b.append((char) ch);
+					} 
+					showSomeThing("上传成功" + b.toString());
+				}
+			}else{
+				showSomeThing(res + " code");
+			}
+			
 			/* 将Response显示于Dialog */
-			showSomeThing("上传成功" + b.toString().trim());
+			//showSomeThing("上传成功" + b.toString().trim());
 			/* 关闭DataOutputStream */
+			
 			ds.close();
+			con.disconnect();
 		} catch (Exception e) {
 			showSomeThing("上传失败" + e.toString());
 		}
