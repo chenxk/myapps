@@ -55,7 +55,7 @@ public class ImageLoader {
 			MAX_CAPACITY / 2);
 	
 	
-	private ImageFileCache imageFileCache;
+	public ImageFileCache imageFileCache;
 	
 	private Context context;
 

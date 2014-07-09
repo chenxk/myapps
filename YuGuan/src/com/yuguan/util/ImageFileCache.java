@@ -160,7 +160,7 @@ public class ImageFileCache {
     }
                                                                 
     /** »ñµÃ»º´æÄ¿Â¼ **/
-    private String getDirectory() {
+    public String getDirectory() {
         String dir = getSDPath() + "/" + CACHDIR;
         return dir;
     }
