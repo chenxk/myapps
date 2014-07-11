@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:background="@drawable/title_btn_back"
-            android:onClick="doBack"
+            android:onClick="doPingfenBack"
             android:text="返回"
             android:textColor="#fff"
             android:textSize="14sp" />
@@ -37,7 +37,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
-            android:onClick="doLogin"
+            android:onClick="doPingfenLogin"
             android:src="@drawable/add_user" />
     </RelativeLayout>
 
@@ -54,7 +54,7 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/pingfenName"
+                android:id="@+id/pingfenActionName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -118,6 +118,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="2dp"
+                    diycomp:score="10"
                     android:paddingTop="2dp" >
                 </cn.buaa.myweixin.ScoreInfo>
             </LinearLayout>
@@ -144,6 +145,7 @@
                 android:paddingRight="10dp" >
 
                 <EditText
+                    android:id="@+id/remark"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/login_edit_normal"
@@ -168,14 +170,17 @@
                     android:text="活动评分：" />
 
                 <cn.buaa.myweixin.ScoreInfo
+                    android:id="@+id/fullscore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="2dp"
+                    diycomp:clickable="true"
                     android:paddingTop="2dp" >
                 </cn.buaa.myweixin.ScoreInfo>
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/submitScore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -195,6 +200,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/cancleScore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

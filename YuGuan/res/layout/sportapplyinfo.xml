@@ -25,7 +25,19 @@
             android:layout_height="wrap_content"
             android:singleLine="false"
             android:text="好友" />
-        
+
+        <TextView
+            android:id="@+id/sportReqId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/sportReqFrdId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/friendfrom"
             style="@style/fontstyle_red_20"
@@ -41,7 +53,7 @@
             android:layout_height="wrap_content"
             android:singleLine="false"
             android:text="邀请你参加" />
-        
+
         <TextView
             android:id="@+id/sportname"
             style="@style/fontstyle_red_20"
@@ -81,7 +93,7 @@
         android:orientation="horizontal" >
 
         <LinearLayout
-             android:id="@+id/but_ok"
+            android:id="@+id/but_ok"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#00B6F0"
@@ -109,9 +121,9 @@
             android:id="@+id/but_no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
             android:background="#DC2F1F"
             android:orientation="horizontal"
-            android:layout_marginLeft="50dp"
             android:paddingBottom="5dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"

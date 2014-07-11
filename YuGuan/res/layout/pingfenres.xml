@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:background="@drawable/title_btn_back"
-            android:onClick="doBack"
+            android:onClick="doPingfenResBack"
             android:text="返回"
             android:textColor="#fff"
             android:textSize="14sp" />
@@ -37,7 +37,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
-            android:onClick="doLogin"
+            android:onClick="doPingfenResLogin"
             android:src="@drawable/add_user" />
     </RelativeLayout>
 
@@ -54,7 +54,7 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/pingfenName"
+                android:id="@+id/pingfenresName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -73,6 +73,7 @@
             </LinearLayout>
 
             <com.yuguan.activities.RefreshListView
+                android:id="@+id/allFrdScoreList"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:cacheColorHint="#00000000"
@@ -113,6 +114,7 @@
                         android:text="冠军:" />
 
                     <TextView
+                        android:id="@+id/guanjun"
                         style="@style/fontstyle_16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -148,6 +150,7 @@
                         android:text="亚军:" />
 
                     <TextView
+                        android:id="@+id/yajun"
                         style="@style/fontstyle_16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -183,6 +186,7 @@
                         android:text="季军:" />
 
                     <TextView
+                        android:id="@+id/jijun"
                         style="@style/fontstyle_16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -194,6 +198,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/submitResScore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -213,6 +218,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/cancleResScore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

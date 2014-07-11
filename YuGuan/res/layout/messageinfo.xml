@@ -57,16 +57,16 @@
             <LinearLayout
                 android:id="@+id/sysMsg"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/white_line"
-                android:gravity="center"
                 android:orientation="horizontal"
+                android:layout_gravity="center"
                 android:padding="10dp" >
 
                 <TextView
                     android:id="@+id/sysMsgText"
-                    style="@style/fontstyle_red_20"
+                    style="@style/fontstyle_red_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -83,22 +83,71 @@
             <LinearLayout
                 android:id="@+id/friendsMsg"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/white_line"
-                android:gravity="center"
                 android:orientation="horizontal"
+                android:layout_gravity="center"
                 android:padding="10dp" >
 
                 <TextView
                     android:id="@+id/friendsMsgText"
-                    style="@style/fontstyle_20"
+                    style="@style/fontstyle_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:gravity="center"
                     android:singleLine="true"
                     android:text="好友私信" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/linearlayout_line" />
+
+            <LinearLayout
+                android:id="@+id/friendReq"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/white_line"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:padding="10dp" >
+
+                <TextView
+                    android:id="@+id/friendReqText"
+                    style="@style/fontstyle_14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="好友申请" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/linearlayout_line" />
+
+            <LinearLayout
+                android:id="@+id/sportReq"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/white_line"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:padding="10dp" >
+
+                <TextView
+                    android:id="@+id/sportReqText"
+                    style="@style/fontstyle_14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:singleLine="true"
+                    android:text="活动邀请" />
             </LinearLayout>
         </TableRow>
     </TableLayout>

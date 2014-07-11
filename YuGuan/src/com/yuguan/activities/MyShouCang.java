@@ -35,26 +35,26 @@ public class MyShouCang extends Activity implements OnClickListener {
 	private LinearLayout friendsMsg;
 	private ViewPager messagePager;
 	
-	/** ËùÓĞ³¡¹İ */
+	/** ï¿½ï¿½ï¿½Ğ³ï¿½ï¿½ï¿½ */
 	private RefreshListView allMallsList;
 	private MallAdepter mallAdapter;
 	private List<MallBean> malls = new ArrayList<MallBean>();
 	private boolean allMallsListIsLoad = false;
 	private int curMallPage = 1;
-	// ÅÅĞò·½Ê½
+	// ï¿½ï¿½ï¿½ï¿½Ê½
 	private int curMallSr = 0;
-	// ÇøÓòID
+	// ï¿½ï¿½ï¿½ï¿½ID
 	private int curMallRg = 0;
 	
-	/** ËùÓĞºÃÓÑ */
+	/** ï¿½ï¿½ï¿½Ğºï¿½ï¿½ï¿½ */
 	private RefreshListView allFriendsList;
 	private UserAdepter friendAdepter;
 	private List<FriendBean> friends = new ArrayList<FriendBean>();
 	private boolean allFriendsListIsLoad = false;
 	private int curFriendPage = 1;
-	// ÅÅĞò·½Ê½
+	// ï¿½ï¿½ï¿½ï¿½Ê½
 	private int curFriendSr = 0;
-	// ÇøÓòID
+	// ï¿½ï¿½ï¿½ï¿½ID
 	private int curFriendRg = 0;
 	
 	private final String KEY_MALL_JSON = "KEY_MALL_JSON";
@@ -69,7 +69,7 @@ public class MyShouCang extends Activity implements OnClickListener {
 			super.handleMessage(msg);
 			Bundle data = msg.getData();
 			String result = data.getString(KEY_MALL_JSON);
-			if (result.length() > 0 && !result.equals("·şÎñ·ÃÎÊÊ§°Ü")) {
+			if (result.length() > 0 && !result.equals("æœåŠ¡è®¿é—®å¤±è´¥")) {
 				mallJson = result;
 				malls.clear();
 				getMallDataFromJson();
@@ -84,7 +84,7 @@ public class MyShouCang extends Activity implements OnClickListener {
 			super.handleMessage(msg);
 			Bundle data = msg.getData();
 			String result = data.getString(KEY_FRIEND_JSON);
-			if (result.length() > 0 && !result.equals("·şÎñ·ÃÎÊÊ§°Ü")) {
+			if (result.length() > 0 && !result.equals("æœåŠ¡è®¿é—®å¤±è´¥")) {
 				friendJson = result;
 				friends.clear();
 				getFriendDataFromJson();
@@ -98,7 +98,7 @@ public class MyShouCang extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.myactions);
+		setContentView(R.layout.myshoucang);
 
 		initView();
 
@@ -131,18 +131,18 @@ public class MyShouCang extends Activity implements OnClickListener {
 		sysMsg.setOnClickListener(new MyOnClickListener(0));
 		friendsMsg.setOnClickListener(new MyOnClickListener(1));
 
-		// ½«Òª·ÖÒ³ÏÔÊ¾µÄView×°ÈëÊı×éÖĞ
+		// ï¿½ï¿½Òªï¿½ï¿½Ò³ï¿½ï¿½Ê¾ï¿½ï¿½View×°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		LayoutInflater mLi = LayoutInflater.from(this);
-		View view1 = mLi.inflate(R.layout.myaction_in, null);
-		View view2 = mLi.inflate(R.layout.myaction_out, null);
+		View view1 = mLi.inflate(R.layout.shoucang_action, null);
+		View view2 = mLi.inflate(R.layout.shoucang_mall, null);
 		// View view4 = mLi.inflate(R.layout.main_tab_settings, null);
 
-		// Ã¿¸öÒ³ÃæµÄviewÊı¾İ
+		// Ã¿ï¿½ï¿½Ò³ï¿½ï¿½ï¿½viewï¿½ï¿½ï¿½
 		final ArrayList<View> views = new ArrayList<View>();
 		views.add(view1);
 		views.add(view2);
 		// views.add(view4);
-		// Ìî³äViewPagerµÄÊı¾İÊÊÅäÆ÷
+		// ï¿½ï¿½ï¿½ViewPagerï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		PagerAdapter mPagerAdapter = new PagerAdapter() {
 
 			@Override
@@ -218,7 +218,7 @@ public class MyShouCang extends Activity implements OnClickListener {
 						}
 
 						String result = obj.toString();
-						if (result.length() > 0 && !result.equals("·şÎñ·ÃÎÊÊ§°Ü")) {
+						if (result.length() > 0 && !result.equals("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½")) {
 							mallJson = result;
 							malls.clear();
 							getMallDataFromJson();
@@ -238,7 +238,7 @@ public class MyShouCang extends Activity implements OnClickListener {
 							String url = Utils.mallListUrl + curMallPage + "&rg=" + curMallRg + "&sr=" + curMallSr;
 							allMallsList.setUrl(url);
 						}else{
-							showSomeThing("¼ÓÔØµ½×îºóÒ»ÌõÁË");
+							showSomeThing("ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½");
 						}
 					}
 
@@ -256,7 +256,7 @@ public class MyShouCang extends Activity implements OnClickListener {
 						}
 
 						String result = obj.toString();
-						if (result.length() > 0 && !result.equals("·şÎñ·ÃÎÊÊ§°Ü")) {
+						if (result.length() > 0 && !result.equals("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½")) {
 							mallJson = result;
 							getMallDataFromJson();
 							mallAdapter.notifyDataSetChanged();
@@ -329,7 +329,7 @@ public class MyShouCang extends Activity implements OnClickListener {
 						}
 
 						String result = obj.toString();
-						if (result.length() > 0 && !result.equals("·şÎñ·ÃÎÊÊ§°Ü")) {
+						if (result.length() > 0 && !result.equals("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½")) {
 							friendJson = result;
 							friends.clear();
 							getFriendDataFromJson();
@@ -349,7 +349,7 @@ public class MyShouCang extends Activity implements OnClickListener {
 							String url = Utils.friendsUrl + "&cid=" + Utils.cid + "&pn=" + curFriendPage;
 							allFriendsList.setUrl(url);
 						}else{
-							showSomeThing("¼ÓÔØµ½×îºóÒ»ÌõÁË");
+							showSomeThing("ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½");
 						}
 					}
 
@@ -367,7 +367,7 @@ public class MyShouCang extends Activity implements OnClickListener {
 						}
 
 						String result = obj.toString();
-						if (result.length() > 0 && !result.equals("·şÎñ·ÃÎÊÊ§°Ü")) {
+						if (result.length() > 0 && !result.equals("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½")) {
 							friendJson = result;
 							getFriendDataFromJson();
 							friendAdepter.notifyDataSetChanged();
@@ -422,15 +422,15 @@ public class MyShouCang extends Activity implements OnClickListener {
 			showSomeThing(e.toString());
 		}
 
-		// Toast.makeText(getApplicationContext(), "µÇÂ¼³É¹¦",
+		// Toast.makeText(getApplicationContext(), "ï¿½ï¿½Â¼ï¿½É¹ï¿½",
 		// Toast.LENGTH_LONG).show();
 	}
 	
-	public void getMallInfo(View v) { // Ğ¡ºÚ ¶Ô»°½çÃæ
+	public void getMallInfo(View v) { // Ğ¡ï¿½ï¿½ ï¿½Ô»ï¿½ï¿½ï¿½ï¿½ï¿½
 		try {
 			// ÏµÍ³Í¨Öª  sysmsginfo.xml
-			// ºÃÓÑÌí¼Ó  friendapplyinfo.xml
-			// »î¶¯ÑûÇë  sportapplyinfo.xml
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  friendapplyinfo.xml
+			// ï¿½î¶¯ï¿½ï¿½ï¿½ï¿½  sportapplyinfo.xml
 			TextView idView = (TextView)v.findViewById(R.id.mallId);
 			int id = Integer.parseInt(idView.getText().toString());
 			Intent intent = new Intent(MyShouCang.this, MallInfo.class);
@@ -442,7 +442,7 @@ public class MyShouCang extends Activity implements OnClickListener {
 			showSomeThing(e.toString());
 		}
 
-		// Toast.makeText(getApplicationContext(), "µÇÂ¼³É¹¦",
+		// Toast.makeText(getApplicationContext(), "ï¿½ï¿½Â¼ï¿½É¹ï¿½",
 		// Toast.LENGTH_LONG).show();
 	}
 	
@@ -491,7 +491,7 @@ public class MyShouCang extends Activity implements OnClickListener {
 	}
 
 	/**
-	 * µã»÷¼àÌı
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	public class MyOnClickListener implements View.OnClickListener {
 		private int index = 0;

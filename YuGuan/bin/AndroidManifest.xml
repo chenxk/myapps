@@ -73,8 +73,18 @@
             android:name="com.yuguan.activities.FriendInfo"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.yuguan.activities.AccountInfo"
+            android:name="com.yuguan.activities.PingFenActivity"
             android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="com.yuguan.activities.PingFenResultActivity"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="com.yuguan.activities.RegisterActivity"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="com.yuguan.activities.AccountInfo"
+            android:theme="@android:style/Theme.NoTitleBar" 
+            android:configChanges="orientation|keyboardHidden"/>
         <activity
             android:name="com.yuguan.activities.ActionPingfen"
             android:theme="@android:style/Theme.NoTitleBar" />

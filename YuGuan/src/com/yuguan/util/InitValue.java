@@ -150,6 +150,27 @@ public class InitValue {
 			+ "了团结和谐、务实向上的良好氛围','mid':1,'name':'航华二中羽毛球馆','phone':'021-64202335','pic':'mall.png',"
 			+ "'score':8.14286},'mid':'1','status':null}";
 	
+	public static String primsg = "{'msgid':9223372036854775807,'msgs':["
+			+ "{'ftime':'2014-07-10 13:59','id':16,'text':'我拒绝了你的好友申请！','uid':29,'uname':'雷曼','upic':'qq.jpg'},"
+			+ "{'ftime':'2014-06-14 21:40','id':9,'text':'我通过了你的好友申请，我们已经是好友了！','uid':30,'uname':'思密达','upic':'1404525978026.jpg'},"
+			+ "{'ftime':'2014-06-14 21:37','id':8,'text':'我忽略了你的好友申请！','uid':30,'uname':'思密达','upic':'1404525978026.jpg'},"
+			+ "{'ftime':'2014-06-13 22:37','id':5,'text':'帖子页面私信验证','uid':30,'uname':'思密达','upic':'1404525978026.jpg'},"
+			+ "{'ftime':'2014-06-11 22:08','id':4,'text':'新人吧','uid':30,'uname':'思密达','upic':'1404525978026.jpg'}"
+			+ "],'type':1,'uid':28}";
+	
+	public static String sysnotice = "{'msgid':9223372036854775807,'msgs':["
+			+ "{'ftime':'2014-06-11 23:28','id':2,'msg':'恭喜你，赢得冠军！'},"
+			+ "{'ftime':'2014-06-11 22:12','id':1,'msg':'比赛规则：报名后退赛要减掉一定的信誉值'}"
+			+ "],'uid':28}";
+	
+	public static String sportReq = "{'msgid':9223372036854775807,'msgs':["
+			+ "{'aid':13,'aname':'健康时尚运动','ftime':'2014-05-11 20:53','id':4,'uid':30,'uname':'思密达'}"
+			+ "],'uid':28}";
+	
+	public static String friendsreq = "{'msgid':9223372036854775807,'msgs':["
+			+ "{'ftime':'2014-07-10 22:16','id':1,'uid':30,'uname':'思密达','upic':'20140707030924144_easyicon_net_44.32.png'}"
+			+ "],'uid':28}";
+	
 	public static SharedPreferences preferences;
 	public InitValue() {
 	}

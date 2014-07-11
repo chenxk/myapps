@@ -3,6 +3,10 @@ package com.yuguan.activities;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -22,50 +26,36 @@ import cn.buaa.myweixin.Login;
 import cn.buaa.myweixin.R;
 
 import com.yuguan.bean.FriendBean;
-import com.yuguan.bean.MallBean;
+import com.yuguan.bean.user.SysNoticeBean;
 import com.yuguan.util.HttpUtil;
 import com.yuguan.util.InitValue;
 import com.yuguan.util.Utils;
 
 public class MessageCenter extends Activity implements OnClickListener {
 
-	private LinearLayout sysMsg;
+	
 	private TextView sysMsgText;
 	private TextView friendsMsgText;
+	private LinearLayout sysMsg;
 	private LinearLayout friendsMsg;
+	private TextView friendReqText;
+	private TextView sportReqText;
+	private LinearLayout friendReq;
+	private LinearLayout sportReq;
 	private ViewPager messagePager;
 	
-	/** 所有场馆 */
+	/** 系统消息 */
 	private RefreshListView allMallsList;
-	private MallAdepter mallAdapter;
-	private List<MallBean> malls = new ArrayList<MallBean>();
+	private SysNoticeAdepter mallAdapter;
+	private List<SysNoticeBean> malls = new ArrayList<SysNoticeBean>();
 	private boolean allMallsListIsLoad = false;
-	private LinearLayout mall_mRadioGroup_content;
-	private int mallColumnSelectIndex = 0;
 	private int curMallPage = 1;
 	// 排序方式
 	private int curMallSr = 0;
 	// 区域ID
 	private int curMallRg = 0;
-	
-	/** 所有好友 */
-	private RefreshListView allFriendsList;
-	private UserAdepter friendAdepter;
-	private List<FriendBean> friends = new ArrayList<FriendBean>();
-	private boolean allFriendsListIsLoad = false;
-	private LinearLayout friend_mRadioGroup_content;
-	private int friendColumnSelectIndex = 0;
-	private int curFriendPage = 1;
-	// 排序方式
-	private int curFriendSr = 0;
-	// 区域ID
-	private int curFriendRg = 0;
-	
 	private final String KEY_MALL_JSON = "KEY_MALL_JSON";
-	private final String KEY_FRIEND_JSON = "KEY_FRIEND_JSON";
-	private String mallJson = InitValue.mallJson;
-	private String friendJson = InitValue.friendJson;
-
+	private String mallJson = InitValue.sysnotice;
 	@SuppressLint("HandlerLeak")
 	private Handler mallHandler = new Handler() {
 		@Override
@@ -81,6 +71,21 @@ public class MessageCenter extends Activity implements OnClickListener {
 			}
 		}
 	};
+	
+	
+	/** 好友私信 */
+	private RefreshListView allFriendsList;
+	private UserAdepter friendAdepter;
+	private List<FriendBean> friends = new ArrayList<FriendBean>();
+	private boolean allFriendsListIsLoad = false;
+	private int curFriendPage = 1;
+	// 排序方式
+	private int curFriendSr = 0;
+	// 区域ID
+	private int curFriendRg = 0;
+	private final String KEY_FRIEND_JSON = "KEY_FRIEND_JSON";
+	private String friendJson = InitValue.primsg;
+
 	@SuppressLint("HandlerLeak")
 	private Handler friendHandler = new Handler() {
 		@Override
@@ -96,6 +101,67 @@ public class MessageCenter extends Activity implements OnClickListener {
 			}
 		}
 	};
+	
+	
+	/** 好友申请 */
+	private RefreshListView allFriendsReqList;
+	private UserAdepter friendsReqAdepter;
+	private List<FriendBean> friendsReq = new ArrayList<FriendBean>();
+	private boolean allFriendsReqListIsLoad = false;
+	private int curFriendsReqPage = 1;
+	// 排序方式
+	private int curFriendsReqr = 0;
+	// 区域ID
+	private int curFriendsReqRg = 0;
+	private final String KEY_FRIENDREQ_JSON = "KEY_FRIENDREQ_JSON";
+	private String friendsReqJson = InitValue.friendsreq;
+
+	@SuppressLint("HandlerLeak")
+	private Handler FriendsReqHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			Bundle data = msg.getData();
+			String result = data.getString(KEY_FRIENDREQ_JSON);
+			if (result.length() > 0 && !result.equals("服务访问失败")) {
+				friendsReqJson = result;
+				friendsReq.clear();
+				getFriendDataFromJson();
+				friendsReqAdepter.notifyDataSetChanged();
+			}
+		}
+	};
+	
+	
+	/** 活动邀请 */
+	private RefreshListView allSportReqList;
+	private UserAdepter sportReqAdepter;
+	private List<FriendBean> sportReqs = new ArrayList<FriendBean>();
+	private boolean allSportReqListIsLoad = false;
+	private int curSportReqPage = 1;
+	// 排序方式
+	private int curSportReqr = 0;
+	// 区域ID
+	private int curSportReqRg = 0;
+	private final String KEY_SPORTREQ_JSON = "KEY_SPORTREQ_JSON";
+	private String sportReqJson = InitValue.sportReq;
+
+	@SuppressLint("HandlerLeak")
+	private Handler sportReqHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			Bundle data = msg.getData();
+			String result = data.getString(KEY_SPORTREQ_JSON);
+			if (result.length() > 0 && !result.equals("服务访问失败")) {
+				sportReqJson = result;
+				sportReqs.clear();
+				getFriendDataFromJson();
+				sportReqAdepter.notifyDataSetChanged();
+			}
+		}
+	};
+	
 
 	
 	@Override
@@ -111,8 +177,6 @@ public class MessageCenter extends Activity implements OnClickListener {
 			showSomeThing(e.toString());
 		}
 		
-		if(true)
-			return;
 
 		messagePager
 				.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -193,12 +257,54 @@ public class MessageCenter extends Activity implements OnClickListener {
 	}
 
 	protected void getFriendDataFromJson() {
-		// TODO Auto-generated method stub
+		try {
+			JSONObject jsonObject = new JSONObject(friendJson);
+			JSONArray jsonArray = jsonObject.getJSONArray("frds");
+			if (jsonArray.length() == 0) {
+				showSomeThing("没有更多数据");
+				allFriendsList.setLastData(true);
+				return;
+			} else {
+				allFriendsList.setLastData(false);
+			}
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject json = (JSONObject) jsonArray.get(i);
+				FriendBean bean = FriendBean.getBeanFromJson(json);
+				if(Utils.loginInfo == null){
+					if(bean != null)
+						friends.add(bean);
+				}else{
+					if(bean != null && Utils.loginInfo.getId() != bean.getUid())
+						friends.add(bean);
+				}
+				
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
 	protected void getMallDataFromJson() {
-		// TODO Auto-generated method stub
+		try {
+			JSONObject jsonObject = new JSONObject(mallJson);
+			JSONArray jsonArray = jsonObject.getJSONArray("msgs");
+			if (jsonArray.length() == 0) {
+				showSomeThing("没有更多数据");
+				allMallsList.setLastData(true);
+				return;
+			} else {
+				allMallsList.setLastData(false);
+			}
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject json = (JSONObject) jsonArray.get(i);
+				SysNoticeBean bean = SysNoticeBean.getBeanByJson(json);
+				if(bean != null)
+				malls.add(bean);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		
 	}
 	
@@ -306,7 +412,7 @@ public class MessageCenter extends Activity implements OnClickListener {
 				allMallsList.addHeaderView();
 				allMallsList.addFootView();
 			}
-			mallAdapter = new MallAdepter(this, malls);
+			mallAdapter = new SysNoticeAdepter(this, malls);
 			allMallsList.setAdapter(mallAdapter);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -463,6 +569,10 @@ public class MessageCenter extends Activity implements OnClickListener {
 		sysMsgText = (TextView) findViewById(R.id.sysMsgText);
 		sysMsg = (LinearLayout) findViewById(R.id.sysMsg);
 		friendsMsg = (LinearLayout) findViewById(R.id.friendsMsg);
+		friendReqText = (TextView) findViewById(R.id.friendReqText);
+		sportReqText = (TextView) findViewById(R.id.sportReqText);
+		friendReq = (LinearLayout) findViewById(R.id.friendReq);
+		sportReq = (LinearLayout) findViewById(R.id.sportReq);
 		messagePager = (ViewPager) findViewById(R.id.messagePager);
 
 	}

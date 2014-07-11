@@ -10,14 +10,26 @@
         style="@style/fontstyle_bold_24"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
         android:layout_marginTop="10dp"
+        android:paddingBottom="10dp"
         android:text="好友申请" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/reqId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/reqFrdId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/friendmsg"
@@ -93,9 +105,9 @@
             android:id="@+id/btn_no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
             android:background="#DC2F1F"
             android:orientation="horizontal"
-            android:layout_marginLeft="50dp"
             android:paddingBottom="5dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"

@@ -14,19 +14,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 import cn.buaa.myweixin.R;
 
-import com.yuguan.bean.ActionBean;
+import com.yuguan.bean.user.UserActActionBean;
 import com.yuguan.util.ImageLoader;
 import com.yuguan.util.Utils;
-
+/**
+ * 
+ * ÊàëÁªÑÁªáÁöÑÂíåÊàëÂèÇ‰∏éÁöÑ
+ * 
+ * 
+ * @author charles.chen
+ *
+ */
 public class MyActivityAdapter extends BaseAdapter {
 
-	private List<ActionBean> list;
+	private List<UserActActionBean> list;
 
 	private Context ctx;
 
 	private LayoutInflater mInflater;
-
-	private LinearLayout imag;
 
 	private ImageLoader mImageLoader;
 
@@ -39,7 +44,7 @@ public class MyActivityAdapter extends BaseAdapter {
 		this.mBusy = busy;
 	}
 
-	public MyActivityAdapter(List<ActionBean> list, Context ctx) {
+	public MyActivityAdapter(List<UserActActionBean> list, Context ctx) {
 		this.list = list;
 		this.ctx = ctx;
 		mInflater = LayoutInflater.from(ctx);
@@ -59,17 +64,17 @@ public class MyActivityAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int position) {
-		return list == null ? 0 : list.get(position).getId();
+		return position;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		ViewHolder holder;
 		if (convertView == null) {
+			holder = new ViewHolder();
 			convertView = mInflater.inflate(R.layout.myaction_list, null);
-		}
-		try {
-			// µ√µΩÃıƒø÷–µƒ◊”◊Èº˛
-			imag = (LinearLayout) convertView.findViewById(R.id.myactionImg);
+			LinearLayout imag = (LinearLayout) convertView
+					.findViewById(R.id.myactionImg);
 			TextView actionId = (TextView) convertView
 					.findViewById(R.id.myactionId);
 			TextView title = (TextView) convertView
@@ -78,41 +83,53 @@ public class MyActivityAdapter extends BaseAdapter {
 					.findViewById(R.id.myactionTime);
 			TextView mall = (TextView) convertView
 					.findViewById(R.id.myactionMall);
-			TextView comeon = (TextView) convertView
-					.findViewById(R.id.comeon);
-			LinearLayout actionScore = (LinearLayout) convertView.findViewById(R.id.actionScore);
+			TextView comeon = (TextView) convertView.findViewById(R.id.comeon);
+			LinearLayout actionScore = (LinearLayout) convertView
+					.findViewById(R.id.actionScore);
 
-			actionScore.setOnClickListener(new View.OnClickListener() {
-				
+			holder.actionId = actionId;
+			holder.actionScore = actionScore;
+			holder.bTime = bTime;
+			holder.comeon = comeon;
+			holder.imag = imag;
+			holder.mall = mall;
+			holder.title = title;
+
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
+		try {
+
+			holder.actionScore.setOnClickListener(new View.OnClickListener() {
+
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					
+
 				}
 			});
-			// ¥”list∂‘œÛ÷–Œ™◊”◊Èº˛∏≥÷µ
-			ActionBean bean = list.get(position);
+			UserActActionBean bean = list.get(position);
 			String url = Utils.activityImg + bean.getPic();
-			imag.setTag(url);
+			holder.imag.setTag(url);
 			if (!mBusy) {
-				mImageLoader.loadImage(url, this, imag);
+				mImageLoader.loadImage(url, this, holder.imag);
 			} else {
 				Bitmap bitmap = mImageLoader.getBitmapFromCache(url);
 				if (bitmap != null) {
 					BitmapDrawable bd = new BitmapDrawable(bitmap);
-					imag.setBackgroundDrawable(bd);
+					holder.imag.setBackgroundDrawable(bd);
 				} else {
-					imag.setBackgroundResource(R.drawable.action_list_back);
+					holder.imag.setBackgroundResource(R.drawable.action_list_back);
 				}
 			}
 
-			actionId.setText(bean.getId() + "");
-			title.setText(bean.getTitle());
-			bTime.setText(bean.getbTime());
-			mall.setText(bean.getMall());
+			holder.actionId.setText(bean.getAid() + "");
+			holder.title.setText(bean.getAname());
+			holder.bTime.setText(bean.getFtime());
+			holder.mall.setText("");
 
 		} catch (Exception e) {
-			Toast.makeText(ctx, e.toString(), Toast.LENGTH_SHORT).show();
+			showSomething(e.toString());
 		}
 
 		return convertView;
@@ -120,6 +137,16 @@ public class MyActivityAdapter extends BaseAdapter {
 
 	public void showSomething(String str) {
 		Toast.makeText(ctx, str, Toast.LENGTH_SHORT).show();
+	}
+
+	public final class ViewHolder {
+		public LinearLayout imag;
+		public TextView actionId;
+		public TextView title;
+		public TextView bTime;
+		public TextView mall;
+		public TextView comeon;
+		public LinearLayout actionScore;
 	}
 
 }

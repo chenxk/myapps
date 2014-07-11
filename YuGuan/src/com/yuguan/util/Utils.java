@@ -72,6 +72,15 @@ public class Utils {
 	public static String getMessageCountUrl = rootPaht + "/user/noticenum.htm?r="+Math.random();;
 	// 上传文件
 	public static String uploadFileUrl = rootPaht + "/fileUpload";
+	// 系统消息  uid=28&msgid=-1	
+	public static String getSysMsgUrl = rootPaht + "/user/sysnotice.htm?r="+Math.random();
+	// 好友私信  uid=28&type=1&msgid=-1  type = 2 是自己
+	public static String getPriMsgUrl = rootPaht + "/user/prvmsg.htm?r="+Math.random();
+	// 好友申请 uid=28&msgid=-1
+	public static String getFriReqUrl = rootPaht + "/user/friendrequest.htm?r="+Math.random();
+	// 活动邀请 uid=28&msgid=-1	
+	public static String getSportReqUrl = rootPaht + "/user/actinvitemsg.htm?r="+Math.random();
+	
 	
 	public static int TIMEOUT = 5000;
 	public static int cid = 173;

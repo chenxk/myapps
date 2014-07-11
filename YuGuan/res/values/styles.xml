@@ -121,6 +121,11 @@
         <item name="android:gravity">center</item>
     </style>
     
+    <style name="fontstyle_14">
+        <item name="android:textSize">14.0sp</item>
+        <item name="android:textColor">#524E4E</item>
+    </style>
+    
     <style name="fontstyle_16">
         <item name="android:textSize">16.0sp</item>
         <item name="android:textColor">#524E4E</item>
@@ -134,6 +139,11 @@
     <style name="fontstyle_20">
         <item name="android:textSize">20.0sp</item>
         <item name="android:textColor">#524E4E</item>
+    </style>
+    
+    <style name="fontstyle_red_14">
+        <item name="android:textSize">14.0sp</item>
+        <item name="android:textColor">#DC2F1F</item>
     </style>
     
     <style name="fontstyle_red_16">

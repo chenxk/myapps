@@ -260,7 +260,7 @@ public class FriendInfo extends Activity {
 			return;
 		}
 		
-		String url = Utils.sendPriMsgUrl + "&tuid=" + friendId + "&fuid=" + Utils.loginInfo.getId();
+		String url = Utils.addFriendUrl + "&tuid=" + friendId + "&fuid=" + Utils.loginInfo.getId();
 		new Thread(new HttpUtil(url, new Handler(){
 			 @Override
 			public void handleMessage(Message msg) {

@@ -6,7 +6,7 @@
     android:orientation="vertical" >
 
     <com.yuguan.activities.RefreshListView
-        android:id="@+id/messageSysList"
+        android:id="@+id/friendReqList"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:background="#fff"
