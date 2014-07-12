@@ -2,9 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#fff"
+    android:background="@drawable/linearlayout_line"
     android:orientation="vertical"
-    android:padding="10dp" >
+    android:paddingTop="10dp" 
+    android:paddingBottom="10dp" >
 
     <TextView
         style="@style/fontstyle_bold_24"

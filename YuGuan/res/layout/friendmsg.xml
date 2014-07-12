@@ -18,7 +18,7 @@
         imagecontrol:border_thickness="2dp" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
@@ -29,15 +29,15 @@
             android:id="@+id/friendmsgId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:text="周杰伦" />
-        
+            android:text="周杰伦"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/msgId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone" />
-        
+
         <TextView
             android:id="@+id/friendmsgname"
             style="@style/fontstyle_red_20"
@@ -48,13 +48,13 @@
             android:text="周杰伦" />
 
         <TextView
-            android:paddingBottom="10dp"
             android:id="@+id/friendContent"
             style="@style/fontstyle_black_18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
             android:singleLine="false"
-            android:text="bbbbbbbbsdfsdfsfsdfsfsfsdfsfasdfsfsdfasfasfsafsadfsdafdsfsdfsdbbbbbb" />
+            android:text="bbbbbbb" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -77,30 +77,62 @@
                 android:singleLine="false"
                 android:text="2014年5月29日20:14:22" />
         </LinearLayout>
-        
+
         <LinearLayout
-             android:id="@+id/huifu"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFB200"
-            android:orientation="horizontal"
-            android:paddingBottom="2dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingTop="2dp" >
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:id="@+id/huifu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#FFB200"
+                android:orientation="horizontal"
+                android:paddingBottom="2dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="2dp" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingRight="5dp"
+                    android:src="@drawable/edit_32" />
+
+                <TextView
+                    style="@style/fontstyle_white_18"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="回复" />
+            </LinearLayout>
+            
+             <LinearLayout
+                 android:id="@+id/deleteMsg"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginLeft="50dp"
+                 android:background="#DC2F1F"
+                 android:orientation="horizontal"
+                 android:paddingBottom="2dp"
+                 android:paddingLeft="5dp"
+                 android:paddingRight="5dp"
+                 android:paddingTop="2dp" >
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
-                android:src="@drawable/edit_32" />
+                android:src="@drawable/no_32" />
 
             <TextView
                 style="@style/fontstyle_white_18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="回复" />
+                android:text="删除" />
+        </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

@@ -66,14 +66,13 @@
 
                 <TextView
                     android:id="@+id/myaction_inText"
+                    style="@style/fontstyle_red_20"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:gravity="center"
                     android:singleLine="true"
-                    android:text="我参与的"
-                    android:textColor="#DC2F1F"
-                    android:textSize="20sp" />
+                    android:text="我参与的" />
             </LinearLayout>
 
             <LinearLayout
@@ -93,14 +92,13 @@
 
                 <TextView
                     android:id="@+id/myaction_outText"
+                    style="@style/fontstyle_20"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:gravity="center"
                     android:singleLine="true"
-                    android:text="我组织的"
-                    android:textColor="#000"
-                    android:textSize="20sp" />
+                    android:text="我组织的" />
             </LinearLayout>
         </TableRow>
     </TableLayout>

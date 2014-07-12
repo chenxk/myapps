@@ -169,11 +169,21 @@
      <style name="fontstyle_bold_24">
          <item name="android:textStyle">bold</item>
         <item name="android:textSize">24.0sp</item>
-        <item name="android:textColor">#000</item>
+        <item name="android:textColor">#202020</item>
     </style>
     
      <style name="fontstyle_white_18">
         <item name="android:textSize">18.0sp</item>
+        <item name="android:textColor">#fff</item>
+    </style>
+    
+     <style name="fontstyle_white_20">
+        <item name="android:textSize">20.0sp</item>
+        <item name="android:textColor">#fff</item>
+    </style>
+    
+     <style name="fontstyle_white_25">
+        <item name="android:textSize">25.0sp</item>
         <item name="android:textColor">#fff</item>
     </style>
     

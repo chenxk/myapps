@@ -82,6 +82,7 @@ public class UserOrgActionBean implements Serializable {
 			bean.setUsernum(json.getInt("usernum"));
 			return bean;
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		return null;

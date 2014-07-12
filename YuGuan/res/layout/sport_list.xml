@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 这是列表项的布局文件，每一行长什么样子，修改这里 
-android:background="@drawable/mm_listitem"
--->
+<!--
+这是列表项的布局文件，每一行长什么样子，修改这里 
+android:background="@drawable/mm_listitem"-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="138dp"
     android:layout_gravity="center_vertical"
-    android:orientation="vertical"
     android:background="@drawable/linearlayout_line"
-    >
+    android:orientation="vertical" >
 
     <LinearLayout
         android:id="@+id/actionImg"
@@ -33,39 +32,36 @@ android:background="@drawable/mm_listitem"
 
             <TextView
                 android:id="@+id/actionTitle"
+                style="@style/fontstyle_white_25"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingBottom="10dp"
                 android:paddingTop="10dp"
                 android:singleLine="true"
-                android:text="TextView"
-                android:textColor="#ccc"
-                android:textSize="25sp" />
+                android:text="TextView" />
 
             <TextView
                 android:id="@+id/actionTime"
+                style="@style/fontstyle_white_18"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingBottom="10dp"
                 android:paddingTop="10dp"
                 android:singleLine="true"
-                android:text="TextView"
-                android:textColor="#ccc"
-                android:textSize="18sp" />
+                android:text="TextView" />
 
             <TextView
                 android:id="@+id/actionMall"
+                style="@style/fontstyle_white_20"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingBottom="10dp"
                 android:paddingTop="10dp"
                 android:singleLine="true"
-                android:text="TextView"
-                android:textColor="#ccc"
-                android:textSize="20sp" />
+                android:text="TextView" />
         </LinearLayout>
     </LinearLayout>
 

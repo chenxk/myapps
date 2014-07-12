@@ -54,7 +54,6 @@ import com.yuguan.bean.ActionBean;
 import com.yuguan.bean.CountyBean;
 import com.yuguan.bean.FriendBean;
 import com.yuguan.bean.MallBean;
-import com.yuguan.imagecache.ImageCacheManager;
 import com.yuguan.util.HttpUtil;
 import com.yuguan.util.ImageLoader;
 import com.yuguan.util.InitValue;

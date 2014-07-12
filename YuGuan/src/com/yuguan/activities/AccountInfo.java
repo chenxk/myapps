@@ -146,39 +146,21 @@ public class AccountInfo extends Activity {
 	}
 
 	public void doMsgcenter(View v) {
-		if (Utils.loginInfo == null) {
-			showSomeThing("ÇëÏÈµÇÂ¼....");
-			return;
-		}
-
 		Intent intent = new Intent(AccountInfo.this, MessageCenter.class);
 		startActivity(intent);
 	}
 
 	public void doMysports(View v) {
-		if (Utils.loginInfo == null) {
-			showSomeThing("ÇëÏÈµÇÂ¼....");
-			return;
-		}
-
-		// Intent intent = new Intent(AccountInfo.this, MyActions.class);
-		// startActivity(intent);
+		Intent intent = new Intent(AccountInfo.this, MyActions.class);
+		startActivity(intent);
 	}
 
 	public void doMyfriends(View v) {
-		if (Utils.loginInfo == null) {
-			showSomeThing("ÇëÏÈµÇÂ¼....");
-			return;
-		}
 		// Intent intent = new Intent(AccountInfo.this, MyActions.class);
 		// startActivity(intent);
 	}
 
 	public void doMyshoucang(View v) {
-		if (Utils.loginInfo == null) {
-			showSomeThing("ÇëÏÈµÇÂ¼....");
-			return;
-		}
 		// Intent intent = new Intent(AccountInfo.this, MyActions.class);
 		// startActivity(intent);
 	}

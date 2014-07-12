@@ -171,6 +171,25 @@ public class InitValue {
 			+ "{'ftime':'2014-07-10 22:16','id':1,'uid':30,'uname':'思密达','upic':'20140707030924144_easyicon_net_44.32.png'}"
 			+ "],'uid':28}";
 	
+	public static String myorgactions = "{'acts':["
+			+ "{'aid':12,'aname':'双打竞技赛','ftime':'2014-05-24 15:00','pic':'m_1399735056391.PNG','score':10,'status':3,'usernum':1},"
+			+ "{'aid':11,'aname':'羽冠王晋级赛','ftime':'2014-05-28 10:00','pic':'action.png','score':0,'status':3,'usernum':0},"
+			+ "{'aid':9,'aname':'双打争霸赛','ftime':'2014-05-02 14:00','pic':'action.png','score':0,'status':3,'usernum':0},"
+			+ "{'aid':7,'aname':'双打擂台赛','ftime':'2014-04-30 13:30','pic':'action.png','score':0,'status':3,'usernum':0},"
+			+ "{'aid':5,'aname':'羽毛球团体对抗赛','ftime':'2014-04-27 14:00','pic':'action.png','score':0,'status':3,'usernum':0},"
+			+ "{'aid':4,'aname':'羽毛球相亲','ftime':'2014-05-01 14:00','pic':'action.png','score':0,'status':3,'usernum':0},"
+			+ "{'aid':1,'aname':'羽毛球交友联谊赛','ftime':'2014-04-29 14:00','pic':'action.png','score':0,'status':3,'usernum':0}"
+			+ "],'aid':2147483647,'review':7,'reviewed':0,'type':0,'uid':28}";
+	
+	public static String myjoinactions = "{'acts':["
+			+ "{'aid':14,'aname':'羽乐欢聚移动真情','ftime':'2014-05-25 15:00','pic':'m_1399812794313.JPG','reviewed':1,'score':10,'sort':1,'status':3},"
+			+ "{'aid':13,'aname':'健康时尚运动','ftime':'2014-06-24 15:00','pic':'m_1399812448626.JPG','reviewed':0,'score':0,'sort':100,'status':1},"
+			+ "{'aid':12,'aname':'双打竞技赛','ftime':'2014-05-24 15:00','pic':'m_1399735056391.PNG','reviewed':0,'score':0,'sort':100,'status':3},"
+			+ "{'aid':11,'aname':'羽冠王晋级赛','ftime':'2014-05-28 10:00','pic':'action.png','reviewed':0,'score':0,'sort':100,'status':2},"
+			+ "{'aid':5,'aname':'羽毛球团体对抗赛','ftime':'2014-04-27 14:00','pic':'action.png','reviewed':0,'score':0,'sort':100,'status':2},"
+			+ "{'aid':1,'aname':'羽毛球交友联谊赛','ftime':'2014-04-29 14:00','pic':'action.png','reviewed':0,'score':0,'sort':100,'status':2}"
+			+ "],'aid':2147483647,'review':3,'reviewed':2,'type':0,'uid':28}";
+	
 	public static SharedPreferences preferences;
 	public InitValue() {
 	}

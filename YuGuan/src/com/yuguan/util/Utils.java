@@ -64,6 +64,8 @@ public class Utils {
 	public static String friendInfoUrl = rootPaht + "/friend/friends.htm?r="+Math.random();
 	// 发私信
 	public static String sendPriMsgUrl = rootPaht + "/user/sendprvmsg.htm?";
+	// 删除私信
+	public static String delPriMsgUrl = rootPaht + "/user/delprvmsg.htm?r="+Math.random();
 	// 添加好友
 	public static String addFriendUrl = rootPaht + "/user/addfriend.htm?r="+Math.random();
 	// 获取个人信息
@@ -74,12 +76,23 @@ public class Utils {
 	public static String uploadFileUrl = rootPaht + "/fileUpload";
 	// 系统消息  uid=28&msgid=-1	
 	public static String getSysMsgUrl = rootPaht + "/user/sysnotice.htm?r="+Math.random();
+	// 删除系统消息
+	public static String delSysMsgUrl = rootPaht + "/user/delnotice.htm?r="+Math.random();
 	// 好友私信  uid=28&type=1&msgid=-1  type = 2 是自己
 	public static String getPriMsgUrl = rootPaht + "/user/prvmsg.htm?r="+Math.random();
 	// 好友申请 uid=28&msgid=-1
 	public static String getFriReqUrl = rootPaht + "/user/friendrequest.htm?r="+Math.random();
+	// 处理好友申请  	uid="+uid+"&fuid="+fuid+"&type="+type+"
+	public static String acceptFriReqUrl = rootPaht + "/user/acceptfriend.htm?r="+Math.random();
 	// 活动邀请 uid=28&msgid=-1	
 	public static String getSportReqUrl = rootPaht + "/user/actinvitemsg.htm?r="+Math.random();
+	// 处理活动申请  	msgid=-1	
+	public static String acceptSportReqUrl = rootPaht + "/user/delactinvitemsg.htm?r="+Math.random();
+	// 组织的活动	uid="+uid+"&type="+type+"&aid="+aid+"
+	public static String myOrgActionsUrl = rootPaht + "/user/orgactionlist.htm?r="+Math.random();
+	// 参与的活动	uid="+uid+"&type="+type+"&aid="+aid+"
+	public static String myJoinActionsUrl = rootPaht + "/user/actactionlist.htm?r="+Math.random();
+	
 	
 	
 	public static int TIMEOUT = 5000;

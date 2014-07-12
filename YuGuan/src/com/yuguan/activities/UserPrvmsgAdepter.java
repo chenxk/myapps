@@ -32,6 +32,7 @@ import cn.buaa.myweixin.R;
 
 import com.yuguan.bean.user.UserPrvmsgBean;
 import com.yuguan.util.HttpPostUtil;
+import com.yuguan.util.HttpUtil;
 import com.yuguan.util.ImageLoader;
 import com.yuguan.util.RoundImageView;
 import com.yuguan.util.Utils;
@@ -43,8 +44,6 @@ public class UserPrvmsgAdepter extends BaseAdapter {
 	private ImageLoader mImageLoader;
 	private Context ctx;
 	private View parent;
-
-	
 
 	public UserPrvmsgAdepter(Context context, List<UserPrvmsgBean> coll,
 			View parent) {
@@ -93,12 +92,15 @@ public class UserPrvmsgAdepter extends BaseAdapter {
 					.findViewById(R.id.msgSendTime);
 			LinearLayout huifu = (LinearLayout) convertView
 					.findViewById(R.id.huifu);
+			LinearLayout deleteMsg = (LinearLayout) convertView
+					.findViewById(R.id.deleteMsg);
 
 			holder.msgId = msgId;
 			holder.friendContent = friendContent;
 			holder.friendmsgId = friendmsgId;
 			holder.friendmsgname = friendmsgname;
 			holder.huifu = huifu;
+			holder.deleteMsg = deleteMsg;
 			holder.msgSendTime = msgSendTime;
 			holder.userImage = userImage;
 
@@ -106,8 +108,14 @@ public class UserPrvmsgAdepter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
+		
 		try {
 			final UserPrvmsgBean bean = coll.get(position);
+			if (bean.getType() == 1) {
+				holder.huifu.setVisibility(View.VISIBLE);
+			} else {
+				holder.huifu.setVisibility(View.INVISIBLE);
+			}
 			holder.msgId.setText(bean.getId() + "");
 			holder.friendContent.setText(bean.getText());
 			holder.friendmsgId.setText(bean.getUid() + "");
@@ -126,10 +134,53 @@ public class UserPrvmsgAdepter extends BaseAdapter {
 				}
 			});
 
+			holder.deleteMsg.setOnClickListener(new View.OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// doSendMsg(bean.getUname(), bean.getUid());
+					deleteMsg(bean.getId(), bean.getType());
+				}
+			});
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		
 		return convertView;
+	}
+
+	
+	public void setconvertViewGone(long id){
+		UserPrvmsgBean temp = null;
+		for(UserPrvmsgBean bean : coll){
+			if(bean.getId() == id){
+				temp = bean;
+				break;
+			}
+		}
+		if(temp != null){
+			coll.remove(temp);
+			this.notifyDataSetChanged();
+		}
+	}
+	
+	
+	public void deleteMsg(final long id, int type) {
+		String url = Utils.delPriMsgUrl + "&type=" + type + "&msgid=" + id;
+		new Thread(new HttpUtil(url, new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				super.handleMessage(msg);
+				Bundle data = msg.getData();
+				String result = data.getString("DELETE_PRIMSG");
+				if (result.length() > 0 && !result.equals("服务访问失败")) {
+					showSomeThing("删除成功!");
+					setconvertViewGone(id);
+				}
+			}
+		}, "DELETE_PRIMSG")).start();
 	}
 
 	// 发信息
@@ -141,6 +192,7 @@ public class UserPrvmsgAdepter extends BaseAdapter {
 	private LinearLayout sendMsg;
 	private TextView sendFriendName;
 	private LinearLayout cancelMsg;
+
 	public void doSendMsg(String name, final long friendId) {
 
 		if (menu_display == false) {
@@ -254,6 +306,7 @@ public class UserPrvmsgAdepter extends BaseAdapter {
 	}
 
 	private InputMethodManager imm;
+
 	private void popupInputMethodWindow() {
 		new Thread((new Runnable() {
 			@Override
@@ -278,6 +331,7 @@ public class UserPrvmsgAdepter extends BaseAdapter {
 		public TextView friendContent;
 		public TextView msgSendTime;
 		public LinearLayout huifu;
+		public LinearLayout deleteMsg;
 		public TextView msgId;
 	}
 

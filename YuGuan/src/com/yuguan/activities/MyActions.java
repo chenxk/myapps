@@ -3,6 +3,10 @@ package com.yuguan.activities;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -21,8 +25,8 @@ import android.widget.Toast;
 import cn.buaa.myweixin.Login;
 import cn.buaa.myweixin.R;
 
-import com.yuguan.bean.FriendBean;
-import com.yuguan.bean.MallBean;
+import com.yuguan.bean.user.UserActActionBean;
+import com.yuguan.bean.user.UserOrgActionBean;
 import com.yuguan.util.HttpUtil;
 import com.yuguan.util.InitValue;
 import com.yuguan.util.Utils;
@@ -34,33 +38,26 @@ public class MyActions extends Activity implements OnClickListener {
 	private TextView friendsMsgText;
 	private LinearLayout friendsMsg;
 	private ViewPager messagePager;
-	
+
 	/** 所有场馆 */
 	private RefreshListView allMallsList;
-	private MallAdepter mallAdapter;
-	private List<MallBean> malls = new ArrayList<MallBean>();
+	private MyActivityAdapter mallAdapter;
+	private List<UserActActionBean> malls = new ArrayList<UserActActionBean>();
 	private boolean allMallsListIsLoad = false;
-	private int curMallPage = 1;
-	// 排序方式
-	private int curMallSr = 0;
-	// 区域ID
-	private int curMallRg = 0;
-	
+	private int actaid = -1;
+	private int acttype = 0;
 	/** 所有好友 */
 	private RefreshListView allFriendsList;
-	private UserAdepter friendAdepter;
-	private List<FriendBean> friends = new ArrayList<FriendBean>();
+	private MyActivityAdapter friendAdepter;
+	private List<UserOrgActionBean> friends = new ArrayList<UserOrgActionBean>();
 	private boolean allFriendsListIsLoad = false;
-	private int curFriendPage = 1;
-	// 排序方式
-	private int curFriendSr = 0;
-	// 区域ID
-	private int curFriendRg = 0;
-	
+	private int orgaid = -1;
+	private int orgtype = 0;
+
 	private final String KEY_MALL_JSON = "KEY_MALL_JSON";
 	private final String KEY_FRIEND_JSON = "KEY_FRIEND_JSON";
-	private String mallJson = InitValue.mallJson;
-	private String friendJson = InitValue.friendJson;
+	private String mallJson = InitValue.myjoinactions;
+	private String friendJson = InitValue.myorgactions;
 
 	@SuppressLint("HandlerLeak")
 	private Handler mallHandler = new Handler() {
@@ -93,7 +90,6 @@ public class MyActions extends Activity implements OnClickListener {
 		}
 	};
 
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -108,6 +104,7 @@ public class MyActions extends Activity implements OnClickListener {
 					@Override
 					public void onPageSelected(int position) {
 						// TODO Auto-generated method stub
+						setFontStyle(position);
 						if (position == 0) {
 							initMallView();
 						}
@@ -181,20 +178,61 @@ public class MyActions extends Activity implements OnClickListener {
 	}
 
 	protected void getFriendDataFromJson() {
-		// TODO Auto-generated method stub
-		
+		try {
+			JSONObject jsonObject = new JSONObject(friendJson);
+			JSONArray jsonArray = jsonObject.getJSONArray("acts");
+			int count = jsonArray.length();
+			if (count >= 10) {
+				orgaid = ((JSONObject) jsonArray.get(9)).getInt("id");
+				allFriendsList.setLastData(false);
+				allFriendsList.addFootView();
+			} else {
+				allFriendsList.setLastData(true);
+				allFriendsList.removeFootView();
+			}
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject json = (JSONObject) jsonArray.get(i);
+				UserOrgActionBean bean = UserOrgActionBean.getBeanByJson(json);
+				if (bean != null)
+					friends.add(bean);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	protected void getMallDataFromJson() {
-		// TODO Auto-generated method stub
-		
+		try {
+			JSONObject jsonObject = new JSONObject(mallJson);
+			JSONArray jsonArray = jsonObject.getJSONArray("acts");
+			int count = jsonArray.length();
+			if (count >= 10) {
+				actaid = ((JSONObject) jsonArray.get(9)).getInt("id");
+				allMallsList.setLastData(false);
+				allMallsList.addFootView();
+			} else {
+				allMallsList.setLastData(true);
+				allMallsList.removeFootView();
+			}
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject json = (JSONObject) jsonArray.get(i);
+				UserActActionBean bean = UserActActionBean.getBeanByJson(json);
+				if (bean != null)
+					malls.add(bean);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
 	}
-	
+
 	private void initMallView() {
 		if (allMallsListIsLoad == false) {
 			try {
-				allMallsList = (RefreshListView) findViewById(R.id.messageSysList);
-				allMallsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+				allMallsList = (RefreshListView) findViewById(R.id.actionInList);
+				allMallsList
+						.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 							@Override
 							public void onItemClick(AdapterView<?> parent,
@@ -202,77 +240,89 @@ public class MyActions extends Activity implements OnClickListener {
 								getMallInfo(view);
 							}
 						});
-				
-				allMallsList.setOnRefreshListener(new RefreshListView.RefreshListener() {
 
-					@Override
-					public Object refreshing() {
-						return null;
-					}
+				allMallsList
+						.setOnRefreshListener(new RefreshListView.RefreshListener() {
 
-					@Override
-					public void refreshed(Object obj) {
-						/**/
-						if (obj == null) {
-							return;
-						}
+							@Override
+							public Object refreshing() {
+								return null;
+							}
 
-						String result = obj.toString();
-						if (result.length() > 0 && !result.equals("服务访问失败")) {
-							mallJson = result;
-							malls.clear();
-							getMallDataFromJson();
-							allMallsList.setLastRow(false);
-							allMallsList.setLoading(false);
-							mallAdapter.notifyDataSetChanged();
-						}else{
-							showSomeThing(result);
-						}
-						allMallsList.setSelection(1);
-					}
+							@Override
+							public void refreshed(Object obj) {
+								/**/
+								if (obj == null) {
+									return;
+								}
 
-					@Override
-					public void more() {
-						if(!allMallsList.isLastData()){
-							++ curMallPage;
-							String url = Utils.mallListUrl + curMallPage + "&rg=" + curMallRg + "&sr=" + curMallSr;
-							allMallsList.setUrl(url);
-						}else{
-							showSomeThing("加载到最后一条了");
-						}
-					}
+								String result = obj.toString();
+								if (result.length() > 0
+										&& !result.equals("服务访问失败")) {
+									mallJson = result;
+									malls.clear();
+									getMallDataFromJson();
+									allMallsList.setLastRow(false);
+									allMallsList.setLoading(false);
+									mallAdapter.notifyDataSetChanged();
+								} else {
+									showSomeThing(result);
+								}
+								allMallsList.setSelection(1);
+							}
 
-					@Override
-					public void setUrl() {
-						curMallPage = 1;
-						String url = Utils.mallListUrl + curMallPage + "&rg=" + curMallRg + "&sr=" + curMallSr;
-						allMallsList.setUrl(url);
-					}
+							@Override
+							public void more() {
+								if (!allMallsList.isLastData()) {
+									String url = Utils.myJoinActionsUrl
+											+ "&uid=" + Utils.loginInfo.getId()
+											+ "&type=" + acttype + "&aid="
+											+ actaid;
+									allMallsList.setUrl(url);
+								} else {
+									showSomeThing("加载到最后一条了");
+								}
+							}
 
-					@Override
-					public void loaded(Object obj) {
-						if (obj == null) {
-							return;
-						}
+							@Override
+							public void setUrl() {
+								actaid = -1;
+								String url = Utils.myJoinActionsUrl
+										+ "&uid=" + Utils.loginInfo.getId()
+										+ "&type=" + acttype + "&aid="
+										+ actaid;
+								allMallsList.setUrl(url);
+							}
 
-						String result = obj.toString();
-						if (result.length() > 0 && !result.equals("服务访问失败")) {
-							mallJson = result;
-							getMallDataFromJson();
-							mallAdapter.notifyDataSetChanged();
-							allMallsList.setLoading(false);
-							
-						}else{
-							showSomeThing(result);
-						}
-						allMallsList.removeFootView();
-					}
-				});
+							@Override
+							public void loaded(Object obj) {
+								if (obj == null) {
+									return;
+								}
+
+								String result = obj.toString();
+								if (result.length() > 0
+										&& !result.equals("服务访问失败")) {
+									mallJson = result;
+									getMallDataFromJson();
+									mallAdapter.notifyDataSetChanged();
+									allMallsList.setLoading(false);
+
+								} else {
+									showSomeThing(result);
+								}
+								allMallsList.removeFootView();
+							}
+						});
 
 				initMallList();
-				String url = Utils.mallListUrl + curMallPage + "&rg=" + curMallRg + "&sr=" + curMallSr;
-				new Thread(new HttpUtil(url,mallHandler, KEY_MALL_JSON)).start();
-				
+				String url = Utils.myJoinActionsUrl
+						+ "&uid=" + Utils.loginInfo.getId()
+						+ "&type=" + acttype + "&aid="
+						+ actaid;
+				new Thread(new HttpUtil(url, mallHandler, KEY_MALL_JSON))
+						.start();
+
 			} catch (Exception e) {
 				showSomeThing(e.toString());
 			}
@@ -280,21 +330,21 @@ public class MyActions extends Activity implements OnClickListener {
 			allMallsListIsLoad = true;
 		}
 	}
-	
+
 	private void initMallList() {
 		/**/
 		getMallDataFromJson();
 		try {
 			allMallsList.setAdapter(null);
 			/**/
-			if(malls.size() < 5){
+			if (malls.size() < 5) {
 				allMallsList.removeHeaderView();
 				allMallsList.removeFootView();
-			}else{
+			} else {
 				allMallsList.addHeaderView();
 				allMallsList.addFootView();
 			}
-			mallAdapter = new MallAdepter(this, malls);
+			mallAdapter = new MyActivityAdapter(this, malls);
 			allMallsList.setAdapter(mallAdapter);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -305,85 +355,98 @@ public class MyActions extends Activity implements OnClickListener {
 	private void initFriendView() {
 		if (allFriendsListIsLoad == false) {
 			try {
-				allFriendsList = (RefreshListView) findViewById(R.id.messagePriList);
-				allFriendsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+				allFriendsList = (RefreshListView) findViewById(R.id.actionOutList);
+				allFriendsList
+						.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 							@Override
 							public void onItemClick(AdapterView<?> parent,
 									View view, int position, long id) {
 								getFriendInfo(view);
 							}
 						});
-				
-				allFriendsList.setOnRefreshListener(new RefreshListView.RefreshListener() {
 
-					@Override
-					public Object refreshing() {
-						return null;
-					}
+				allFriendsList
+						.setOnRefreshListener(new RefreshListView.RefreshListener() {
 
-					@Override
-					public void refreshed(Object obj) {
-						/**/
-						if (obj == null) {
-							return;
-						}
+							@Override
+							public Object refreshing() {
+								return null;
+							}
 
-						String result = obj.toString();
-						if (result.length() > 0 && !result.equals("服务访问失败")) {
-							friendJson = result;
-							friends.clear();
-							getFriendDataFromJson();
-							allFriendsList.setLastRow(false);
-							allFriendsList.setLoading(false);
-							friendAdepter.notifyDataSetChanged();
-						}else{
-							showSomeThing(result);
-						}
-						allFriendsList.setSelection(1);
-					}
+							@Override
+							public void refreshed(Object obj) {
+								/**/
+								if (obj == null) {
+									return;
+								}
 
-					@Override
-					public void more() {
-						if(!allFriendsList.isLastData()){
-							++ curFriendPage;
-							String url = Utils.friendsUrl + "&cid=" + Utils.cid + "&pn=" + curFriendPage;
-							allFriendsList.setUrl(url);
-						}else{
-							showSomeThing("加载到最后一条了");
-						}
-					}
+								String result = obj.toString();
+								if (result.length() > 0
+										&& !result.equals("服务访问失败")) {
+									friendJson = result;
+									friends.clear();
+									getFriendDataFromJson();
+									allFriendsList.setLastRow(false);
+									allFriendsList.setLoading(false);
+									friendAdepter.notifyDataSetChanged();
+								} else {
+									showSomeThing(result);
+								}
+								allFriendsList.setSelection(1);
+							}
 
-					@Override
-					public void setUrl() {
-						curFriendPage = 1;
-						String url = Utils.friendsUrl + "&cid=" + Utils.cid + "&pn=" + curFriendPage;
-						allFriendsList.setUrl(url);
-					}
+							@Override
+							public void more() {
+								if (!allFriendsList.isLastData()) {
+									String url = Utils.myOrgActionsUrl
+											+ "&uid=" + Utils.loginInfo.getId()
+											+ "&type=" + orgtype + "&aid="
+											+ orgaid;
+									allFriendsList.setUrl(url);
+								} else {
+									showSomeThing("加载到最后一条了");
+								}
+							}
 
-					@Override
-					public void loaded(Object obj) {
-						if (obj == null) {
-							return;
-						}
+							@Override
+							public void setUrl() {
+								orgaid = -1;
+								String url = Utils.myOrgActionsUrl
+										+ "&uid=" + Utils.loginInfo.getId()
+										+ "&type=" + orgtype + "&aid="
+										+ orgaid;
+								allFriendsList.setUrl(url);
+							}
 
-						String result = obj.toString();
-						if (result.length() > 0 && !result.equals("服务访问失败")) {
-							friendJson = result;
-							getFriendDataFromJson();
-							friendAdepter.notifyDataSetChanged();
-							allFriendsList.setLoading(false);
-							
-						}else{
-							showSomeThing(result);
-						}
-						allFriendsList.removeFootView();
-					}
-				});
+							@Override
+							public void loaded(Object obj) {
+								if (obj == null) {
+									return;
+								}
+
+								String result = obj.toString();
+								if (result.length() > 0
+										&& !result.equals("服务访问失败")) {
+									friendJson = result;
+									getFriendDataFromJson();
+									friendAdepter.notifyDataSetChanged();
+									allFriendsList.setLoading(false);
+
+								} else {
+									showSomeThing(result);
+								}
+								allFriendsList.removeFootView();
+							}
+						});
 
 				initFriendList();
-				String url = Utils.friendsUrl + "&cid=" + Utils.cid + "&pn=" + curFriendPage;
-				new Thread(new HttpUtil(url,friendHandler, KEY_FRIEND_JSON)).start();
-				
+				String url = Utils.myOrgActionsUrl
+						+ "&uid=" + Utils.loginInfo.getId()
+						+ "&type=" + orgtype + "&aid="
+						+ orgaid;
+				new Thread(new HttpUtil(url, friendHandler, KEY_FRIEND_JSON))
+						.start();
+
 			} catch (Exception e) {
 				showSomeThing(e.toString());
 			}
@@ -397,23 +460,22 @@ public class MyActions extends Activity implements OnClickListener {
 		try {
 			allFriendsList.setAdapter(null);
 			/**/
-			if(friends.size() < 5){
+			if (friends.size() < 5) {
 				allFriendsList.removeHeaderView();
 				allFriendsList.removeFootView();
-			}else{
+			} else {
 				allFriendsList.addHeaderView();
 				allFriendsList.addFootView();
 			}
-			friendAdepter = new UserAdepter(this, friends);
+			friendAdepter = new MyActivityAdapter(this, friends, 0);
 			allFriendsList.setAdapter(friendAdepter);
 		} catch (Exception e) {
 			// TODO: handle exception
 			showSomeThing(e.toString());
 		}
-		
+
 	}
-	
-	
+
 	public void getFriendInfo(View v) {
 		try {
 			Intent intent = new Intent(MyActions.this, FriendInfo.class);
@@ -425,13 +487,13 @@ public class MyActions extends Activity implements OnClickListener {
 		// Toast.makeText(getApplicationContext(), "登录成功",
 		// Toast.LENGTH_LONG).show();
 	}
-	
+
 	public void getMallInfo(View v) { // 小黑 对话界面
 		try {
-			// 系统通知  sysmsginfo.xml
-			// 好友添加  friendapplyinfo.xml
-			// 活动邀请  sportapplyinfo.xml
-			TextView idView = (TextView)v.findViewById(R.id.mallId);
+			// 系统通知 sysmsginfo.xml
+			// 好友添加 friendapplyinfo.xml
+			// 活动邀请 sportapplyinfo.xml
+			TextView idView = (TextView) v.findViewById(R.id.mallId);
 			int id = Integer.parseInt(idView.getText().toString());
 			Intent intent = new Intent(MyActions.this, MallInfo.class);
 			Bundle bundle = new Bundle();
@@ -445,14 +507,13 @@ public class MyActions extends Activity implements OnClickListener {
 		// Toast.makeText(getApplicationContext(), "登录成功",
 		// Toast.LENGTH_LONG).show();
 	}
-	
+
 	private void initView() {
-		friendsMsgText = (TextView) findViewById(R.id.myaction_inText);
-		sysMsgText = (TextView) findViewById(R.id.myaction_outText);
+		sysMsgText = (TextView) findViewById(R.id.myaction_inText);
+		friendsMsgText = (TextView) findViewById(R.id.myaction_outText);
 		sysMsg = (LinearLayout) findViewById(R.id.myaction_in);
 		friendsMsg = (LinearLayout) findViewById(R.id.myaction_out);
 		messagePager = (ViewPager) findViewById(R.id.myactionPager);
-
 	}
 
 	@Override
@@ -476,7 +537,6 @@ public class MyActions extends Activity implements OnClickListener {
 		}
 	}
 
-
 	public void doBack(View v) {
 		this.finish();
 	}
@@ -488,6 +548,20 @@ public class MyActions extends Activity implements OnClickListener {
 
 	public void showSomeThing(String str) {
 		Toast.makeText(getApplicationContext(), str, Toast.LENGTH_LONG).show();
+	}
+
+	public void setFontStyle(int index) {
+		if (index == 0) {
+			sysMsgText.setTextAppearance(getApplicationContext(),
+					R.style.fontstyle_red_20);
+			friendsMsgText.setTextAppearance(getApplicationContext(),
+					R.style.fontstyle_20);
+		} else {
+			sysMsgText.setTextAppearance(getApplicationContext(),
+					R.style.fontstyle_20);
+			friendsMsgText.setTextAppearance(getApplicationContext(),
+					R.style.fontstyle_red_20);
+		}
 	}
 
 	/**
@@ -503,11 +577,7 @@ public class MyActions extends Activity implements OnClickListener {
 		@Override
 		public void onClick(View v) {
 			messagePager.setCurrentItem(index);
-			if (index == 0) {
-				// friendsMsgText.set
-			} else {
-
-			}
+			setFontStyle(index);
 		}
 	};
 }

@@ -6,6 +6,9 @@ package com.yuguan.activities;
 import java.util.List;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,9 @@ import android.widget.Toast;
 import cn.buaa.myweixin.R;
 
 import com.yuguan.bean.user.FrdRequestMsgBean;
+import com.yuguan.bean.user.SysNoticeBean;
+import com.yuguan.util.HttpUtil;
+import com.yuguan.util.Utils;
 
 /**
  * @author Monkey
@@ -102,14 +108,14 @@ public class FrdRequestAdepter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		try {
-			FrdRequestMsgBean bean = coll.get(position);
+			final FrdRequestMsgBean bean = coll.get(position);
 			holder.applySendTime.setText(bean.getFtime());
 			holder.btn_no.setOnClickListener(new View.OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-
+					acceptFrdReq(bean.getUid(),bean.getId(), 0);
 				}
 			});
 			holder.btn_ok.setOnClickListener(new View.OnClickListener() {
@@ -117,7 +123,7 @@ public class FrdRequestAdepter extends BaseAdapter {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-
+					acceptFrdReq(bean.getUid(),bean.getId(), 1);
 				}
 			});
 			holder.friendmsg.setText(bean.getUname());
@@ -129,6 +135,45 @@ public class FrdRequestAdepter extends BaseAdapter {
 
 		return convertView;
 
+	}
+
+	public void setconvertViewGone(long id) {
+		FrdRequestMsgBean temp = null;
+		for (FrdRequestMsgBean bean : coll) {
+			if (bean.getId() == id) {
+				temp = bean;
+				break;
+			}
+		}
+		if (temp != null) {
+			coll.remove(temp);
+			this.notifyDataSetChanged();
+		}
+	}
+
+	public void acceptFrdReq(final long fuid,final long id,final int type) {
+		String url = Utils.acceptFriReqUrl + "&uid=" + Utils.loginInfo.getId()
+				+ "&fuid=" + fuid + "&type=" + type;
+		new Thread(new HttpUtil(url, new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				super.handleMessage(msg);
+				Bundle data = msg.getData();
+				String result = data.getString("DELETE_PRIMSG");
+				if (result.length() > 0 && !result.equals("服务访问失败")) {
+					if(type == 1){
+						showSomeThing("好友添加成功");
+					}else{
+						showSomeThing("已忽略此消息");
+					}
+					setconvertViewGone(id);
+				}
+			}
+		}, "DELETE_PRIMSG")).start();
+	}
+
+	public void showSomeThing(String str) {
+		Toast.makeText(ctx, str, Toast.LENGTH_LONG).show();
 	}
 
 	/** 存放控件 */

@@ -12,6 +12,17 @@ public class UserPrvmsgBean implements Serializable {
 	private String upic;
 	private String text;
 	private String ftime;
+	private int type;
+	
+	
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
 
 	public long getId() {
 		return this.id;

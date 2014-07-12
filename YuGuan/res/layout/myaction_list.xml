@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 这是列表项的布局文件，每一行长什么样子，修改这里 
-android:background="@drawable/mm_listitem"-->
+android:background="@drawable/mm_listitem"
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="180dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/linearlayout_line"
     android:orientation="vertical"
     android:paddingLeft="10dp"
@@ -13,13 +14,13 @@ android:background="@drawable/mm_listitem"-->
     <LinearLayout
         android:id="@+id/myactionImg"
         android:layout_width="fill_parent"
-        android:layout_height="138dp"
+        android:layout_height="128dp"
         android:background="@drawable/action_list_back"
         android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="138dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/huise"
             android:orientation="vertical" >
 
@@ -33,27 +34,25 @@ android:background="@drawable/mm_listitem"-->
 
             <TextView
                 android:id="@+id/myactionTitle"
+                style="@style/fontstyle_white_25"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingBottom="10dp"
-                android:paddingTop="10dp"
+                android:paddingTop="20dp"
                 android:singleLine="true"
-                android:text="TextView"
-                android:textColor="#ccc"
-                android:textSize="25sp" />
+                android:text="TextView" />
 
             <TextView
                 android:id="@+id/myactionTime"
+                style="@style/fontstyle_white_20"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingBottom="10dp"
                 android:paddingTop="10dp"
                 android:singleLine="true"
-                android:text="TextView"
-                android:textColor="#ccc"
-                android:textSize="18sp" />
+                android:text="TextView" />
 
             <TextView
                 android:id="@+id/myactionMall"
@@ -63,22 +62,22 @@ android:background="@drawable/mm_listitem"-->
                 android:paddingBottom="10dp"
                 android:paddingTop="10dp"
                 android:singleLine="true"
-                android:text="TextView"
                 android:textColor="#ccc"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp" >
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:orientation="horizontal"
-            android:paddingTop="5dp" >
+            android:orientation="horizontal" >
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -101,12 +100,13 @@ android:background="@drawable/mm_listitem"-->
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:gravity="center"
             android:orientation="horizontal"
-            android:paddingTop="5dp" >
+            android:visibility="gone" >
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_gravity="center"
                 android:src="@drawable/yellow_star_48" />
 
@@ -115,7 +115,93 @@ android:background="@drawable/mm_listitem"-->
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:paddingLeft="5dp"
                 android:text="评分" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/myjoinLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingRight="5dp"
+                android:src="@drawable/jg" />
+
+            <TextView
+                style="@style/fontstyle_red_16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="比赛成绩" />
+
+            <ImageView
+                android:id="@+id/sortMC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/pf_mc" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal" >
+
+            <TextView
+                style="@style/fontstyle_black_16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="组织者评分:" />
+
+            <TextView
+                android:id="@+id/orggeifen"
+                style="@style/fontstyle_red_16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10分" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/myorgLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/xinyuscore"
+                style="@style/fontstyle_red_16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="信誉积分:10" />
+
+            <TextView
+                android:id="@+id/usernum"
+                style="@style/fontstyle_black_16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:text="(已有1位参与者评分)" />
         </LinearLayout>
     </RelativeLayout>
 

@@ -5,7 +5,13 @@ package com.yuguan.activities;
 
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Context;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +21,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import cn.buaa.myweixin.R;
 
+import com.yuguan.bean.user.FrdRequestMsgBean;
 import com.yuguan.bean.user.HuodongInviteMsgBean;
+import com.yuguan.util.HttpUtil;
+import com.yuguan.util.Utils;
 
 /**
  * @author Monkey
@@ -105,22 +114,20 @@ public class SportRequestAdepter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		try {
-			HuodongInviteMsgBean bean = coll.get(position);
+			final HuodongInviteMsgBean bean = coll.get(position);
 			holder.applySendTime.setText(bean.getFtime());
 			holder.btn_no.setOnClickListener(new View.OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
-
+					acceptSportReq(bean.getId(),0);
 				}
 			});
 			holder.btn_ok.setOnClickListener(new View.OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
-
+					baoming(bean.getAid(),bean.getId());
 				}
 			});
 			holder.friendmsg.setText(bean.getUname());
@@ -133,6 +140,74 @@ public class SportRequestAdepter extends BaseAdapter {
 
 		return convertView;
 
+	}
+	
+	public void setconvertViewGone(long id) {
+		HuodongInviteMsgBean temp = null;
+		for (HuodongInviteMsgBean bean : coll) {
+			if (bean.getId() == id) {
+				temp = bean;
+				break;
+			}
+		}
+		if (temp != null) {
+			coll.remove(temp);
+			this.notifyDataSetChanged();
+		}
+	}
+
+	public void acceptSportReq(final long msgid,final int type) {
+		
+		String url = Utils.acceptSportReqUrl + "&msgid=" + msgid;
+		new Thread(new HttpUtil(url, new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				super.handleMessage(msg);
+				Bundle data = msg.getData();
+				String result = data.getString("DELETE_PRIMSG");
+				if (result.length() > 0 && !result.equals("服务访问失败")) {
+					if(type == 0){
+						showSomeThing("已忽略此邀请");
+					}
+					setconvertViewGone(msgid);
+				}else{
+					showSomeThing("服务访问失败!");
+				}
+			}
+		}, "DELETE_PRIMSG")).start();
+	}
+
+	public void showSomeThing(String str) {
+		Toast.makeText(ctx, str, Toast.LENGTH_LONG).show();
+	}
+	
+	
+	public void baoming(int actionId,final long id){
+		String url = Utils.baomingtUrl + Utils.loginInfo.getId() + "&aid" + actionId;
+		new Thread(new HttpUtil(url, new Handler(){
+			@Override
+			public void handleMessage(Message msg) {
+				// TODO Auto-generated method stub
+				super.handleMessage(msg);
+				Bundle data = msg.getData();
+				String result = data.getString("BAOMING");
+				if (result != null && !"服务访问失败".equals(result)) {
+					try {
+						JSONObject json = new JSONObject(result);
+						if(json.getString("status").equals("suc")){
+							showSomeThing("活动报名成功!");
+							acceptSportReq(id,1);
+						}else{
+							showSomeThing("活动报名失败!");
+						}
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}else{
+					showSomeThing("服务访问失败!");
+				}
+			}
+		}, "BAOMING")).start();
 	}
 
 	/** 存放控件 */

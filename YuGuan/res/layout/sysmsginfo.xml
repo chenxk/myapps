@@ -2,16 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#fff"
+    android:background="@drawable/linearlayout_line"
     android:orientation="vertical"
-    android:padding="10dp" >
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp" >
 
     <TextView
         style="@style/fontstyle_bold_24"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
         android:layout_marginTop="10dp"
+        android:paddingBottom="10dp"
         android:text="系统消息" />
 
     <TextView
@@ -43,6 +44,31 @@
             android:layout_height="wrap_content"
             android:singleLine="false"
             android:text="2014年5月29日20:14:22" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/deleteSysMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#DC2F1F"
+        android:orientation="horizontal"
+        android:paddingBottom="2dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="2dp" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingRight="5dp"
+            android:src="@drawable/no_32" />
+
+        <TextView
+            style="@style/fontstyle_white_18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="删除" />
     </LinearLayout>
 
 </LinearLayout>

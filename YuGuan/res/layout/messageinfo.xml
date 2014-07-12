@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:diycomp="http://schemas.android.com/apk/res/cn.buaa.myweixin"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parentView"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#fff"
@@ -58,18 +59,19 @@
                 android:id="@+id/sysMsg"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:gravity="center"
                 android:layout_weight="1"
                 android:background="@drawable/white_line"
                 android:orientation="horizontal"
-                android:layout_gravity="center"
-                android:padding="10dp" >
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp" >
 
                 <TextView
                     android:id="@+id/sysMsgText"
-                    style="@style/fontstyle_red_14"
+                    style="@style/fontstyle_red_16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:layout_gravity="center"
                     android:gravity="center"
                     android:singleLine="true"
                     android:text="系统消息" />
@@ -84,15 +86,16 @@
                 android:id="@+id/friendsMsg"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:gravity="center"
                 android:layout_weight="1"
                 android:background="@drawable/white_line"
                 android:orientation="horizontal"
-                android:layout_gravity="center"
-                android:padding="10dp" >
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp" >
 
                 <TextView
                     android:id="@+id/friendsMsgText"
-                    style="@style/fontstyle_14"
+                    style="@style/fontstyle_16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -100,6 +103,7 @@
                     android:singleLine="true"
                     android:text="好友私信" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="2dp"
                 android:layout_height="match_parent"
@@ -109,15 +113,16 @@
                 android:id="@+id/friendReq"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:gravity="center"
                 android:layout_weight="1"
                 android:background="@drawable/white_line"
                 android:orientation="horizontal"
-                android:layout_gravity="center"
-                android:padding="10dp" >
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp" >
 
                 <TextView
                     android:id="@+id/friendReqText"
-                    style="@style/fontstyle_14"
+                    style="@style/fontstyle_16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -125,6 +130,7 @@
                     android:singleLine="true"
                     android:text="好友申请" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="2dp"
                 android:layout_height="match_parent"
@@ -134,15 +140,16 @@
                 android:id="@+id/sportReq"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:gravity="center"
                 android:layout_weight="1"
                 android:background="@drawable/white_line"
                 android:orientation="horizontal"
-                android:layout_gravity="center"
-                android:padding="10dp" >
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp" >
 
                 <TextView
                     android:id="@+id/sportReqText"
-                    style="@style/fontstyle_14"
+                    style="@style/fontstyle_16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

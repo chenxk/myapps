@@ -58,7 +58,8 @@ public class ScoreInfo extends LinearLayout {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				setScore(0);
+				if(clickAble)
+					setScore(0);
 			}
 		});
 		v1 = (ImageView) view.findViewById(R.id.star1);

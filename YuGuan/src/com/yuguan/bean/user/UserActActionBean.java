@@ -10,6 +10,7 @@ public class UserActActionBean implements Serializable {
 	private String aname;
 	private String pic;
 	private String ftime;
+	// 状态：0-无效 1-报名 2-完成比赛 3-完成评价 4-退出比赛
 	private int status;
 	private int sort;
 	private int score;
@@ -88,7 +89,7 @@ public class UserActActionBean implements Serializable {
 			bean.setPic(json.getString("pic"));
 			bean.setReviewed(json.getInt("reviewed"));
 			bean.setScore(json.getInt("score"));
-			bean.setSort(json.getInt("scort"));
+			bean.setSort(json.getInt("sort"));
 			bean.setStatus(json.getInt("status"));
 			return bean;
 		} catch (Exception e) {
