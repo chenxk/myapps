@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import cn.buaa.myweixin.ChatActivity;
 import cn.buaa.myweixin.Login;
 import cn.buaa.myweixin.R;
 
@@ -361,7 +362,7 @@ public class MyActions extends Activity implements OnClickListener {
 							@Override
 							public void onItemClick(AdapterView<?> parent,
 									View view, int position, long id) {
-								getFriendInfo(view);
+								getMallInfo(view);
 							}
 						});
 
@@ -493,11 +494,11 @@ public class MyActions extends Activity implements OnClickListener {
 			// 系统通知 sysmsginfo.xml
 			// 好友添加 friendapplyinfo.xml
 			// 活动邀请 sportapplyinfo.xml
-			TextView idView = (TextView) v.findViewById(R.id.mallId);
+			TextView idView = (TextView)v.findViewById(R.id.myactionId);
 			int id = Integer.parseInt(idView.getText().toString());
-			Intent intent = new Intent(MyActions.this, MallInfo.class);
+			Intent intent = new Intent(MyActions.this, ChatActivity.class);
 			Bundle bundle = new Bundle();
-			bundle.putInt("mallId", id);
+			bundle.putInt("actionId", id);
 			intent.putExtras(bundle);
 			startActivity(intent);
 		} catch (Exception e) {

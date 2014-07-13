@@ -19,7 +19,7 @@ import com.yuguan.bean.FriendBean;
 
 public class Utils {
 
-	public static String rootPaht = "http://192.168.10.100:8080/yuqiu";//
+	public static String rootPaht = "http://www.yuguanwang.com";//	http://192.168.10.100:8080/yuqiu
 	// 获取区
 	public static String countyUrl = rootPaht + "/util/county.htm?r=" + Math.random() + "&cid=";
 	// 获取活动图片
@@ -92,8 +92,10 @@ public class Utils {
 	public static String myOrgActionsUrl = rootPaht + "/user/orgactionlist.htm?r="+Math.random();
 	// 参与的活动	uid="+uid+"&type="+type+"&aid="+aid+"
 	public static String myJoinActionsUrl = rootPaht + "/user/actactionlist.htm?r="+Math.random();
-	
-	
+	// 评分活动和球馆	"aid="+aid+"&uid="+uid+"&actscore="+actScore+"&acttext="+actText+"&mallscore="+mallScore+"&malltext="+mallText
+	public static String putactreviewUrl = rootPaht + "/user/putactreview.htm?r="+Math.random();
+	// 评分活动和球馆	"aid="+aid+"&uid="+uid+"&actscore="+actScore+"&acttext="+actText+"&mallscore="+mallScore+"&malltext="+mallText
+	public static String putorgreviewUrl = rootPaht + "/user/putactreview.htm?r="+Math.random();
 	
 	public static int TIMEOUT = 5000;
 	public static int cid = 173;

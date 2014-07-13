@@ -188,8 +188,16 @@ public class Login extends Activity {
 							JSONObject message  = json.getJSONObject("user");
 							if(message != null){
 								Utils.self = FriendBean.getBeanFromJson(message);
-								String url = Utils.userImg + Utils.self.getPic();
-								Utils.selfPic = mImageLoader.getImageFromUrl(url);
+								final String url = Utils.userImg + Utils.self.getPic();
+								new Thread(new Runnable() {
+									
+									@Override
+									public void run() {
+										// TODO Auto-generated method stub
+										Utils.selfPic = mImageLoader.getImageFromUrl(url);
+									}
+								}).start();
+								
 							}
 						} catch (JSONException e) {
 							e.printStackTrace();

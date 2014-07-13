@@ -34,7 +34,7 @@ import android.widget.Toast;
 public class ImageLoader {
 	private static final String TAG = "ImageLoader";
 	private static final int MAX_CAPACITY = 50;// 一级缓存的最大空间
-	private static final long DELAY_BEFORE_PURGE = 1000 * 60 * 30;// 定时清理缓存
+	private static final long DELAY_BEFORE_PURGE = 1000 * 60;// 定时清理缓存
 
 	// 0.75是加载因子为经验值，true则表示按照最近访问量的高低排序，false则表示按照插入顺序排序
 	private HashMap<String, Bitmap> mFirstLevelCache = new LinkedHashMap<String, Bitmap>(
@@ -92,6 +92,7 @@ public class ImageLoader {
 	}
 
 	/**
+	 * 
 	 * 返回缓存，如果没有则返回null
 	 * 
 	 * @param url

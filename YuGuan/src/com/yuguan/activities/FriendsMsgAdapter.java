@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import cn.buaa.myweixin.R;
 
-import com.yuguan.bean.ActionBean;
 import com.yuguan.bean.FriendMsgBean;
 import com.yuguan.util.ImageLoader;
 import com.yuguan.util.RoundImageView;

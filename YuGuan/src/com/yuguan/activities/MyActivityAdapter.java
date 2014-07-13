@@ -3,8 +3,10 @@ package com.yuguan.activities;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,9 @@ public class MyActivityAdapter extends BaseAdapter {
 
 	private List<UserActActionBean> list;
 	private List<UserOrgActionBean> coll;
+	/**
+	 * flag = 0 org else act
+	 * */
 	private int flag = 10;
 	private Context ctx;
 
@@ -66,9 +71,9 @@ public class MyActivityAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		if(flag == 0){
+		if (flag == 0) {
 			return coll == null ? 0 : coll.size();
-		}else{
+		} else {
 			return list == null ? 0 : list.size();
 		}
 	}
@@ -137,8 +142,10 @@ public class MyActivityAdapter extends BaseAdapter {
 			TextView mall = (TextView) convertView
 					.findViewById(R.id.myactionMall);
 			TextView comeon = (TextView) convertView.findViewById(R.id.comeon);
-			TextView xinyuscore = (TextView) convertView.findViewById(R.id.xinyuscore);
-			TextView usernums = (TextView) convertView.findViewById(R.id.usernum);
+			TextView xinyuscore = (TextView) convertView
+					.findViewById(R.id.xinyuscore);
+			TextView usernums = (TextView) convertView
+					.findViewById(R.id.usernum);
 			TextView orggeifen = (TextView) convertView
 					.findViewById(R.id.orggeifen);
 			ImageView sortMC = (ImageView) convertView
@@ -183,7 +190,7 @@ public class MyActivityAdapter extends BaseAdapter {
 					holder.comeon.setText("已结束");
 					holder.myorg.setVisibility(View.VISIBLE);
 					holder.xinyuscore.setText("信誉积分:" + score);
-					holder.usernum.setText("(已有" + usernum +"位参与者评分)");
+					holder.usernum.setText("(已有" + usernum + "位参与者评分)");
 					holder.actionScore.setVisibility(View.VISIBLE);
 				}
 
@@ -191,7 +198,7 @@ public class MyActivityAdapter extends BaseAdapter {
 					holder.comeon.setText("已结束");
 					holder.myorg.setVisibility(View.VISIBLE);
 					holder.xinyuscore.setText("信誉积分:" + score);
-					holder.usernum.setText("(已有" + usernum +"位参与者评分)");
+					holder.usernum.setText("(已有" + usernum + "位参与者评分)");
 				}
 
 			} else {
@@ -208,7 +215,7 @@ public class MyActivityAdapter extends BaseAdapter {
 							holder.sortMC.setImageResource(R.drawable.pf_mc);
 						} else if (sort == 2) {
 							holder.sortMC.setImageResource(R.drawable.pf_mc_02);
-						} else if(sort == 3){
+						} else if (sort == 3) {
 							holder.sortMC.setImageResource(R.drawable.pf_mc_03);
 						}
 						holder.orggeifen.setText(score + "分");
@@ -224,7 +231,7 @@ public class MyActivityAdapter extends BaseAdapter {
 							holder.sortMC.setImageResource(R.drawable.pf_mc);
 						} else if (sort == 2) {
 							holder.sortMC.setImageResource(R.drawable.pf_mc_02);
-						} else if(sort == 3){
+						} else if (sort == 3) {
 							holder.sortMC.setImageResource(R.drawable.pf_mc_03);
 						}
 						holder.orggeifen.setText(score + "分");
@@ -233,11 +240,26 @@ public class MyActivityAdapter extends BaseAdapter {
 
 			}
 
+			final int index = position;
+
 			holder.actionScore.setOnClickListener(new View.OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
-
+					if (flag == 0) {
+						Intent intent = new Intent(ctx,
+								PingFenResultActivity.class);
+						Bundle bundle = new Bundle();
+						bundle.putSerializable("orgActionBean", coll.get(index));
+						intent.putExtras(bundle);
+						ctx.startActivity(intent);
+					} else {
+						Intent intent = new Intent(ctx, PingFenActivity.class);
+						Bundle bundle = new Bundle();
+						bundle.putSerializable("actActionBean", list.get(index));
+						intent.putExtras(bundle);
+						ctx.startActivity(intent);
+					}
 				}
 			});
 

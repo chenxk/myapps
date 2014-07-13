@@ -257,7 +257,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 				title.setText(actionInfo.getString("aName"));
 				actionHouse.setText(actionInfo.getString("mName"));
 				actionAdress.setText(actionInfo.getString("mAddress"));
-				actionCreater.setText(actionInfo.getString("contact"));
+				actionCreater.setText(actionInfo.getString("poster"));
 				actionTel.setText(actionInfo.getString("phone"));
 				actionPrice.setText(actionInfo.getString("price"));
 				String stime = actionInfo.getString("sTime");
