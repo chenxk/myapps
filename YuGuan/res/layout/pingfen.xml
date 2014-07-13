@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:id="@+id/parentView"
     android:background="#fff" >
 
     <RelativeLayout
@@ -73,7 +74,7 @@
             </LinearLayout>
 
             <TextView
-                style="@style/fontstyle_red_18"
+                style="@style/fontstyle_red_20"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -82,8 +83,9 @@
                 android:text="比赛结果" />
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="150dp"
                 android:layout_height="2dp"
+                android:layout_gravity="center"
                 android:background="@drawable/white_line" >
             </LinearLayout>
 
@@ -103,16 +105,7 @@
                     android:gravity="center"
                     android:paddingLeft="2dp"
                     android:paddingRight="2dp"
-                    android:src="@drawable/star_black" />
-
-                <TextView
-                    style="@style/fontstyle_guanjun_16"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="2dp"
-                    android:paddingTop="2dp"
-                    android:singleLine="true"
-                    android:text="冠军" />
+                    android:src="@drawable/pf_mc" />
 
                 <cn.buaa.myweixin.ScoreInfo
                     android:layout_width="wrap_content"
@@ -149,8 +142,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/login_edit_normal"
-                    android:hint="说点什么说点什么说点什么说点什么说点什么说点什么说点什么说点什么吧"
+                    android:hint="你的评价很重要哦"
                     android:inputType="textMultiLine"
+                    android:minHeight="100dp"
                     android:singleLine="false" />
             </LinearLayout>
 
@@ -161,11 +155,12 @@
                 android:padding="10dp" >
 
                 <TextView
-                    style="@style/fontstyle_black_16"
+                    style="@style/fontstyle_black_18"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="2dp"
                     android:paddingTop="2dp"
+                    android:layout_gravity="center"
                     android:singleLine="true"
                     android:text="活动评分：" />
 
@@ -174,8 +169,68 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="2dp"
-                    diycomp:clickable="true"
-                    android:paddingTop="2dp" >
+                    android:layout_gravity="center"
+                    diycomp:clickable="true" >
+                </cn.buaa.myweixin.ScoreInfo>
+            </LinearLayout>
+            
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/white_line" >
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:text="球馆评论："
+                android:textColor="#000"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" >
+
+                <EditText
+                    android:id="@+id/mallremark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/login_edit_normal"
+                    android:hint="你的评价很重要哦"
+                    android:inputType="textMultiLine"
+                    android:minHeight="100dp"
+                    android:singleLine="false" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:padding="10dp" >
+
+                <TextView
+                    style="@style/fontstyle_black_18"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="2dp"
+                    android:layout_gravity="center"
+                    android:singleLine="true"
+                    android:text="球馆评分：" />
+
+                <cn.buaa.myweixin.ScoreInfo
+                    android:id="@+id/mallscore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="2dp"
+                    android:layout_gravity="center"
+                    diycomp:clickable="true" >
                 </cn.buaa.myweixin.ScoreInfo>
             </LinearLayout>
 
@@ -187,13 +242,14 @@
                 android:background="#DC2F1F"
                 android:gravity="center"
                 android:orientation="horizontal"
+                android:layout_marginTop="10dp"
                 android:paddingBottom="5dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="5dp" >
 
                 <TextView
-                    style="@style/fontstyle_white_18"
+                    style="@style/fontstyle_white_20"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="提交评分" />
@@ -206,13 +262,15 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
                 android:paddingBottom="5dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="5dp" >
 
                 <TextView
-                    style="@style/fontstyle_16"
+                    style="@style/fontstyle_18"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="取消" />

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:diycomp="http://schemas.android.com/apk/res/cn.buaa.myweixin"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:background="@drawable/linearlayout_line"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/linearlayout_line" >
+
+        <ImageView
+            android:id="@+id/friendScorePic"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_vertical"
+            android:scaleType="fitXY"
+            android:src="@drawable/head1_128" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:paddingLeft="10dp" >
+
+        <LinearLayout
+            android:id="@+id/aaaaa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/friendScoreSex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/girl_48" />
+
+            <TextView
+                android:id="@+id/friendScoreTitle"
+                style="@style/fontstyle_22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="name" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/jiange2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/aaaaa"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp" >
+
+            <TextView
+                style="@style/fontstyle_18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="评分:" />
+
+            <cn.buaa.myweixin.ScoreInfo
+                android:id="@+id/userscore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="2dp"
+                diycomp:clickable="true"
+                android:paddingTop="2dp" >
+            </cn.buaa.myweixin.ScoreInfo>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/jiange3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/jiange2"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/imggj"
+                android:layout_width="60dp"
+                android:layout_height="32dp"
+                android:gravity="center"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:src="@drawable/pf_mc" />
+
+            <ImageView
+                android:id="@+id/imgyj"
+                android:layout_width="60dp"
+                android:layout_height="32dp"
+                android:gravity="center"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:src="@drawable/pf_mc_02" />
+
+            <ImageView
+                android:id="@+id/imgjj"
+                android:layout_width="60dp"
+                android:layout_height="32dp"
+                android:gravity="center"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:src="@drawable/pf_mc_03" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

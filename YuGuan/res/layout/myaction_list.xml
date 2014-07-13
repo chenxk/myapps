@@ -102,16 +102,16 @@ android:background="@drawable/mm_listitem"
             android:layout_alignParentRight="true"
             android:gravity="center"
             android:orientation="horizontal"
-            android:visibility="gone" >
+             >
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:layout_gravity="center"
                 android:src="@drawable/yellow_star_48" />
 
             <TextView
-                style="@style/fontstyle_pingfen_16"
+                style="@style/fontstyle_pingfen_18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"

@@ -48,15 +48,13 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingLeft="2dp"
-        android:paddingRight="2dp"
         android:src="@drawable/star_black" />
 
     <TextView
         android:id="@+id/fenshu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:paddingLeft="2dp"
+        android:layout_marginLeft="5dp"
         android:paddingTop="2dp"
         android:singleLine="true"
         android:text="0分"
