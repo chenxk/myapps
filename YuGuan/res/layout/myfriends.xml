@@ -54,13 +54,13 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/pingfenName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp"
                 android:singleLine="true"
+                android:visibility="gone"
                 android:textColor="#000"
                 android:textSize="22sp" />
 
@@ -72,6 +72,7 @@
             </LinearLayout>
 
             <com.yuguan.activities.RefreshListView
+                android:id="@+id/myfrdsListView"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:cacheColorHint="#00000000"

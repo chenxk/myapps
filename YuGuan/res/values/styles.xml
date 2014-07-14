@@ -212,6 +212,11 @@
         <item name="android:textColor">#FFB200</item>
     </style>
     
+     <style name="fontstyle_pingfen_20">
+        <item name="android:textSize">20.0sp</item>
+        <item name="android:textColor">#FFB200</item>
+    </style>
+    
      <style name="fontstyle_guanjun_16">
         <item name="android:textSize">16.0sp</item>
         <item name="android:textColor">#E1AD0F</item>
