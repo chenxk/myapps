@@ -154,7 +154,7 @@ public class RefreshListView extends ListView implements OnScrollListener {
 		setSelection(1);
 		setOnScrollListener(this);
 		measureView(mHeaderLinearLayout);
-		mHeaderHeight = mHeaderLinearLayout.getMeasuredHeight() + this.getDividerHeight();
+		mHeaderHeight = mHeaderLinearLayout.getMeasuredHeight();
 
 		mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 		mHeaderUpdateText.setText(context.getString(
@@ -191,6 +191,7 @@ public class RefreshListView extends ListView implements OnScrollListener {
 					public void run() {
 						Message msg;
 						while (mHeaderLinearLayout.getPaddingTop() > 1) {
+							System.out.println(mHeaderLinearLayout.getPaddingTop());
 							msg = mHandler.obtainMessage();
 							msg.what = REFRESH_BACKING;
 							mHandler.sendMessage(msg);

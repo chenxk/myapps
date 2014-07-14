@@ -16,6 +16,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -221,6 +222,16 @@ public class MainWeixin extends Activity {
 		}
 	};
 	
+	// 检测用户是否更换头像
+	private BroadcastReceiver userImageChangeReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				//Bitmap bitmap = intent.getExtras().getParcelable(Utils.NEWUSERIMAGE);
+				if(Utils.selfPic != null)
+					userImg.setImageBitmap(Utils.selfPic);
+			}
+		};
+	
 
 	private ImageLoader mImageLoader;
 	
@@ -251,6 +262,11 @@ public class MainWeixin extends Activity {
 			IntentFilter intentFilter = new IntentFilter();
 			intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 			this.registerReceiver(connectionReceiver, intentFilter);
+			
+			IntentFilter intentFilter2 = new IntentFilter();
+			intentFilter2.addAction(Utils.USERCHANGEIMAGE);
+			this.registerReceiver(userImageChangeReceiver, intentFilter2);
+			
 		} catch (Exception e) {
 			showSomeThing(e.toString());
 		}
@@ -337,6 +353,14 @@ public class MainWeixin extends Activity {
 		mTabPager.setAdapter(mPagerAdapter);
 
 	}
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		unregisterReceiver(connectionReceiver);
+		unregisterReceiver(userImageChangeReceiver);
+	}
 
 	public void login(String name,String pwd){
     	String url = Utils.loginUrl + name + "&password=" + pwd;
@@ -401,14 +425,17 @@ public class MainWeixin extends Activity {
 								final String url = Utils.userImg + Utils.self.getPic();
 								userImg.setTag(url);
 								mImageLoader.loadImage(url, null, userImg);
-								new Thread(new Runnable() {
+								userImg.setDrawingCacheEnabled(true);
+								Utils.selfPic = userImg.getDrawingCache();
+								
+								/*new Thread(new Runnable() {
 									
 									@Override
 									public void run() {
 										// TODO Auto-generated method stub
 										Utils.selfPic = mImageLoader.getImageFromUrl(url);
 									}
-								}).start();
+								}).start();*/
 							}
 						} catch (JSONException e) {
 							e.printStackTrace();

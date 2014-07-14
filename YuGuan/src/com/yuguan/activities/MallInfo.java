@@ -163,6 +163,19 @@ public class MallInfo extends Activity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		init();
+		
+	}
+	
+	@Override
+	protected void onRestart() {
+		// TODO Auto-generated method stub
+		super.onRestart();
+		//init();
+	}
+	
+	public void init(){
 		setContentView(R.layout.mallinfo);
 
 		// 启动activity时不自动弹出软键盘
@@ -183,8 +196,6 @@ public class MallInfo extends Activity{
 				commentHandler, KEY_COMMENT_JSON)).start();
 		new Thread(new HttpUtil(Utils.mallEnvInfoUrl + mallId,
 				envHandler, KEY_ENV_JSON)).start();
-		
-		
 	}
 
 	public void initView() {

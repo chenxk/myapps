@@ -38,20 +38,14 @@ public class UserScoreAdepter extends BaseAdapter {
 		mInflater = LayoutInflater.from(context);
 		mImageLoader = new ImageLoader(ctx);
 	}
-	
-	
 
 	public SelectUser getSelectUser() {
 		return selectUser;
 	}
 
-
-
 	public void setSelectUser(SelectUser selectUser) {
 		this.selectUser = selectUser;
 	}
-
-
 
 	/*
 	 * (non-Javadoc)
@@ -113,8 +107,6 @@ public class UserScoreAdepter extends BaseAdapter {
 			ImageView imgyj = (ImageView) convertView.findViewById(R.id.imgyj);
 			ImageView imgjj = (ImageView) convertView.findViewById(R.id.imgjj);
 
-			
-
 			holder.friendSex = friendSex;
 			holder.friendTitle = friendTitle;
 			holder.imag = imag;
@@ -131,12 +123,12 @@ public class UserScoreAdepter extends BaseAdapter {
 		try {
 			// 从list对象中为子组件赋值
 			final UserBean bean = coll.get(position);
-			
+			final ScoreInfo score = holder.userscore;
 			holder.imggj.setOnClickListener(new View.OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
-					selectUser.select(bean, 1,0);
+					selectUser.select(bean, 1, score.getScore());
 				}
 			});
 
@@ -145,7 +137,7 @@ public class UserScoreAdepter extends BaseAdapter {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					selectUser.select(bean, 2,0);
+					selectUser.select(bean, 2, score.getScore());
 				}
 			});
 
@@ -154,10 +146,19 @@ public class UserScoreAdepter extends BaseAdapter {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					selectUser.select(bean, 3,0);
+					selectUser.select(bean, 3, score.getScore());
 				}
 			});
 			
+			holder.userscore.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					selectUser.select(bean, 4, score.getScore());
+				}
+			});
+
 			String url = Utils.userImg + bean.getPic();
 			holder.imag.setTag(url);
 			mImageLoader.loadImage(url, this, holder.imag);
@@ -185,9 +186,9 @@ public class UserScoreAdepter extends BaseAdapter {
 		public ImageView imgjj;
 		public ScoreInfo userscore;
 	}
-	
-	public interface SelectUser{
-		public void select(UserBean bean,int jb,int score);
+
+	public interface SelectUser {
+		public void select(UserBean bean, int jb, int score);
 	}
 
 }

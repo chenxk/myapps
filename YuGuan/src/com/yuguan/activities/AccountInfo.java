@@ -27,6 +27,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -56,10 +57,13 @@ public class AccountInfo extends Activity {
 	private LinearLayout myshoucang;
 	private TextView myshoucangText;
 	private ImageLoader mImageLoader;
-	private String uploadFile;
+	// 剪切后保存的图片
+	private String uploadFile = "";
+	// 保存拍照留下的临时照片
+	private String newCapturePhotoPath = "";
 	private String[] items = new String[] { "选择图片", "拍照" };
 	/* 头像名称 */
-	private static String IMAGE_FILE_NAME = "pic"
+	private static String IMAGE_FILE_NAME = ""
 			+ (int) (System.currentTimeMillis() / 1000) + ".jpg";
 	/* 请求码 */
 	private static final int IMAGE_REQUEST_CODE = 0;
@@ -97,7 +101,10 @@ public class AccountInfo extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		init();
+	}
+	
+	public void init(){
 		try {
 			setContentView(R.layout.accountinfo);
 			uid = getIntent().getExtras().getInt("uid");
@@ -107,16 +114,54 @@ public class AccountInfo extends Activity {
 					+ Utils.loginInfo.getId(), countHandler, "countHandler"))
 					.start();
 			mImageLoader = new ImageLoader(getApplicationContext());
-			if (isAccount) {
-				initValue(Utils.self);
-			}else{
-				getAccountInfo(uid);
-			}
+			getAccountInfo(uid);
 		} catch (Exception e) {
 			showSomeThing(e.toString());
 		}
-
 	}
+	
+	//Activity从后台重新回到前台时被调用  
+    @Override  
+    protected void onRestart() {  
+        super.onRestart();  
+        Log.i("onRestart", "onRestart called.");  
+       // init();
+    }  
+      
+    //Activity创建或者从被覆盖、后台重新回到前台时被调用  
+    @Override  
+    protected void onResume() {  
+        super.onResume();  
+        Log.i("onResume", "onResume called.");  
+    }  
+    
+    
+    @Override
+    protected void onDestroy() {
+    	// TODO Auto-generated method stub
+    	super.onDestroy();
+    }
+    
+    /** 
+     * Activity被系统杀死时被调用. 
+     * 例如:屏幕方向改变时,Activity被销毁再重建;当前Activity处于后台,系统资源紧张将其杀死. 
+     * 另外,当跳转到其他Activity或者按Home键回到主屏时该方法也会被调用,系统是为了保存当前View组件的状态. 
+     * 在onPause之前被调用. 
+     */  
+    @Override  
+    protected void onSaveInstanceState(Bundle outState) {  
+        super.onSaveInstanceState(outState);  
+    }  
+      
+    /** 
+     * Activity被系统杀死后再重建时被调用. 
+     * 例如:屏幕方向改变时,Activity被销毁再重建;当前Activity处于后台,系统资源紧张将其杀死,用户又启动该Activity. 
+     * 这两种情况下onRestoreInstanceState都会被调用,在onStart之后. 
+     */  
+    @Override  
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {  
+        super.onRestoreInstanceState(savedInstanceState);  
+    }  
 
 	public void getAccountInfo(int id) {
 		String url = Utils.getAccountInfoUrl + id;
@@ -131,10 +176,24 @@ public class AccountInfo extends Activity {
 						JSONObject json = new JSONObject(result);
 						JSONObject message = json.getJSONObject("user");
 						if (message != null) {
-							FriendBean bean = FriendBean.getBeanFromJson(message);
+							FriendBean bean = FriendBean
+									.getBeanFromJson(message);
 							final String url = Utils.userImg + bean.getPic();
 							accountImg.setTag(url);
 							mImageLoader.loadImage(url, null, accountImg);
+							if (isAccount) {
+								Utils.self = bean;
+								accountImg.setDrawingCacheEnabled(true);
+								Utils.selfPic = accountImg.getDrawingCache();
+								/*new Thread(new Runnable() {
+									@Override
+									public void run() {
+										// TODO Auto-generated method stub
+										Utils.selfPic = mImageLoader
+												.getImageFromUrl(url);
+									}
+								}).start();*/
+							}
 							initValue(bean);
 						}
 					} catch (JSONException e) {
@@ -159,19 +218,19 @@ public class AccountInfo extends Activity {
 		myshoucang = (LinearLayout) findViewById(R.id.myshoucang);
 		myshoucangText = (TextView) findViewById(R.id.myshoucangText);
 
-		if(isAccount){
+		if (isAccount) {
 			msgcenter.setVisibility(View.VISIBLE);
 			mysportText.setText("我的活动");
 			myfriendsText.setText("我的好友");
 			myshoucangText.setText("我的收藏");
-			
-		}else{
+
+		} else {
 			msgcenter.setVisibility(View.GONE);
 			mysportText.setText("他的活动");
 			myfriendsText.setText("他的好友");
 			myshoucangText.setText("他的收藏");
 		}
-		
+
 		accountImg.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -243,7 +302,7 @@ public class AccountInfo extends Activity {
 		}
 	}
 
-	private String newCapturePhotoPath;
+	
 
 	/**
 	 * 显示选择对话框
@@ -252,6 +311,7 @@ public class AccountInfo extends Activity {
 
 		IMAGE_FILE_NAME = "pic" + (int) (System.currentTimeMillis() / 1000)
 				+ ".jpg";
+		tempUri = Uri.parse("file:///sdcard/" + IMAGE_FILE_NAME);
 
 		new AlertDialog.Builder(this)
 				.setTitle("设置头像")
@@ -278,7 +338,7 @@ public class AccountInfo extends Activity {
 								newCapturePhotoPath = Environment
 										.getExternalStorageDirectory()
 										.toString()
-										+ "/" + IMAGE_FILE_NAME;
+										+ "/temp.jpg";
 								// 加上这个后，图片就不会被压缩变小了
 								intentFromCapture.putExtra(
 										MediaStore.EXTRA_OUTPUT, Uri
@@ -339,20 +399,23 @@ public class AccountInfo extends Activity {
 
 					break;
 				case RESULT_REQUEST_CODE:
-					if (data != null) {}
+					if (data != null) {
+					}
 					// 照片剪切好后上传服务器
+					uploadFile = "/mnt/sdcard/" + IMAGE_FILE_NAME;
 					upload();
 					break;
 				}
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 			showSomeThing(e.toString());
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
-	private Uri tempUri = Uri.parse("file:///sdcard/temp.jpg");
+	private Uri tempUri;
 
 	/**
 	 * 裁剪图片方法实现
@@ -437,6 +500,11 @@ public class AccountInfo extends Activity {
 			accountImg.setImageBitmap(photo);
 			String url = Utils.userImg + IMAGE_FILE_NAME;
 			mImageLoader.saveImageToFile(url, photo);
+			
+			Intent mIntent = new Intent(Utils.USERCHANGEIMAGE); 
+            //mIntent.putExtra(Utils.NEWUSERIMAGE, photo); 
+            //发送广播 
+            sendBroadcast(mIntent); 
 		} catch (Exception e) {
 			showSomeThing("shi " + e.toString());
 		}
@@ -458,15 +526,21 @@ public class AccountInfo extends Activity {
 				File old = new File(mImageLoader.imageFileCache.getDirectory()
 						+ File.separator + Utils.self.getPic());
 				old.delete();
-				// 删除拍照留下的照片
-				if(newCapturePhotoPath.length() > 0){
-					File file = new File(newCapturePhotoPath);
-					file.delete();
+				// 删除剪切留下的照片
+				if (uploadFile.length() > 0) {
+					File file = new File(uploadFile);
+					if(file.exists())
+						file.delete();
 				}
-				
-				
+				// 删除拍照留下的照片
+				if (newCapturePhotoPath.length() > 0) {
+					File file = new File(newCapturePhotoPath);
+					if(file.exists())
+						file.delete();
+				}
 				Utils.self.setPic(IMAGE_FILE_NAME);
-			}else{
+				
+			} else {
 				showSomeThing(responseMessage);
 			}
 
@@ -500,7 +574,7 @@ public class AccountInfo extends Activity {
 
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("uid", Utils.loginInfo.getId() + "");
-		uploadUtil.uploadFile(newCapturePhotoPath, "img", Utils.uploadFileUrl, params);
+		uploadUtil.uploadFile(uploadFile, "img", Utils.uploadFileUrl, params);
 
 	}
 
