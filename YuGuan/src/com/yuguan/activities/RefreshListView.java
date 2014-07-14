@@ -55,7 +55,6 @@ public class RefreshListView extends ListView implements OnScrollListener {
 	private ProgressBar mHeaderProgressBar = null;
 	private TextView mFooterTextView = null;
 	private ProgressBar mFooterProgressBar = null;
-	private ListAdapter adapter;
 	private SimpleDateFormat mSimpleDateFormat;
 
 	private Object mRefreshObject = null;
@@ -71,6 +70,8 @@ public class RefreshListView extends ListView implements OnScrollListener {
 	private boolean isLoading = false;
 
 	private boolean isInterup = false;
+	// °ü¹ülistviewµÄ¸¸¿Ø¼þ
+	private ViewParent parent;
 
 	public boolean isInterup() {
 		return isInterup;
@@ -78,6 +79,11 @@ public class RefreshListView extends ListView implements OnScrollListener {
 
 	public void setInterup(boolean isInterup) {
 		this.isInterup = isInterup;
+	}
+	
+
+	public void setParent(ViewParent parent) {
+		this.parent = parent;
 	}
 
 	public String getUrl() {
@@ -123,7 +129,7 @@ public class RefreshListView extends ListView implements OnScrollListener {
 	}
 
 	private void setParentScrollAble(boolean b) {
-		ViewParent parent = this.getParent().getParent().getParent();
+		//ViewParent parent = this.getParent().getParent().getParent();
 		parent.requestDisallowInterceptTouchEvent(!b);
 		// showSomeThing(b+" "+parent.toString());
 	}
@@ -148,7 +154,7 @@ public class RefreshListView extends ListView implements OnScrollListener {
 		setSelection(1);
 		setOnScrollListener(this);
 		measureView(mHeaderLinearLayout);
-		mHeaderHeight = mHeaderLinearLayout.getMeasuredHeight();
+		mHeaderHeight = mHeaderLinearLayout.getMeasuredHeight() + this.getDividerHeight();
 
 		mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 		mHeaderUpdateText.setText(context.getString(
@@ -290,7 +296,6 @@ public class RefreshListView extends ListView implements OnScrollListener {
 	@Override
 	public void setAdapter(ListAdapter adapter) {
 		super.setAdapter(adapter);
-		this.adapter = adapter;
 		setSelection(1);
 	}
 

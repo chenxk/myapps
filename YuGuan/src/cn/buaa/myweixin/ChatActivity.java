@@ -474,6 +474,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 		actionContext = (TextView) findViewById(R.id.actionContext);
 		commentList = (RefreshListView) findViewById(R.id.commentList);
 		commentList.setInterup(true);
+		commentList.setParent(screen);
 		baoming = (TextView) findViewById(R.id.baoming);
 		loveImg = (ImageView) findViewById(R.id.loveImg);
 		shoucang = (TextView) findViewById(R.id.shoucang);
