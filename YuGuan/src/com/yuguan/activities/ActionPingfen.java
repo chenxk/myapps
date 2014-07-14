@@ -50,18 +50,6 @@ public class ActionPingfen extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.msgcenter:
-			doMsgcenter(v);
-			break;
-		case R.id.mysport:
-			doMysports(v);
-			break;
-		case R.id.myfriends:
-			doMyfriends(v);
-			break;
-		case R.id.myshoucang:
-			doMyshoucang(v);
-			break;
 		case R.id.account_back:
 			doBack(v);
 			break;
@@ -70,21 +58,6 @@ public class ActionPingfen extends Activity implements OnClickListener {
 			break;
 		}
 	}
-
-	public void doMsgcenter(View v) {
-		Intent intent = new Intent(ActionPingfen.this, MessageCenter.class);
-		startActivity(intent);
-	}
-	
-	public void doMysports(View v) {
-	}
-	
-	public void doMyfriends(View v) {
-	}
-	
-	public void doMyshoucang(View v) {
-	}
-
 
 	public void doBack(View v) {
 		this.finish();

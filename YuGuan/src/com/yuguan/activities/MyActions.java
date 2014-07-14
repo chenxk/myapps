@@ -30,6 +30,7 @@ import com.yuguan.bean.user.UserActActionBean;
 import com.yuguan.bean.user.UserOrgActionBean;
 import com.yuguan.util.HttpUtil;
 import com.yuguan.util.InitValue;
+import com.yuguan.util.SuperViewPager;
 import com.yuguan.util.Utils;
 
 public class MyActions extends Activity implements OnClickListener {
@@ -38,7 +39,7 @@ public class MyActions extends Activity implements OnClickListener {
 	private TextView sysMsgText;
 	private TextView friendsMsgText;
 	private LinearLayout friendsMsg;
-	private ViewPager messagePager;
+	private SuperViewPager messagePager;
 
 	/** 所有场馆 */
 	private RefreshListView allMallsList;
@@ -60,6 +61,7 @@ public class MyActions extends Activity implements OnClickListener {
 	private String mallJson = InitValue.myjoinactions;
 	private String friendJson = InitValue.myorgactions;
 
+	private int uid;
 	@SuppressLint("HandlerLeak")
 	private Handler mallHandler = new Handler() {
 		@Override
@@ -96,7 +98,7 @@ public class MyActions extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.myactions);
-
+		uid = this.getIntent().getExtras().getInt("uid");
 		initView();
 
 		messagePager
@@ -276,9 +278,8 @@ public class MyActions extends Activity implements OnClickListener {
 							public void more() {
 								if (!allMallsList.isLastData()) {
 									String url = Utils.myJoinActionsUrl
-											+ "&uid=" + Utils.loginInfo.getId()
-											+ "&type=" + acttype + "&aid="
-											+ actaid;
+											+ "&uid=" + uid + "&type="
+											+ acttype + "&aid=" + actaid;
 									allMallsList.setUrl(url);
 								} else {
 									showSomeThing("加载到最后一条了");
@@ -288,9 +289,8 @@ public class MyActions extends Activity implements OnClickListener {
 							@Override
 							public void setUrl() {
 								actaid = -1;
-								String url = Utils.myJoinActionsUrl
-										+ "&uid=" + Utils.loginInfo.getId()
-										+ "&type=" + acttype + "&aid="
+								String url = Utils.myJoinActionsUrl + "&uid="
+										+ uid + "&type=" + acttype + "&aid="
 										+ actaid;
 								allMallsList.setUrl(url);
 							}
@@ -317,10 +317,8 @@ public class MyActions extends Activity implements OnClickListener {
 						});
 
 				initMallList();
-				String url = Utils.myJoinActionsUrl
-						+ "&uid=" + Utils.loginInfo.getId()
-						+ "&type=" + acttype + "&aid="
-						+ actaid;
+				String url = Utils.myJoinActionsUrl + "&uid=" + uid + "&type="
+						+ acttype + "&aid=" + actaid;
 				new Thread(new HttpUtil(url, mallHandler, KEY_MALL_JSON))
 						.start();
 
@@ -400,9 +398,8 @@ public class MyActions extends Activity implements OnClickListener {
 							public void more() {
 								if (!allFriendsList.isLastData()) {
 									String url = Utils.myOrgActionsUrl
-											+ "&uid=" + Utils.loginInfo.getId()
-											+ "&type=" + orgtype + "&aid="
-											+ orgaid;
+											+ "&uid=" + uid + "&type="
+											+ orgtype + "&aid=" + orgaid;
 									allFriendsList.setUrl(url);
 								} else {
 									showSomeThing("加载到最后一条了");
@@ -412,9 +409,8 @@ public class MyActions extends Activity implements OnClickListener {
 							@Override
 							public void setUrl() {
 								orgaid = -1;
-								String url = Utils.myOrgActionsUrl
-										+ "&uid=" + Utils.loginInfo.getId()
-										+ "&type=" + orgtype + "&aid="
+								String url = Utils.myOrgActionsUrl + "&uid="
+										+ uid + "&type=" + orgtype + "&aid="
 										+ orgaid;
 								allFriendsList.setUrl(url);
 							}
@@ -441,10 +437,8 @@ public class MyActions extends Activity implements OnClickListener {
 						});
 
 				initFriendList();
-				String url = Utils.myOrgActionsUrl
-						+ "&uid=" + Utils.loginInfo.getId()
-						+ "&type=" + orgtype + "&aid="
-						+ orgaid;
+				String url = Utils.myOrgActionsUrl + "&uid=" + uid + "&type="
+						+ orgtype + "&aid=" + orgaid;
 				new Thread(new HttpUtil(url, friendHandler, KEY_FRIEND_JSON))
 						.start();
 
@@ -494,7 +488,7 @@ public class MyActions extends Activity implements OnClickListener {
 			// 系统通知 sysmsginfo.xml
 			// 好友添加 friendapplyinfo.xml
 			// 活动邀请 sportapplyinfo.xml
-			TextView idView = (TextView)v.findViewById(R.id.myactionId);
+			TextView idView = (TextView) v.findViewById(R.id.myactionId);
 			int id = Integer.parseInt(idView.getText().toString());
 			Intent intent = new Intent(MyActions.this, ChatActivity.class);
 			Bundle bundle = new Bundle();
@@ -514,7 +508,7 @@ public class MyActions extends Activity implements OnClickListener {
 		friendsMsgText = (TextView) findViewById(R.id.myaction_outText);
 		sysMsg = (LinearLayout) findViewById(R.id.myaction_in);
 		friendsMsg = (LinearLayout) findViewById(R.id.myaction_out);
-		messagePager = (ViewPager) findViewById(R.id.myactionPager);
+		messagePager = (SuperViewPager) findViewById(R.id.myactionPager);
 	}
 
 	@Override

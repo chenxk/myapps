@@ -121,7 +121,7 @@ public class PingFenResultActivity extends Activity {
 						@Override
 						public void onItemClick(AdapterView<?> parent,
 								View view, int position, long id) {
-							// getFriendInfo(view);
+							doClickInfo(view);
 						}
 					});
 
@@ -204,6 +204,24 @@ public class PingFenResultActivity extends Activity {
 
 	}
 
+	protected void doClickInfo(View view) {
+		// view是你点b item的view的句柄，就是你可以用这个view，来获得b里的控件的id后操作控件
+		int viewid = view.getId();
+		// 冠军
+		if (viewid == R.id.imggj) {
+
+		}
+		// 亚军
+		if (viewid == R.id.imgyj) {
+
+		}
+		// 季军
+		if (viewid == R.id.imgjj) {
+
+		}
+
+	}
+
 	private void initFriendList() {
 		getUserInfoFromJson();
 		try {
@@ -217,6 +235,20 @@ public class PingFenResultActivity extends Activity {
 				allFrdScoreList.addFootView();
 			}
 			adepter = new UserScoreAdepter(this, users);
+			adepter.setSelectUser(new UserScoreAdepter.SelectUser() {
+				
+				@Override
+				public void select(UserBean bean, int jb, int score) {
+					// TODO Auto-generated method stub
+					if(jb == 1){
+						guanjun.setText(bean.getName());
+					}else if(jb == 2){
+						yajun.setText(bean.getName());
+					}else{
+						jijun.setText(bean.getName());
+					}
+				}
+			});
 			allFrdScoreList.setAdapter(adepter);
 			setCommentListHeight();
 		} catch (Exception e) {

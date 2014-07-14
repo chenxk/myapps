@@ -84,6 +84,7 @@ public class MessageCenter extends Activity implements OnClickListener {
 	private int friendtype = 1;
 	private final String KEY_FRIEND_JSON = "KEY_FRIEND_JSON";
 	private String friendJson = InitValue.primsg;
+	private int uid;
 
 	@SuppressLint("HandlerLeak")
 	private Handler friendHandler = new Handler() {
@@ -157,6 +158,7 @@ public class MessageCenter extends Activity implements OnClickListener {
 
 		try {
 			setContentView(R.layout.messageinfo);
+			uid = this.getIntent().getExtras().getInt("uid");
 			initView();
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -202,8 +204,6 @@ public class MessageCenter extends Activity implements OnClickListener {
 		friendsMsg.setOnClickListener(new MyOnClickListener(1));
 		friendReq.setOnClickListener(new MyOnClickListener(2));
 		sportReq.setOnClickListener(new MyOnClickListener(3));
-		
-		
 
 		// 将要分页显示的View装入数组中
 		LayoutInflater mLi = LayoutInflater.from(this);
@@ -306,7 +306,7 @@ public class MessageCenter extends Activity implements OnClickListener {
 		}
 
 	}
-	
+
 	protected void getFrdReqDataFromJson() {
 		try {
 			JSONObject jsonObject = new JSONObject(friendsReqJson);
@@ -331,7 +331,7 @@ public class MessageCenter extends Activity implements OnClickListener {
 		}
 
 	}
-	
+
 	protected void getSportReqDataFromJson() {
 		try {
 			JSONObject jsonObject = new JSONObject(sportReqJson);
@@ -347,7 +347,8 @@ public class MessageCenter extends Activity implements OnClickListener {
 			}
 			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject json = (JSONObject) jsonArray.get(i);
-				HuodongInviteMsgBean bean = HuodongInviteMsgBean.getBeanByJson(json);
+				HuodongInviteMsgBean bean = HuodongInviteMsgBean
+						.getBeanByJson(json);
 				if (bean != null)
 					sportReqs.add(bean);
 			}
@@ -367,7 +368,7 @@ public class MessageCenter extends Activity implements OnClickListener {
 							@Override
 							public void onItemClick(AdapterView<?> parent,
 									View view, int position, long id) {
-								//getMallInfo(view);
+								// getMallInfo(view);
 							}
 						});
 
@@ -405,8 +406,7 @@ public class MessageCenter extends Activity implements OnClickListener {
 							public void more() {
 								if (!allSportReqList.isLastData()) {
 									String url = Utils.getSportReqUrl + "&uid="
-											+ Utils.loginInfo.getId()
-											+ "&msgid=" + sportmsgid;
+											+ uid + "&msgid=" + sportmsgid;
 									allSportReqList.setUrl(url);
 								} else {
 									showSomeThing("加载到最后一条了");
@@ -417,8 +417,7 @@ public class MessageCenter extends Activity implements OnClickListener {
 							public void setUrl() {
 								sportmsgid = -1;
 								String url = Utils.getSportReqUrl + "&uid="
-										+ Utils.loginInfo.getId() + "&msgid="
-										+ sportmsgid;
+										+ uid + "&msgid=" + sportmsgid;
 								allSportReqList.setUrl(url);
 							}
 
@@ -444,10 +443,10 @@ public class MessageCenter extends Activity implements OnClickListener {
 						});
 
 				initSportReqList();
-				String url = Utils.getSportReqUrl + "&uid="
-						+ Utils.loginInfo.getId() + "&msgid="
+				String url = Utils.getSportReqUrl + "&uid=" + uid + "&msgid="
 						+ sportmsgid;
-				new Thread(new HttpUtil(url, sportReqHandler, KEY_SPORTREQ_JSON))
+				new Thread(
+						new HttpUtil(url, sportReqHandler, KEY_SPORTREQ_JSON))
 						.start();
 
 			} catch (Exception e) {
@@ -476,7 +475,7 @@ public class MessageCenter extends Activity implements OnClickListener {
 			showSomeThing(e.toString());
 		}
 	}
-	
+
 	private void initFrdReqView() {
 		if (allFriendsReqListIsLoad == false) {
 			try {
@@ -487,7 +486,7 @@ public class MessageCenter extends Activity implements OnClickListener {
 							@Override
 							public void onItemClick(AdapterView<?> parent,
 									View view, int position, long id) {
-								//getMallInfo(view);
+								// getMallInfo(view);
 							}
 						});
 
@@ -525,8 +524,7 @@ public class MessageCenter extends Activity implements OnClickListener {
 							public void more() {
 								if (!allFriendsReqList.isLastData()) {
 									String url = Utils.getFriReqUrl + "&uid="
-											+ Utils.loginInfo.getId()
-											+ "&msgid=" + frdreqmsgid;
+											+ uid + "&msgid=" + frdreqmsgid;
 									allFriendsReqList.setUrl(url);
 								} else {
 									showSomeThing("加载到最后一条了");
@@ -536,9 +534,8 @@ public class MessageCenter extends Activity implements OnClickListener {
 							@Override
 							public void setUrl() {
 								frdreqmsgid = -1;
-								String url = Utils.getFriReqUrl + "&uid="
-										+ Utils.loginInfo.getId() + "&msgid="
-										+ frdreqmsgid;
+								String url = Utils.getFriReqUrl + "&uid=" + uid
+										+ "&msgid=" + frdreqmsgid;
 								allFriendsReqList.setUrl(url);
 							}
 
@@ -564,11 +561,10 @@ public class MessageCenter extends Activity implements OnClickListener {
 						});
 
 				initFriendReqList();
-				String url = Utils.getFriReqUrl + "&uid="
-						+ Utils.loginInfo.getId() + "&msgid="
+				String url = Utils.getFriReqUrl + "&uid=" + uid + "&msgid="
 						+ frdreqmsgid;
-				new Thread(new HttpUtil(url, friendsReqHandler, KEY_FRIENDREQ_JSON))
-						.start();
+				new Thread(new HttpUtil(url, friendsReqHandler,
+						KEY_FRIENDREQ_JSON)).start();
 
 			} catch (Exception e) {
 				showSomeThing(e.toString());
@@ -606,38 +602,39 @@ public class MessageCenter extends Activity implements OnClickListener {
 				reciveMsg = (TextView) findViewById(R.id.reciveMsg);
 				sendMsg = (TextView) findViewById(R.id.sendMsg);
 				friendMsgBtn.setOnClickListener(new View.OnClickListener() {
-					
+
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
-						reciveMsg.setTextAppearance(getApplicationContext(), R.style.fontstyle_white_18);
-						sendMsg.setTextAppearance(getApplicationContext(), R.style.fontstyle_black_18);
+						reciveMsg.setTextAppearance(getApplicationContext(),
+								R.style.fontstyle_white_18);
+						sendMsg.setTextAppearance(getApplicationContext(),
+								R.style.fontstyle_black_18);
 						friendtype = 1;
 						loadFrdPriMsg();
 					}
 				});
-				
-				
+
 				myMsgBtn.setOnClickListener(new View.OnClickListener() {
-					
+
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
-						reciveMsg.setTextAppearance(getApplicationContext(), R.style.fontstyle_black_18);
-						sendMsg.setTextAppearance(getApplicationContext(), R.style.fontstyle_white_18);
+						reciveMsg.setTextAppearance(getApplicationContext(),
+								R.style.fontstyle_black_18);
+						sendMsg.setTextAppearance(getApplicationContext(),
+								R.style.fontstyle_white_18);
 						friendtype = 2;
 						loadFrdPriMsg();
 					}
 				});
-				
-				
-				
+
 				allFriendsList
 						.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 							@Override
 							public void onItemClick(AdapterView<?> parent,
 									View view, int position, long id) {
-								//getFriendInfo(view);
+								// getFriendInfo(view);
 							}
 						});
 
@@ -675,8 +672,7 @@ public class MessageCenter extends Activity implements OnClickListener {
 							public void more() {
 								if (!allFriendsList.isLastData()) {
 									String url = Utils.getPriMsgUrl + "&type="
-											+ friendtype + "&uid="
-											+ Utils.loginInfo.getId()
+											+ friendtype + "&uid=" + uid
 											+ "&msgid=" + friendmsgid;
 									allFriendsList.setUrl(url);
 								} else {
@@ -688,9 +684,8 @@ public class MessageCenter extends Activity implements OnClickListener {
 							public void setUrl() {
 								friendmsgid = -1;
 								String url = Utils.getPriMsgUrl + "&type="
-										+ friendtype + "&uid="
-										+ Utils.loginInfo.getId() + "&msgid="
-										+ friendmsgid;
+										+ friendtype + "&uid=" + uid
+										+ "&msgid=" + friendmsgid;
 								allFriendsList.setUrl(url);
 							}
 
@@ -724,14 +719,12 @@ public class MessageCenter extends Activity implements OnClickListener {
 			allFriendsListIsLoad = true;
 		}
 	}
-	
-	private void loadFrdPriMsg(){
+
+	private void loadFrdPriMsg() {
 		friendmsgid = -1;
-		String url = Utils.getPriMsgUrl + "&type=" + friendtype
-				+ "&uid=" + Utils.loginInfo.getId() + "&msgid="
-				+ friendmsgid;
-		new Thread(new HttpUtil(url, friendHandler, KEY_FRIEND_JSON))
-				.start();
+		String url = Utils.getPriMsgUrl + "&type=" + friendtype + "&uid=" + uid
+				+ "&msgid=" + friendmsgid;
+		new Thread(new HttpUtil(url, friendHandler, KEY_FRIEND_JSON)).start();
 	}
 
 	private void initFriendList() {
@@ -754,8 +747,7 @@ public class MessageCenter extends Activity implements OnClickListener {
 		}
 
 	}
-	
-	
+
 	private void initMallView() {
 		if (allMallsListIsLoad == false) {
 			try {
@@ -804,8 +796,7 @@ public class MessageCenter extends Activity implements OnClickListener {
 							public void more() {
 								if (!allMallsList.isLastData()) {
 									String url = Utils.getSysMsgUrl + "&uid="
-											+ Utils.loginInfo.getId()
-											+ "&msgid=" + noticemsgid;
+											+ uid + "&msgid=" + noticemsgid;
 									allMallsList.setUrl(url);
 								} else {
 									showSomeThing("加载到最后一条了");
@@ -815,9 +806,8 @@ public class MessageCenter extends Activity implements OnClickListener {
 							@Override
 							public void setUrl() {
 								noticemsgid = -1;
-								String url = Utils.getSysMsgUrl + "&uid="
-										+ Utils.loginInfo.getId() + "&msgid="
-										+ noticemsgid;
+								String url = Utils.getSysMsgUrl + "&uid=" + uid
+										+ "&msgid=" + noticemsgid;
 								allMallsList.setUrl(url);
 							}
 
@@ -843,8 +833,8 @@ public class MessageCenter extends Activity implements OnClickListener {
 						});
 
 				initMallList();
-				String url = Utils.getSysMsgUrl + "&uid="
-						+ Utils.loginInfo.getId() + "&msgid=" + noticemsgid;
+				String url = Utils.getSysMsgUrl + "&uid=" + uid + "&msgid="
+						+ noticemsgid;
 				new Thread(new HttpUtil(url, mallHandler, KEY_MALL_JSON))
 						.start();
 
@@ -910,8 +900,7 @@ public class MessageCenter extends Activity implements OnClickListener {
 		friendReq = (LinearLayout) findViewById(R.id.friendReq);
 		sportReq = (LinearLayout) findViewById(R.id.sportReq);
 		messagePager = (ViewPager) findViewById(R.id.messagePager);
-		
-		
+
 		list.add(sysMsgText);
 		list.add(friendsMsgText);
 		list.add(friendReqText);

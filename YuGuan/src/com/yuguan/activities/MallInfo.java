@@ -231,6 +231,7 @@ public class MallInfo extends Activity{
 		
 		commentList = (RefreshListView) findViewById(R.id.mallCommentList);
 		commentList.setInterup(true);
+		commentList.setParent(screen);
 	}
 	
 	public void initCommentListView(){

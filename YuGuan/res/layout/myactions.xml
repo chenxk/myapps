@@ -109,11 +109,10 @@
         android:background="@drawable/white_line" >
     </LinearLayout>
 
-    <android.support.v4.view.ViewPager
+    <com.yuguan.util.SuperViewPager
         android:id="@+id/myactionPager"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" >
-    </android.support.v4.view.ViewPager>
+        android:layout_gravity="center" />
 
 </LinearLayout>

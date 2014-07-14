@@ -34,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import cn.buaa.myweixin.R;
 
+import com.yuguan.bean.FriendBean;
 import com.yuguan.util.HttpUtil;
 import com.yuguan.util.ImageLoader;
 import com.yuguan.util.RoundImageView;
@@ -49,8 +50,11 @@ public class AccountInfo extends Activity {
 	private ImageView msgNew;
 	private LinearLayout msgcenter;
 	private LinearLayout mysport;
+	private TextView mysportText;
 	private LinearLayout myfriends;
+	private TextView myfriendsText;
 	private LinearLayout myshoucang;
+	private TextView myshoucangText;
 	private ImageLoader mImageLoader;
 	private String uploadFile;
 	private String[] items = new String[] { "选择图片", "拍照" };
@@ -61,6 +65,8 @@ public class AccountInfo extends Activity {
 	private static final int IMAGE_REQUEST_CODE = 0;
 	private static final int CAMERA_REQUEST_CODE = 1;
 	private static final int RESULT_REQUEST_CODE = 2;
+	private int uid = 0;
+	private boolean isAccount = false;
 
 	@SuppressLint("HandlerLeak")
 	private Handler countHandler = new Handler() {
@@ -94,16 +100,49 @@ public class AccountInfo extends Activity {
 
 		try {
 			setContentView(R.layout.accountinfo);
+			uid = getIntent().getExtras().getInt("uid");
+			isAccount = getIntent().getExtras().getBoolean("isAccount");
 			initView();
 			new Thread(new HttpUtil(Utils.getMessageCountUrl + "&uid="
 					+ Utils.loginInfo.getId(), countHandler, "countHandler"))
 					.start();
 			mImageLoader = new ImageLoader(getApplicationContext());
-			initValue();
+			if (isAccount) {
+				initValue(Utils.self);
+			}else{
+				getAccountInfo(uid);
+			}
 		} catch (Exception e) {
 			showSomeThing(e.toString());
 		}
 
+	}
+
+	public void getAccountInfo(int id) {
+		String url = Utils.getAccountInfoUrl + id;
+		new Thread(new HttpUtil(url, new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				super.handleMessage(msg);
+				Bundle data = msg.getData();
+				String result = data.getString("GETACCOUNTINFO");
+				if (result != null && !"服务访问失败".equals(result)) {
+					try {
+						JSONObject json = new JSONObject(result);
+						JSONObject message = json.getJSONObject("user");
+						if (message != null) {
+							FriendBean bean = FriendBean.getBeanFromJson(message);
+							final String url = Utils.userImg + bean.getPic();
+							accountImg.setTag(url);
+							mImageLoader.loadImage(url, null, accountImg);
+							initValue(bean);
+						}
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}, "GETACCOUNTINFO")).start();
 	}
 
 	private void initView() {
@@ -114,55 +153,72 @@ public class AccountInfo extends Activity {
 		accountAddress = (TextView) findViewById(R.id.accountAddress);
 		msgcenter = (LinearLayout) findViewById(R.id.msgcenter);
 		mysport = (LinearLayout) findViewById(R.id.mysport);
+		mysportText = (TextView) findViewById(R.id.mysportText);
 		myfriends = (LinearLayout) findViewById(R.id.myfriends);
+		myfriendsText = (TextView) findViewById(R.id.myfriendsText);
 		myshoucang = (LinearLayout) findViewById(R.id.myshoucang);
+		myshoucangText = (TextView) findViewById(R.id.myshoucangText);
 
+		if(isAccount){
+			msgcenter.setVisibility(View.VISIBLE);
+			mysportText.setText("我的活动");
+			myfriendsText.setText("我的好友");
+			myshoucangText.setText("我的收藏");
+			
+		}else{
+			msgcenter.setVisibility(View.GONE);
+			mysportText.setText("他的活动");
+			myfriendsText.setText("他的好友");
+			myshoucangText.setText("他的收藏");
+		}
+		
 		accountImg.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				showDialog();
-
+				if (isAccount)
+					showDialog();
 			}
 		});
 
 	}
 
-	private void initValue() {
-		if (Utils.self != null) {
-
-			accountName.setText(Utils.self.getName());
-			if (Utils.selfPic != null) {
+	private void initValue(FriendBean bean) {
+		if (bean != null) {
+			accountName.setText(bean.getName());
+			if (isAccount && Utils.selfPic != null) {
 				accountImg.setImageBitmap(Utils.selfPic);
 			}
-			if (Utils.self.getSex() == 0) {
+			if (bean.getSex() == 0) {
 				accountSex.setImageResource(R.drawable.boy_48);
 			} else {
 				accountSex.setImageResource(R.drawable.girl_48);
 			}
-			accountAddress.setText(Utils.self.getAddr());
+			accountAddress.setText(bean.getAddr());
 		}
 
 	}
 
 	public void doMsgcenter(View v) {
 		Intent intent = new Intent(AccountInfo.this, MessageCenter.class);
+		Bundle bundle = new Bundle();
+		bundle.putInt("uid", uid);
+		intent.putExtras(bundle);
 		startActivity(intent);
 	}
 
 	public void doMysports(View v) {
 		Intent intent = new Intent(AccountInfo.this, MyActions.class);
+		Bundle bundle = new Bundle();
+		bundle.putInt("uid", uid);
+		intent.putExtras(bundle);
 		startActivity(intent);
 	}
 
 	public void doMyfriends(View v) {
-		// Intent intent = new Intent(AccountInfo.this, MyActions.class);
-		// startActivity(intent);
 	}
 
 	public void doMyshoucang(View v) {
-		// Intent intent = new Intent(AccountInfo.this, MyActions.class);
-		// startActivity(intent);
 	}
 
 	public void doaccountBack(View v) {
@@ -188,6 +244,7 @@ public class AccountInfo extends Activity {
 	}
 
 	private String newCapturePhotoPath;
+
 	/**
 	 * 显示选择对话框
 	 */
@@ -217,10 +274,16 @@ public class AccountInfo extends Activity {
 									MediaStore.ACTION_IMAGE_CAPTURE);
 							// 判断存储卡是否可以用，可用进行存储
 							if (hasSdcard()) {
-							     //拍完照片之后保存的路径（文件名）
-							    newCapturePhotoPath = Environment.getExternalStorageDirectory().toString()+ "/"+ IMAGE_FILE_NAME;
-							     //加上这个后，图片就不会被压缩变小了
-							    intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(newCapturePhotoPath)));
+								// 拍完照片之后保存的路径（文件名）
+								newCapturePhotoPath = Environment
+										.getExternalStorageDirectory()
+										.toString()
+										+ "/" + IMAGE_FILE_NAME;
+								// 加上这个后，图片就不会被压缩变小了
+								intentFromCapture.putExtra(
+										MediaStore.EXTRA_OUTPUT, Uri
+												.fromFile(new File(
+														newCapturePhotoPath)));
 							}
 
 							startActivityForResult(intentFromCapture,
@@ -276,9 +339,9 @@ public class AccountInfo extends Activity {
 
 					break;
 				case RESULT_REQUEST_CODE:
-					if (data != null) {
-						getImageToView(data);
-					}
+					if (data != null) {}
+					// 照片剪切好后上传服务器
+					upload();
 					break;
 				}
 			}
@@ -289,15 +352,14 @@ public class AccountInfo extends Activity {
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
-	
-
 	private Uri tempUri = Uri.parse("file:///sdcard/temp.jpg");
+
 	/**
 	 * 裁剪图片方法实现
 	 * 
 	 * @param uri
 	 */
-	private void startPhotoZoom(Uri uri){
+	private void startPhotoZoom(Uri uri) {
 		Intent intent = new Intent("com.android.camera.action.CROP");
 		intent.setDataAndType(uri, "image/*");
 		intent.putExtra("crop", "true");
@@ -371,36 +433,43 @@ public class AccountInfo extends Activity {
 		// Bitmap photo = extras.getParcelable("data");
 		try {
 			Bitmap photo = decodeUriAsBitmap(tempUri);
-			// Drawable drawable = new BitmapDrawable(photo);
 			Utils.selfPic = photo;
 			accountImg.setImageBitmap(photo);
-			// accountImg.setImageDrawable(drawable);
 			String url = Utils.userImg + IMAGE_FILE_NAME;
 			mImageLoader.saveImageToFile(url, photo);
-			File tempFile = mImageLoader.getImageFile(url);
-			uploadFile = tempFile.getPath();
-			upload();
 		} catch (Exception e) {
 			showSomeThing("shi " + e.toString());
 		}
 	}
-	
-	
+
 	private Handler resHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			Bundle data = msg.getData();
 			int responseCode = data.getInt("responseCode");
-			//String responseMessage = data.getString("responseMessage");
-			if(responseCode == UploadUtil.UPLOAD_SUCCESS_CODE){
+			String responseMessage = data.getString("responseMessage");
+			// 图片上传成功
+			if (responseCode == UploadUtil.UPLOAD_SUCCESS_CODE) {
 				showSomeThing("上传成功");
-				File old = new File(mImageLoader.imageFileCache.getDirectory()+ File.separator + Utils.self.getPic());
-				old.deleteOnExit();
-				Utils.self.setPic(IMAGE_FILE_NAME);
+				// 设置新头像
+				getImageToView(null);
+				// 删除旧照片
+				File old = new File(mImageLoader.imageFileCache.getDirectory()
+						+ File.separator + Utils.self.getPic());
+				old.delete();
+				// 删除拍照留下的照片
+				if(newCapturePhotoPath.length() > 0){
+					File file = new File(newCapturePhotoPath);
+					file.delete();
+				}
 				
+				
+				Utils.self.setPic(IMAGE_FILE_NAME);
+			}else{
+				showSomeThing(responseMessage);
 			}
-			
+
 		}
 	};
 
@@ -431,7 +500,7 @@ public class AccountInfo extends Activity {
 
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("uid", Utils.loginInfo.getId() + "");
-		uploadUtil.uploadFile(uploadFile, "img", Utils.uploadFileUrl, params);
+		uploadUtil.uploadFile(newCapturePhotoPath, "img", Utils.uploadFileUrl, params);
 
 	}
 

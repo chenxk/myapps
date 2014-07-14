@@ -111,7 +111,7 @@ android:background="@drawable/mm_listitem"
                 android:src="@drawable/yellow_star_48" />
 
             <TextView
-                style="@style/fontstyle_pingfen_18"
+                style="@style/fontstyle_pingfen_20"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"

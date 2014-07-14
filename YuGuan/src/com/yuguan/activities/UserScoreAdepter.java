@@ -16,7 +16,6 @@ import android.widget.Toast;
 import cn.buaa.myweixin.R;
 import cn.buaa.myweixin.ScoreInfo;
 
-import com.yuguan.bean.FriendBean;
 import com.yuguan.bean.UserBean;
 import com.yuguan.util.ImageLoader;
 import com.yuguan.util.Utils;
@@ -31,6 +30,7 @@ public class UserScoreAdepter extends BaseAdapter {
 	private Context ctx;
 	private LayoutInflater mInflater;
 	private ImageLoader mImageLoader;
+	private SelectUser selectUser;
 
 	public UserScoreAdepter(Context context, List<UserBean> coll) {
 		this.ctx = context;
@@ -38,6 +38,20 @@ public class UserScoreAdepter extends BaseAdapter {
 		mInflater = LayoutInflater.from(context);
 		mImageLoader = new ImageLoader(ctx);
 	}
+	
+	
+
+	public SelectUser getSelectUser() {
+		return selectUser;
+	}
+
+
+
+	public void setSelectUser(SelectUser selectUser) {
+		this.selectUser = selectUser;
+	}
+
+
 
 	/*
 	 * (non-Javadoc)
@@ -82,7 +96,7 @@ public class UserScoreAdepter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
 		ViewHolder holder = null;
-		
+
 		if (convertView == null) {
 			holder = new ViewHolder();
 			convertView = mInflater.inflate(R.layout.userscore_list, null);
@@ -93,11 +107,14 @@ public class UserScoreAdepter extends BaseAdapter {
 					.findViewById(R.id.friendScoreTitle);
 			ImageView friendSex = (ImageView) convertView
 					.findViewById(R.id.friendScoreSex);
-			ScoreInfo userscore = (ScoreInfo) convertView.findViewById(R.id.userscore);
+			ScoreInfo userscore = (ScoreInfo) convertView
+					.findViewById(R.id.userscore);
 			ImageView imggj = (ImageView) convertView.findViewById(R.id.imggj);
 			ImageView imgyj = (ImageView) convertView.findViewById(R.id.imgyj);
 			ImageView imgjj = (ImageView) convertView.findViewById(R.id.imgjj);
+
 			
+
 			holder.friendSex = friendSex;
 			holder.friendTitle = friendTitle;
 			holder.imag = imag;
@@ -105,15 +122,42 @@ public class UserScoreAdepter extends BaseAdapter {
 			holder.imgjj = imgjj;
 			holder.imgyj = imgyj;
 			holder.userscore = userscore;
-			
+
 			convertView.setTag(holder);
-			
-		}else{
+
+		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		try {
 			// 从list对象中为子组件赋值
-			UserBean bean = coll.get(position);
+			final UserBean bean = coll.get(position);
+			
+			holder.imggj.setOnClickListener(new View.OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					selectUser.select(bean, 1,0);
+				}
+			});
+
+			holder.imgyj.setOnClickListener(new View.OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					selectUser.select(bean, 2,0);
+				}
+			});
+
+			holder.imgjj.setOnClickListener(new View.OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					selectUser.select(bean, 3,0);
+				}
+			});
+			
 			String url = Utils.userImg + bean.getPic();
 			holder.imag.setTag(url);
 			mImageLoader.loadImage(url, this, holder.imag);
@@ -140,6 +184,10 @@ public class UserScoreAdepter extends BaseAdapter {
 		public ImageView imgyj;
 		public ImageView imgjj;
 		public ScoreInfo userscore;
+	}
+	
+	public interface SelectUser{
+		public void select(UserBean bean,int jb,int score);
 	}
 
 }

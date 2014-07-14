@@ -191,6 +191,7 @@
                     android:src="@drawable/sport_48" />
 
                 <TextView
+                    android:id="@+id/mysportText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -226,6 +227,7 @@
                     android:src="@drawable/users_48" />
 
                 <TextView
+                    android:id="@+id/myfriendsText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -261,6 +263,7 @@
                     android:src="@drawable/love_48" />
 
                 <TextView
+                    android:id="@+id/myshoucangText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"

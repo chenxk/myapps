@@ -131,10 +131,6 @@ public class MainWeixin extends Activity {
 	private LinearLayout friend_mRadioGroup_content;
 	private int friendColumnSelectIndex = 0;
 	private int curFriendPage = 1;
-	// 排序方式
-	private int curFriendSr = 0;
-	// 区域ID
-	private int curFriendRg = 0;
 	
 	private final String KEY_COUNTY_JSON = "KEY_COUNTY_JSON";
 	private final String KEY_ACTIVITY_JSON = "KEY_ACTIVITY_JSON";
@@ -627,7 +623,7 @@ public class MainWeixin extends Activity {
 							@Override
 							public void onItemClick(AdapterView<?> parent,
 									View view, int position, long id) {
-								getFriendInfo(view,position);
+								getFriendInfo(view);
 							}
 						});
 				
@@ -1083,29 +1079,8 @@ public class MainWeixin extends Activity {
 						}
 						if(index == 2){
 							
-							if(true){
-								return;
-							}
-							
-							curFriendRg = id;
-							curFriendPage = 1;
-							new Thread(new HttpUtil(Utils.activityUrl + curActivityPage + "&rg=" + curActivityRg + "&sr=" + curActivitySr,
-									new Handler() {
-
-								@Override
-								public void handleMessage(Message msg) {
-									super.handleMessage(msg);
-									Bundle data = msg.getData();
-									String result = data.getString("CHANGEQU3");
-									if (result.length() > 0 && !result.equals("服务访问失败")) {
-										activityJson = result;
-										actions.clear();
-										initActivitiesList();
-									}
-								}
-							}, "CHANGEQU3")).start();
 						}
-						showSomeThing(id + "");
+						//showSomeThing(id + "");
 					} catch (Exception e) {
 						showSomeThing(e.toString());
 					}
@@ -1401,6 +1376,10 @@ public class MainWeixin extends Activity {
 			
 			if(Utils.loginInfo != null){
 				intent = new Intent(MainWeixin.this, com.yuguan.activities.AccountInfo.class);
+				Bundle bundle = new Bundle();
+				bundle.putInt("uid", Utils.loginInfo.getId());
+				bundle.putBoolean("isAccount", true);
+				intent.putExtras(bundle);
 			}else{
 				intent = new Intent(MainWeixin.this, Login.class);
 			}
@@ -1448,15 +1427,19 @@ public class MainWeixin extends Activity {
 		// Toast.LENGTH_LONG).show();
 	}
 
-	public void getFriendInfo(View v,int position) {
+	public void getFriendInfo(View v) {
 		try {
-			FriendBean bean = friends.get(position);
 			Intent intent = new Intent(MainWeixin.this, FriendInfo.class);
 			TextView idView = (TextView)v.findViewById(R.id.friendId);
 			int id = Integer.parseInt(idView.getText().toString());
 			Bundle bundle = new Bundle();
 			bundle.putInt("friendId", id);
-			bundle.putSerializable("friendBean", bean);
+			for(FriendBean bean :friends){
+				if(bean.getUid() == id){
+					bundle.putSerializable("friendBean", bean);
+					break;
+				}
+			}
 			intent.putExtras(bundle);
 			startActivity(intent);
 		} catch (Exception e) {
