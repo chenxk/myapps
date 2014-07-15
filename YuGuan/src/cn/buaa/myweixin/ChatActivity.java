@@ -135,8 +135,18 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		init();
+	}
+	
+	@Override
+	protected void onRestart() {
+		// TODO Auto-generated method stub
+		super.onRestart();
+		//init();
+	}
+	
+	public void init(){
 		actionId = getIntent().getIntExtra("actionId", 0);
-		showSomeThing(actionId + "");
 		mImageLoader = new ImageLoader(getApplicationContext());
 		setContentView(R.layout.chat_xiaohei);
 		// 启动activity时不自动弹出软键盘
@@ -151,10 +161,8 @@ public class ChatActivity extends Activity implements OnClickListener {
 				userHandler, KEY_USERINFO_JSON)).start();
 		new Thread(new HttpUtil(Utils.getCommentUrl + actionId +"&commentid=" + commentId,
 				commentHandler, KEY_COMMENT_JSON)).start();
-		
-		/**/
-		
 	}
+	
 
 	public void doBaoMin(View v) {
 		if(Utils.loginInfo == null){

@@ -40,6 +40,17 @@ public class PingFenActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		init();
+	}
+
+	@Override
+	protected void onRestart() {
+		// TODO Auto-generated method stub
+		super.onRestart();
+		//init();
+	}
+
+	private void init() {
 		setContentView(R.layout.pingfen);
 		// 启动activity时不自动弹出软键盘
 		getWindow().setSoftInputMode(
@@ -122,18 +133,16 @@ public class PingFenActivity extends Activity {
 				Bundle data = msg.getData();
 				String result = data.getString("LOGINAJAX");
 				if (result != null && !"服务访问失败".equals(result)) {
-					try {
-						JSONObject json = new JSONObject(result);
-						String status = json.getString("status");
-						if (status.equals("suc")) {
-							instance.finish();
-							showSomeThing("评分成功!");
-						} else {
-							showSomeThing("评分失败!");
-						}
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
+					instance.finish();
+					showSomeThing("评分成功!");
+					/*
+					 * try { JSONObject json = new JSONObject(result); String
+					 * status = json.getString("status"); if
+					 * (status.equals("suc")) {
+					 * 
+					 * } else { showSomeThing("评分失败!"); } } catch (JSONException
+					 * e) { e.printStackTrace(); }
+					 */
 				} else {
 					showSomeThing("评分失败!");
 				}

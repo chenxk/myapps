@@ -19,7 +19,7 @@ import com.yuguan.bean.FriendBean;
 
 public class Utils {
 
-	public static String rootPaht = "http://www.yuguanwang.com";//	http://192.168.10.100:8080/yuqiu
+	public static String rootPaht = "http://192.168.10.100:8080/yuqiu";//http://www.yuguanwang.com	
 	// 获取区
 	public static String countyUrl = rootPaht + "/util/county.htm?r=" + Math.random() + "&cid=";
 	// 获取活动图片
@@ -94,8 +94,8 @@ public class Utils {
 	public static String myJoinActionsUrl = rootPaht + "/user/actactionlist.htm?r="+Math.random();
 	// 评分活动和球馆	"aid="+aid+"&uid="+uid+"&actscore="+actScore+"&acttext="+actText+"&mallscore="+mallScore+"&malltext="+mallText
 	public static String putactreviewUrl = rootPaht + "/user/putactreview.htm?r="+Math.random();
-	// 评分活动和球馆	"aid="+aid+"&uid="+uid+"&actscore="+actScore+"&acttext="+actText+"&mallscore="+mallScore+"&malltext="+mallText
-	public static String putorgreviewUrl = rootPaht + "/user/putactreview.htm?r="+Math.random();
+	// 组织者评分
+	public static String putorgreviewUrl = rootPaht + "/user/putorgreview.htm?jsonobj=";
 	
 	public static int TIMEOUT = 5000;
 	public static int cid = 173;
@@ -114,6 +114,9 @@ public class Utils {
 	// 球友私信
 	public static int  prvmsg;
 	private Context context;
+	
+	public static final String USERCHANGEIMAGE = "USERCHANGEIMAGE";
+	public static final String NEWUSERIMAGE = "NEWUSERIMAGE";
 
 	
 	public static String getNowTime(){

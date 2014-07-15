@@ -85,7 +85,7 @@ public class UploadUtil {
 			File file = new File(filePath);
 			uploadFile(file, fileKey, RequestURL, param);
 		} catch (Exception e) {
-			sendMessageByHandler(UPLOAD_FILE_NOT_EXISTS_CODE, "文件不存在");
+			sendMessageByHandler(UPLOAD_FILE_NOT_EXISTS_CODE, e.toString());
 			e.printStackTrace();
 			return;
 		}
@@ -104,7 +104,7 @@ public class UploadUtil {
 	public void uploadFile(final File file, final String fileKey,
 			final String RequestURL, final Map<String, String> param) {
 		if (file == null || (!file.exists())) {
-			sendMessageByHandler(UPLOAD_FILE_NOT_EXISTS_CODE, "文件不存在");
+			sendMessageByHandler(UPLOAD_FILE_NOT_EXISTS_CODE, "文件不存在2");
 			return;
 		}
 
