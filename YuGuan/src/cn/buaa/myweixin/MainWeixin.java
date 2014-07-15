@@ -16,7 +16,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -358,8 +357,10 @@ public class MainWeixin extends Activity {
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		unregisterReceiver(connectionReceiver);
-		unregisterReceiver(userImageChangeReceiver);
+		if(connectionReceiver != null)
+			unregisterReceiver(connectionReceiver);
+		if(userImageChangeReceiver != null)
+			unregisterReceiver(userImageChangeReceiver);
 	}
 
 	public void login(String name,String pwd){

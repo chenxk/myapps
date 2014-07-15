@@ -3,6 +3,10 @@ package com.yuguan.activities;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -11,6 +15,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,49 +23,49 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import cn.buaa.myweixin.ChatActivity;
 import cn.buaa.myweixin.Login;
 import cn.buaa.myweixin.R;
 
-import com.yuguan.bean.FriendBean;
-import com.yuguan.bean.MallBean;
+import com.yuguan.bean.user.ActionCollectBean;
+import com.yuguan.bean.user.MallCollectBean;
+import com.yuguan.bean.user.UserActActionBean;
 import com.yuguan.util.HttpUtil;
 import com.yuguan.util.InitValue;
 import com.yuguan.util.Utils;
 
 public class MyShouCang extends Activity implements OnClickListener {
 
-	private LinearLayout sysMsg;
-	private TextView sysMsgText;
-	private TextView friendsMsgText;
-	private LinearLayout friendsMsg;
+	private LinearLayout sportcoll;
+	private TextView sportcollText;
+	private TextView mallcollText;
+	private LinearLayout mallcoll;
 	private ViewPager messagePager;
 	
-	/** ���г��� */
-	private RefreshListView allMallsList;
-	private MallAdepter mallAdapter;
-	private List<MallBean> malls = new ArrayList<MallBean>();
-	private boolean allMallsListIsLoad = false;
-	private int curMallPage = 1;
-	// ����ʽ
-	private int curMallSr = 0;
-	// ����ID
-	private int curMallRg = 0;
+	private RefreshListView sportcollList;
+	private SportCollectAdepter sportcollAdapter;
+	private List<ActionCollectBean> sports = new ArrayList<ActionCollectBean>();
+	private boolean allSportcollListIsLoad = false;
+	private int aid = -1;
+	private int curSportcollPage = 1;
+	private int curSportcollSr = 0;
+	private int curSportcollRg = 0;
 	
-	/** ���к��� */
-	private RefreshListView allFriendsList;
-	private UserAdepter friendAdepter;
-	private List<FriendBean> friends = new ArrayList<FriendBean>();
-	private boolean allFriendsListIsLoad = false;
-	private int curFriendPage = 1;
-	// ����ʽ
-	private int curFriendSr = 0;
-	// ����ID
-	private int curFriendRg = 0;
+	private RefreshListView mallcollList;
+	private MallCollectAdepter mallcollAdepter;
+	private List<MallCollectBean> malls = new ArrayList<MallCollectBean>();
+	private boolean allMallcollListIsLoad = false;
+	private int mallid = -1;
+	private int curMallcollPage = 1;
+	private int curMallcollSr = 0;
+	private int curMallcollRg = 0;
 	
+	private final String KEY_SPORT_JSON = "KEY_SPORT_JSON";
 	private final String KEY_MALL_JSON = "KEY_MALL_JSON";
-	private final String KEY_FRIEND_JSON = "KEY_FRIEND_JSON";
-	private String mallJson = InitValue.mallJson;
-	private String friendJson = InitValue.friendJson;
+	private String sportcollJson = InitValue.activityJson;
+	private String mallcollJson = InitValue.mallJson;
+	
+	private int uid;
 
 	@SuppressLint("HandlerLeak")
 	private Handler mallHandler = new Handler() {
@@ -68,12 +73,12 @@ public class MyShouCang extends Activity implements OnClickListener {
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			Bundle data = msg.getData();
-			String result = data.getString(KEY_MALL_JSON);
+			String result = data.getString(KEY_SPORT_JSON);
 			if (result.length() > 0 && !result.equals("服务访问失败")) {
-				mallJson = result;
-				malls.clear();
+				sportcollJson = result;
+				sports.clear();
 				getMallDataFromJson();
-				mallAdapter.notifyDataSetChanged();
+				sportcollAdapter.notifyDataSetChanged();
 			}
 		}
 	};
@@ -83,12 +88,12 @@ public class MyShouCang extends Activity implements OnClickListener {
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			Bundle data = msg.getData();
-			String result = data.getString(KEY_FRIEND_JSON);
+			String result = data.getString(KEY_MALL_JSON);
 			if (result.length() > 0 && !result.equals("服务访问失败")) {
-				friendJson = result;
-				friends.clear();
+				mallcollJson = result;
+				malls.clear();
 				getFriendDataFromJson();
-				friendAdepter.notifyDataSetChanged();
+				mallcollAdepter.notifyDataSetChanged();
 			}
 		}
 	};
@@ -97,9 +102,23 @@ public class MyShouCang extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		init();
+	}
+	
+	/** 
+     * Activity被系统杀死后再重建时被调用. 
+     * 例如:屏幕方向改变时,Activity被销毁再重建;当前Activity处于后台,系统资源紧张将其杀死,用户又启动该Activity. 
+     * 这两种情况下onRestoreInstanceState都会被调用,在onStart之后. 
+     */  
+    @Override  
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {  
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.i("onRestoreInstanceState", "onRestoreInstanceState called." + savedInstanceState);  
+        init();
+    }  
+	private void init(){
 		setContentView(R.layout.myshoucang);
-
+		uid = this.getIntent().getExtras().getInt("uid");
 		initView();
 
 		messagePager
@@ -108,6 +127,7 @@ public class MyShouCang extends Activity implements OnClickListener {
 					@Override
 					public void onPageSelected(int position) {
 						// TODO Auto-generated method stub
+						setFontStyle(position);
 						if (position == 0) {
 							initMallView();
 						}
@@ -128,21 +148,18 @@ public class MyShouCang extends Activity implements OnClickListener {
 					}
 				});
 
-		sysMsg.setOnClickListener(new MyOnClickListener(0));
-		friendsMsg.setOnClickListener(new MyOnClickListener(1));
+		sportcoll.setOnClickListener(new MyOnClickListener(0));
+		mallcoll.setOnClickListener(new MyOnClickListener(1));
 
-		// ��Ҫ��ҳ��ʾ��Viewװ��������
 		LayoutInflater mLi = LayoutInflater.from(this);
 		View view1 = mLi.inflate(R.layout.shoucang_action, null);
 		View view2 = mLi.inflate(R.layout.shoucang_mall, null);
 		// View view4 = mLi.inflate(R.layout.main_tab_settings, null);
 
-		// ÿ��ҳ���view���
 		final ArrayList<View> views = new ArrayList<View>();
 		views.add(view1);
 		views.add(view2);
 		// views.add(view4);
-		// ���ViewPager�����������
 		PagerAdapter mPagerAdapter = new PagerAdapter() {
 
 			@Override
@@ -177,24 +194,63 @@ public class MyShouCang extends Activity implements OnClickListener {
 		};
 
 		messagePager.setAdapter(mPagerAdapter);
-
 	}
 
 	protected void getFriendDataFromJson() {
 		// TODO Auto-generated method stub
-		
+		try {
+			JSONObject jsonObject = new JSONObject(mallcollJson);
+			JSONArray jsonArray = jsonObject.getJSONArray("malls");
+			int count = jsonArray.length();
+			if (count >= 10) {
+				mallid = ((JSONObject) jsonArray.get(9)).getInt("id");
+				mallcollList.setLastData(false);
+				mallcollList.addFootView();
+			} else {
+				mallcollList.setLastData(true);
+				mallcollList.removeFootView();
+			}
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject json = (JSONObject) jsonArray.get(i);
+				MallCollectBean bean = MallCollectBean.getBeanByJson(json);
+				if (bean != null)
+					malls.add(bean);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 
 	protected void getMallDataFromJson() {
 		// TODO Auto-generated method stub
-		
+		try {
+			JSONObject jsonObject = new JSONObject(sportcollJson);
+			JSONArray jsonArray = jsonObject.getJSONArray("actions");
+			int count = jsonArray.length();
+			if (count >= 10) {
+				aid = ((JSONObject) jsonArray.get(9)).getInt("id");
+				sportcollList.setLastData(false);
+				sportcollList.addFootView();
+			} else {
+				sportcollList.setLastData(true);
+				sportcollList.removeFootView();
+			}
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject json = (JSONObject) jsonArray.get(i);
+				ActionCollectBean bean = ActionCollectBean.getBeanByJson(json);
+				if (bean != null)
+					sports.add(bean);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void initMallView() {
-		if (allMallsListIsLoad == false) {
+		if (allSportcollListIsLoad == false) {
 			try {
-				allMallsList = (RefreshListView) findViewById(R.id.messageSysList);
-				allMallsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+				sportcollList = (RefreshListView) findViewById(R.id.messageSysList);
+				sportcollList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 							@Override
 							public void onItemClick(AdapterView<?> parent,
@@ -203,7 +259,7 @@ public class MyShouCang extends Activity implements OnClickListener {
 							}
 						});
 				
-				allMallsList.setOnRefreshListener(new RefreshListView.RefreshListener() {
+				sportcollList.setOnRefreshListener(new RefreshListView.RefreshListener() {
 
 					@Override
 					public Object refreshing() {
@@ -218,35 +274,35 @@ public class MyShouCang extends Activity implements OnClickListener {
 						}
 
 						String result = obj.toString();
-						if (result.length() > 0 && !result.equals("�������ʧ��")) {
-							mallJson = result;
-							malls.clear();
+						if (result.length() > 0 && !result.equals("服务访问失败")) {
+							sportcollJson = result;
+							sports.clear();
 							getMallDataFromJson();
-							allMallsList.setLastRow(false);
-							allMallsList.setLoading(false);
-							mallAdapter.notifyDataSetChanged();
+							sportcollList.setLastRow(false);
+							sportcollList.setLoading(false);
+							sportcollAdapter.notifyDataSetChanged();
 						}else{
 							showSomeThing(result);
 						}
-						allMallsList.setSelection(1);
+						sportcollList.setSelection(1);
 					}
 
 					@Override
 					public void more() {
-						if(!allMallsList.isLastData()){
-							++ curMallPage;
-							String url = Utils.mallListUrl + curMallPage + "&rg=" + curMallRg + "&sr=" + curMallSr;
-							allMallsList.setUrl(url);
+						if(!sportcollList.isLastData()){
+							++ curSportcollPage;
+							String url = Utils.mallListUrl + curSportcollPage + "&rg=" + curSportcollRg + "&sr=" + curSportcollSr;
+							sportcollList.setUrl(url);
 						}else{
-							showSomeThing("���ص����һ����");
+							showSomeThing("加载到最后一条了");
 						}
 					}
 
 					@Override
 					public void setUrl() {
-						curMallPage = 1;
-						String url = Utils.mallListUrl + curMallPage + "&rg=" + curMallRg + "&sr=" + curMallSr;
-						allMallsList.setUrl(url);
+						curSportcollPage = 1;
+						String url = Utils.mallListUrl + curSportcollPage + "&rg=" + curSportcollRg + "&sr=" + curSportcollSr;
+						sportcollList.setUrl(url);
 					}
 
 					@Override
@@ -256,28 +312,28 @@ public class MyShouCang extends Activity implements OnClickListener {
 						}
 
 						String result = obj.toString();
-						if (result.length() > 0 && !result.equals("�������ʧ��")) {
-							mallJson = result;
+						if (result.length() > 0 && !result.equals("服务访问失败")) {
+							sportcollJson = result;
 							getMallDataFromJson();
-							mallAdapter.notifyDataSetChanged();
-							allMallsList.setLoading(false);
+							sportcollAdapter.notifyDataSetChanged();
+							sportcollList.setLoading(false);
 							
 						}else{
 							showSomeThing(result);
 						}
-						allMallsList.removeFootView();
+						sportcollList.removeFootView();
 					}
 				});
 
 				initMallList();
-				String url = Utils.mallListUrl + curMallPage + "&rg=" + curMallRg + "&sr=" + curMallSr;
-				new Thread(new HttpUtil(url,mallHandler, KEY_MALL_JSON)).start();
+				String url = Utils.mallListUrl + curSportcollPage + "&rg=" + curSportcollRg + "&sr=" + curSportcollSr;
+				new Thread(new HttpUtil(url,mallHandler, KEY_SPORT_JSON)).start();
 				
 			} catch (Exception e) {
 				showSomeThing(e.toString());
 			}
 
-			allMallsListIsLoad = true;
+			allSportcollListIsLoad = true;
 		}
 	}
 	
@@ -285,17 +341,35 @@ public class MyShouCang extends Activity implements OnClickListener {
 		/**/
 		getMallDataFromJson();
 		try {
-			allMallsList.setAdapter(null);
+			sportcollList.setAdapter(null);
 			/**/
-			if(malls.size() < 5){
-				allMallsList.removeHeaderView();
-				allMallsList.removeFootView();
+			if(sports.size() < 5){
+				sportcollList.removeHeaderView();
+				sportcollList.removeFootView();
 			}else{
-				allMallsList.addHeaderView();
-				allMallsList.addFootView();
+				sportcollList.addHeaderView();
+				sportcollList.addFootView();
 			}
-			mallAdapter = new MallAdepter(this, malls);
-			allMallsList.setAdapter(mallAdapter);
+			sportcollAdapter = new SportCollectAdepter(this, sports);
+			sportcollAdapter.setOnClickJoinListener(new SportCollectAdepter.OnClickJoinListener() {
+				
+				@Override
+				public void onClickJoinListener(int aid) {
+					// TODO Auto-generated method stub
+					Intent intent = new Intent(MyShouCang.this, ChatActivity.class);
+					Bundle bundle = new Bundle();
+					bundle.putInt("actionId", aid);
+					intent.putExtras(bundle);
+					startActivity(intent);
+				}
+
+				@Override
+				public void onClickCancelListener(int aid) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+			sportcollList.setAdapter(sportcollAdapter);
 		} catch (Exception e) {
 			// TODO: handle exception
 			showSomeThing(e.toString());
@@ -303,10 +377,10 @@ public class MyShouCang extends Activity implements OnClickListener {
 	}
 
 	private void initFriendView() {
-		if (allFriendsListIsLoad == false) {
+		if (allMallcollListIsLoad == false) {
 			try {
-				allFriendsList = (RefreshListView) findViewById(R.id.messagePriList);
-				allFriendsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+				mallcollList = (RefreshListView) findViewById(R.id.messagePriList);
+				mallcollList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 							@Override
 							public void onItemClick(AdapterView<?> parent,
 									View view, int position, long id) {
@@ -314,7 +388,7 @@ public class MyShouCang extends Activity implements OnClickListener {
 							}
 						});
 				
-				allFriendsList.setOnRefreshListener(new RefreshListView.RefreshListener() {
+				mallcollList.setOnRefreshListener(new RefreshListView.RefreshListener() {
 
 					@Override
 					public Object refreshing() {
@@ -329,35 +403,35 @@ public class MyShouCang extends Activity implements OnClickListener {
 						}
 
 						String result = obj.toString();
-						if (result.length() > 0 && !result.equals("�������ʧ��")) {
-							friendJson = result;
-							friends.clear();
+						if (result.length() > 0 && !result.equals("服务访问失败")) {
+							mallcollJson = result;
+							malls.clear();
 							getFriendDataFromJson();
-							allFriendsList.setLastRow(false);
-							allFriendsList.setLoading(false);
-							friendAdepter.notifyDataSetChanged();
+							mallcollList.setLastRow(false);
+							mallcollList.setLoading(false);
+							mallcollAdepter.notifyDataSetChanged();
 						}else{
 							showSomeThing(result);
 						}
-						allFriendsList.setSelection(1);
+						mallcollList.setSelection(1);
 					}
 
 					@Override
 					public void more() {
-						if(!allFriendsList.isLastData()){
-							++ curFriendPage;
-							String url = Utils.friendsUrl + "&cid=" + Utils.cid + "&pn=" + curFriendPage;
-							allFriendsList.setUrl(url);
+						if(!mallcollList.isLastData()){
+							++ curMallcollPage;
+							String url = Utils.friendsUrl + "&cid=" + Utils.cid + "&pn=" + curMallcollPage;
+							mallcollList.setUrl(url);
 						}else{
-							showSomeThing("���ص����һ����");
+							showSomeThing("加载到最后一条了");
 						}
 					}
 
 					@Override
 					public void setUrl() {
-						curFriendPage = 1;
-						String url = Utils.friendsUrl + "&cid=" + Utils.cid + "&pn=" + curFriendPage;
-						allFriendsList.setUrl(url);
+						curMallcollPage = 1;
+						String url = Utils.friendsUrl + "&cid=" + Utils.cid + "&pn=" + curMallcollPage;
+						mallcollList.setUrl(url);
 					}
 
 					@Override
@@ -367,45 +441,63 @@ public class MyShouCang extends Activity implements OnClickListener {
 						}
 
 						String result = obj.toString();
-						if (result.length() > 0 && !result.equals("�������ʧ��")) {
-							friendJson = result;
+						if (result.length() > 0 && !result.equals("服务访问失败")) {
+							mallcollJson = result;
 							getFriendDataFromJson();
-							friendAdepter.notifyDataSetChanged();
-							allFriendsList.setLoading(false);
+							mallcollAdepter.notifyDataSetChanged();
+							mallcollList.setLoading(false);
 							
 						}else{
 							showSomeThing(result);
 						}
-						allFriendsList.removeFootView();
+						mallcollList.removeFootView();
 					}
 				});
 
 				initFriendList();
-				String url = Utils.friendsUrl + "&cid=" + Utils.cid + "&pn=" + curFriendPage;
-				new Thread(new HttpUtil(url,friendHandler, KEY_FRIEND_JSON)).start();
+				String url = Utils.friendsUrl + "&cid=" + Utils.cid + "&pn=" + curMallcollPage;
+				new Thread(new HttpUtil(url,friendHandler, KEY_MALL_JSON)).start();
 				
 			} catch (Exception e) {
 				showSomeThing(e.toString());
 			}
 
-			allFriendsListIsLoad = true;
+			allMallcollListIsLoad = true;
 		}
 	}
 
 	private void initFriendList() {
 		getFriendDataFromJson();
 		try {
-			allFriendsList.setAdapter(null);
+			mallcollList.setAdapter(null);
 			/**/
-			if(friends.size() < 5){
-				allFriendsList.removeHeaderView();
-				allFriendsList.removeFootView();
+			if(malls.size() < 5){
+				mallcollList.removeHeaderView();
+				mallcollList.removeFootView();
 			}else{
-				allFriendsList.addHeaderView();
-				allFriendsList.addFootView();
+				mallcollList.addHeaderView();
+				mallcollList.addFootView();
 			}
-			friendAdepter = new UserAdepter(this, friends);
-			allFriendsList.setAdapter(friendAdepter);
+			mallcollAdepter = new MallCollectAdepter(this, malls);
+			mallcollAdepter.setOnClickJoinListener(new MallCollectAdepter.OnClickJoinListener() {
+				
+				@Override
+				public void onClickJoinListener(int mallId) {
+					// TODO Auto-generated method stub
+					Intent intent = new Intent(MyShouCang.this, MallInfo.class);
+					Bundle bundle = new Bundle();
+					bundle.putInt("mallId", mallId);
+					intent.putExtras(bundle);
+					startActivity(intent);
+				}
+
+				@Override
+				public void onClickCancelListener(int mallId) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+			mallcollList.setAdapter(mallcollAdepter);
 		} catch (Exception e) {
 			// TODO: handle exception
 			showSomeThing(e.toString());
@@ -422,15 +514,10 @@ public class MyShouCang extends Activity implements OnClickListener {
 			showSomeThing(e.toString());
 		}
 
-		// Toast.makeText(getApplicationContext(), "��¼�ɹ�",
-		// Toast.LENGTH_LONG).show();
 	}
 	
-	public void getMallInfo(View v) { // С�� �Ի�����
+	public void getMallInfo(View v) { // 
 		try {
-			// ϵͳ֪ͨ  sysmsginfo.xml
-			// �������  friendapplyinfo.xml
-			// �����  sportapplyinfo.xml
 			TextView idView = (TextView)v.findViewById(R.id.mallId);
 			int id = Integer.parseInt(idView.getText().toString());
 			Intent intent = new Intent(MyShouCang.this, MallInfo.class);
@@ -441,16 +528,13 @@ public class MyShouCang extends Activity implements OnClickListener {
 		} catch (Exception e) {
 			showSomeThing(e.toString());
 		}
-
-		// Toast.makeText(getApplicationContext(), "��¼�ɹ�",
-		// Toast.LENGTH_LONG).show();
 	}
 	
 	private void initView() {
-		friendsMsgText = (TextView) findViewById(R.id.myaction_inText);
-		sysMsgText = (TextView) findViewById(R.id.myaction_outText);
-		sysMsg = (LinearLayout) findViewById(R.id.myaction_in);
-		friendsMsg = (LinearLayout) findViewById(R.id.myaction_out);
+		mallcollText = (TextView) findViewById(R.id.myaction_inText);
+		sportcollText = (TextView) findViewById(R.id.myaction_outText);
+		sportcoll = (LinearLayout) findViewById(R.id.myaction_in);
+		mallcoll = (LinearLayout) findViewById(R.id.myaction_out);
 		messagePager = (ViewPager) findViewById(R.id.myactionPager);
 
 	}
@@ -489,9 +573,22 @@ public class MyShouCang extends Activity implements OnClickListener {
 	public void showSomeThing(String str) {
 		Toast.makeText(getApplicationContext(), str, Toast.LENGTH_LONG).show();
 	}
+	
+	public void setFontStyle(int index) {
+		if (index == 0) {
+			sportcollText.setTextAppearance(getApplicationContext(),
+					R.style.fontstyle_red_20);
+			mallcollText.setTextAppearance(getApplicationContext(),
+					R.style.fontstyle_20);
+		} else {
+			sportcollText.setTextAppearance(getApplicationContext(),
+					R.style.fontstyle_20);
+			mallcollText.setTextAppearance(getApplicationContext(),
+					R.style.fontstyle_red_20);
+		}
+	}
 
 	/**
-	 * �������
 	 */
 	public class MyOnClickListener implements View.OnClickListener {
 		private int index = 0;
@@ -503,11 +600,7 @@ public class MyShouCang extends Activity implements OnClickListener {
 		@Override
 		public void onClick(View v) {
 			messagePager.setCurrentItem(index);
-			if (index == 0) {
-				// friendsMsgText.set
-			} else {
-
-			}
+			setFontStyle(index);
 		}
 	};
 }

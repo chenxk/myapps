@@ -5,17 +5,43 @@
     android:background="#fcfcfc"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/shoucangMallName"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingBottom="18dp"
-        android:paddingTop="18dp"
-        android:singleLine="true"
-        android:text="什么球馆"
-        android:textColor="#FFB200"
-        android:textSize="22sp" />
+        android:orientation="horizontal"
+        android:paddingBottom="10dp" >
+
+        <ImageView
+            android:id="@+id/shoucangMallCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/qx" >
+        </ImageView>
+
+        <TextView
+            android:id="@+id/shoucangMallName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="18dp"
+            android:singleLine="true"
+            android:text="什么活动"
+            android:textColor="#FFB200"
+            android:textSize="22sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/white_line"
+        android:gravity="center" >
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,6 +65,17 @@
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/white_line"
+        android:gravity="center" >
+    </LinearLayout>
+    
+    
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
@@ -55,7 +92,7 @@
             android:singleLine="true"
             android:text="地址地址地址地址地址地址地址地址" />
     </LinearLayout>
-
+<!-- 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -72,5 +109,5 @@
             android:paddingTop="2dp" >
         </cn.buaa.myweixin.ScoreInfo>
     </LinearLayout>
-
+ -->
 </LinearLayout>

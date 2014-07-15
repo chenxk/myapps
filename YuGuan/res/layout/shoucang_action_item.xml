@@ -5,17 +5,43 @@
     android:background="#fcfcfc"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/shoucangActionName"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingBottom="18dp"
-        android:paddingTop="18dp"
-        android:singleLine="true"
-        android:text="什么活动"
-        android:textColor="#000"
-        android:textSize="22sp" />
+        android:orientation="horizontal"
+        android:paddingBottom="10dp" >
+
+        <ImageView
+            android:id="@+id/shoucangActionCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/qx" >
+        </ImageView>
+
+        <TextView
+            android:id="@+id/shoucangActionName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="18dp"
+            android:singleLine="true"
+            android:text="什么活动"
+            android:textColor="#000"
+            android:textSize="22sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/white_line"
+        android:gravity="center" >
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,7 +49,8 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="10dp" >
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp" >
 
         <TextView
             style="@style/fontstyle_black_18"
@@ -97,10 +124,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
         android:background="#FFB200"
         android:gravity="center"
         android:orientation="horizontal"
-        android:layout_marginBottom="10dp"
         android:paddingBottom="5dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
@@ -110,9 +137,7 @@
             style="@style/fontstyle_white_18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="立即参加" />
+            android:text="查看详细" />
     </LinearLayout>
-    
-    
 
 </LinearLayout>

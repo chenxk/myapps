@@ -83,7 +83,17 @@ public class Login extends Activity {
     }
     
     
+    @Override
+    protected void onStart() {
+    	// TODO Auto-generated method stub
+    	super.onStart();
+    }
     
+    @Override
+    protected void onResume() {
+    	// TODO Auto-generated method stub
+    	super.onResume();
+    }
 
     public void login_mainweixin(View v) {
     	if(!"".equals(mUser.getText().toString()) && !"".equals(mPassword.getText().toString()))   //≈–∂œ ’ ∫≈∫Õ√‹¬Î

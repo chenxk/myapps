@@ -150,12 +150,12 @@ public class UserScoreAdepter extends BaseAdapter {
 				}
 			});
 			
-			holder.userscore.setOnClickListener(new View.OnClickListener() {
+			holder.userscore.setListener(new ScoreInfo.OnClickScoreListener() {
 				
 				@Override
-				public void onClick(View v) {
+				public void onClickScoreListener(int score) {
 					// TODO Auto-generated method stub
-					selectUser.select(bean, 4, score.getScore());
+					selectUser.select(bean, 4, score);
 				}
 			});
 

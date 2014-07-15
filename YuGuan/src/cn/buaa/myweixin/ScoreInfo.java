@@ -25,8 +25,18 @@ public class ScoreInfo extends LinearLayout {
 	private ImageView v3;
 	private ImageView v4;
 	private ImageView v5;
+	private OnClickScoreListener listener;
 
 	private View view;
+
+	
+	public OnClickScoreListener getListener() {
+		return listener;
+	}
+
+	public void setListener(OnClickScoreListener listener) {
+		this.listener = listener;
+	}
 
 	public boolean isClickAble() {
 		return clickAble;
@@ -58,8 +68,13 @@ public class ScoreInfo extends LinearLayout {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if(clickAble)
+				if(clickAble){
 					setScore(0);
+					if(listener != null){
+						listener.onClickScoreListener(0);
+					}
+				}
+					
 			}
 		});
 		v1 = (ImageView) view.findViewById(R.id.star1);
@@ -83,6 +98,9 @@ public class ScoreInfo extends LinearLayout {
 					String tag = v.getTag().toString();
 					int index = Integer.parseInt(tag) + 1;
 					setScore(index * 2);
+					if(listener != null){
+						listener.onClickScoreListener(index * 2);
+					}
 				}
 			});
 		}
@@ -107,6 +125,10 @@ public class ScoreInfo extends LinearLayout {
 			}
 		}
 		scoreView.setText(score + "·Ö");
+	}
+	
+	public interface OnClickScoreListener{
+		public void onClickScoreListener(int score);
 	}
 
 }

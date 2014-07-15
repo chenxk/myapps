@@ -53,6 +53,7 @@
             android:layout_height="wrap_content" >
 
             <LinearLayout
+                android:id="@+id/sportcoll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -62,6 +63,7 @@
                 android:padding="10dp" >
 
                 <TextView
+                    android:id="@+id/sportcollText"
                     style="@style/fontstyle_red_20"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -77,6 +79,7 @@
                 android:background="@drawable/linearlayout_line" />
 
             <LinearLayout
+                android:id="@+id/mallcoll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -86,6 +89,7 @@
                 android:padding="10dp" >
 
                 <TextView
+                    android:id="@+id/mallcollText"
                     style="@style/fontstyle_20"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

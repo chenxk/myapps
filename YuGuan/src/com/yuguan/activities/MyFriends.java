@@ -36,6 +36,7 @@ public class MyFriends extends Activity implements OnClickListener {
 	private int curFriendPage = 1;
 	private String friendJson = InitValue.friendJson;
 	private String KEY_FRIEND_JSON = "KEY_FRIEND_JSON";
+	private int uid;
 
 	@SuppressLint("HandlerLeak")
 	private Handler friendHandler = new Handler() {
@@ -56,7 +57,12 @@ public class MyFriends extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		init();
+	}
+
+	public void init() {
 		setContentView(R.layout.myfriends);
+		uid = this.getIntent().getExtras().getInt("uid");
 		initFriendView();
 	}
 
@@ -207,13 +213,16 @@ public class MyFriends extends Activity implements OnClickListener {
 		try {
 			TextView frd = (TextView) v.findViewById(R.id.friendId);
 			int id = Integer.parseInt(frd.getText().toString());
-			Intent intent = new Intent(MyFriends.this, FriendInfo.class);
+			Intent intent = new Intent(MyFriends.this, AccountInfo.class);
+			Bundle bundle = new Bundle();
+			bundle.putInt("uid", id);
+			bundle.putBoolean("isAccount", false);
+			intent.putExtras(bundle);
 			startActivity(intent);
 		} catch (Exception e) {
 			showSomeThing(e.toString());
 		}
 	}
-
 
 	@Override
 	public void onClick(View v) {

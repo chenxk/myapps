@@ -110,9 +110,11 @@ public class AccountInfo extends Activity {
 			uid = getIntent().getExtras().getInt("uid");
 			isAccount = getIntent().getExtras().getBoolean("isAccount");
 			initView();
-			new Thread(new HttpUtil(Utils.getMessageCountUrl + "&uid="
-					+ Utils.loginInfo.getId(), countHandler, "countHandler"))
-					.start();
+			if(isAccount){
+				new Thread(new HttpUtil(Utils.getMessageCountUrl + "&uid="
+						+ Utils.loginInfo.getId(), countHandler, "countHandler"))
+						.start();
+			}
 			mImageLoader = new ImageLoader(getApplicationContext());
 			getAccountInfo(uid);
 		} catch (Exception e) {
@@ -120,13 +122,14 @@ public class AccountInfo extends Activity {
 		}
 	}
 	
-	//Activity从后台重新回到前台时被调用  
+	//Activity创建或者从后台重新回到前台时被调用  
     @Override  
-    protected void onRestart() {  
-        super.onRestart();  
-        Log.i("onRestart", "onRestart called.");  
-       // init();
+    protected void onStart() {  
+        super.onStart();  
+        Log.i("onStart", "onStart called.");  
     }  
+    
+	
       
     //Activity创建或者从被覆盖、后台重新回到前台时被调用  
     @Override  
@@ -135,11 +138,45 @@ public class AccountInfo extends Activity {
         Log.i("onResume", "onResume called.");  
     }  
     
+    //Activity窗口获得或失去焦点时被调用,在onResume之后或onPause之后  
+    /*@Override 
+    public void onWindowFocusChanged(boolean hasFocus) { 
+        super.onWindowFocusChanged(hasFocus); 
+        Log.i(TAG, "onWindowFocusChanged called."); 
+    }*/  
+      
+    
+     
+    
+    //Activity被覆盖到下面或者锁屏时被调用  
+    @Override  
+    protected void onPause() {  
+        super.onPause();  
+        Log.i("onPause", "onPause called.");  
+        //有可能在执行完onPause或onStop后,系统资源紧张将Activity杀死,所以有必要在此保存持久数据  
+    } 
+    
+    //Activity从后台重新回到前台时被调用  
+    @Override  
+    protected void onRestart() {  
+        super.onRestart();  
+        Log.i("onRestart", "onRestart called.");  
+       // init();
+    } 
+    
+    //退出当前Activity或者跳转到新Activity时被调用  
+    @Override  
+    protected void onStop() {  
+        super.onStop();  
+        Log.i("onStop", "onStop called.");     
+    }  
+    
     
     @Override
     protected void onDestroy() {
     	// TODO Auto-generated method stub
     	super.onDestroy();
+    	Log.i("onDestroy", "onDestroy called.");     
     }
     
     /** 
@@ -160,7 +197,9 @@ public class AccountInfo extends Activity {
      */  
     @Override  
     protected void onRestoreInstanceState(Bundle savedInstanceState) {  
-        super.onRestoreInstanceState(savedInstanceState);  
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.i("onRestoreInstanceState", "onRestoreInstanceState called." + savedInstanceState);  
+        init();
     }  
 
 	public void getAccountInfo(int id) {
@@ -275,9 +314,19 @@ public class AccountInfo extends Activity {
 	}
 
 	public void doMyfriends(View v) {
+		Intent intent = new Intent(AccountInfo.this, MyFriends.class);
+		Bundle bundle = new Bundle();
+		bundle.putInt("uid", uid);
+		intent.putExtras(bundle);
+		startActivity(intent);
 	}
 
 	public void doMyshoucang(View v) {
+		Intent intent = new Intent(AccountInfo.this, MyShouCang.class);
+		Bundle bundle = new Bundle();
+		bundle.putInt("uid", uid);
+		intent.putExtras(bundle);
+		startActivity(intent);
 	}
 
 	public void doaccountBack(View v) {
